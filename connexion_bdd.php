@@ -1,7 +1,7 @@
 <?php
 $hostname='localhost';
 $username='meteastro';
-$password='Paq6VZGKy2ZcsbYz';
+$password='';
 
 try {
 $db = new PDO("mysql:host=$hostname;dbname=test;charset=utf8mb4",$username,$password);
