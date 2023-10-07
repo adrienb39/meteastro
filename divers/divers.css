@@ -1,0 +1,148 @@
+/* *, ::before, ::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    background: white;
+    height: 100vh;
+} */
+
+.container {
+    position: relative;
+    width: 1260px;
+    height: 900px;
+    bottom: 76px;
+    border: 1px solid #333;
+    margin-left: 149px;
+    /* background: white; */
+    border-radius: 2px;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
+}
+
+ul.container-onglets {
+    /* background: white; */
+    width: 15%;
+    height: 20%;
+    /* display: flex; */
+    /* border-bottom: 1px solid #333; */
+}
+
+.onglets {
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* .onglets:not(:nth-child(3)) {
+    border-right: 1px solid #333;
+} */
+
+.contenu {
+    height: 70%;
+    height: 100%;
+    position: absolute;
+    opacity: 0;
+}
+
+.contenu h3 {
+    padding: 20px;
+}
+
+.contenu hr {
+    width: 20%;
+    height: 2px;
+    margin-left: 20px;
+    background: #000;
+    border: none;
+}
+
+.contenu p {
+    padding: 20px;
+}
+
+.active {
+    background: linear-gradient(45deg, red, yellow);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.activeContenu {
+    animation: fade 0.5s forwards;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.label-onglets,
+#toggle {
+    display: none;
+}
+
+/* responsive */
+@media screen and (max-width: 1000px) {
+    .container {
+        position: relative;
+        width: auto;
+        height: 900px;
+        bottom: auto;
+        margin: 10px;
+        border: 1px solid #333;
+        margin-top: 15%;
+        border-radius: 2px;
+    }
+
+    .container-onglets {
+        width: 15%;
+        z-index: 99;
+        height: 20%;
+        position: relative;
+        top: 120px;
+    }
+
+    .onglets {
+        background-color: rgb(255, 128, 128);
+        padding: 10px;
+        width: 200px;
+    }
+
+    .navbar-onglets {
+        height: 60px;
+    }
+
+    .navbar-onglets .container-onglets {
+        display: none;
+        flex-direction: column;
+    }
+
+    .label-onglets {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 80px auto;
+        font-size: 20px;
+        cursor: pointer;
+        position: absolute;
+        left: 20%;
+    }
+
+    #toggle:checked+.container-onglets {
+        display: flex;
+    }
+}
