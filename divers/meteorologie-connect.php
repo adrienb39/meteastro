@@ -1,4 +1,13 @@
 <?php
+// Initialiser la session
+session_start();
+// Vérifiez si l'utilisateur est connecté, sinon redirigez-le vers la page de connexion
+if (!isset($_SESSION["type"])) {
+    header("Location: /connexion/login.php");
+    exit();
+}
+?>
+<?php
 $servername = "localhost";
 $username = "root";
 $password = "Robot500";
@@ -25,38 +34,19 @@ if ($conn->connect_error) {
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="/divers/divers.css">
-    <!-- <style>
-        .blc-seemore{
-            position: relative;
-            margin-left: 5px;
-        }
-
-        span.hide { display: none; }
-
-label.seemore::before { content: "\0026EE"; }
-label.seemore:hover { cursor: pointer; }
-
-input[type='checkbox'].seemore {
-  position: absolute;
-  left: -9999px;
-  top: -9999px;
-}
-
-input.seemore:checked~span.hide { display: inline; background-color: black; color: white; position: relative; z-index: 99; padding: 3px; }
-    </style> -->
 </head>
 
 <body>
     <?php
-    include "../import_dans_le_php/menu.php";
+    include "../import_dans_le_php/menu-connect.php";
     ?>
-    <!-- Contenu de la page principale pour l'Astronomie -->
+    <!-- Contenu de la page principale pour la Météorologie -->
     <div class="navbar-onglets">
         <label class="label-onglets" for="toggle">☰</label>
         <input type="checkbox" id="toggle">
         <div class="container-onglets">
             <?php
-            $sql = "SELECT * FROM astronomie";
+            $sql = "SELECT * FROM meteorologie";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -81,8 +71,8 @@ input.seemore:checked~span.hide { display: inline; background-color: black; colo
     </div>
 
     <?php
-    include "../cookie/cookie.php";
-    ?>
+    include "../cookie/cookie.php"
+        ?>
     <?php
     include "../import_dans_le_php/footer.php";
     ?>

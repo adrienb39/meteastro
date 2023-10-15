@@ -67,7 +67,7 @@ html, body {
 	position: relative;
 }
 
-#menu a {
+#menu .a {
 	display: block;
 	line-height: 45px;
 	padding: 0 14px;
@@ -78,12 +78,12 @@ html, body {
 	transition: all 0.25s;
 }
 
-#menu a .nav-link:after {
+#menu .a .nav-link:after {
 	content: "\25BE";
 	margin-left: 5px;
 }
 
-#menu li a:hover {
+#menu li .a:hover {
 	color: red;
 	background-color: orange;
 	border-radius: 10px;
@@ -94,7 +94,7 @@ html, body {
 	color: bisque;
 } */
 
-#menu input {
+#menu .input {
 	display: none;
 	margin: 0;
 	padding: 0;
@@ -104,14 +104,14 @@ html, body {
 	cursor: pointer;
 }
 
-#menu label {
+#menu .label {
 	display: none;
 	line-height: 45px;
 	text-align: right;
 	position: absolute;
 }
 
-#menu label:before {
+#menu .label:before {
 	font-size: 1.6em;
 	content: "\2261"; 
 	margin-left: 20px;
@@ -269,7 +269,7 @@ legend {
 	display: inline-block;
 }
 
-/* input, textarea {
+/* .input, textarea {
 	border-radius: 10px;
 } */
 
@@ -327,7 +327,7 @@ legend {
 		padding: 10px 2px;
 	}
 
-	#menu a {
+	#menu .a {
 		transition: none;
 	}
 
@@ -347,7 +347,7 @@ legend {
 		width: auto;
 	}
 
-	#menu input, #menu label {
+	#menu .input, #menu .label {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -355,19 +355,19 @@ legend {
 		left: 85%;
 	}
 
-	#menu input {
+	#menu .input {
 		z-index: 4
 	}
 
-	#menu input:checked + label {
+	#menu .input:checked + .label {
 		color: red
 	}
 
-	#menu input:checked + label:before {
+	#menu .input:checked + .label:before {
 		content: "\00d7";
 	}
 
-	#menu input:checked ~ ul {
+	#menu .input:checked ~ ul {
 		display: block
 	}
 

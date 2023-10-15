@@ -14,15 +14,16 @@ body {
 } */
 
 .container {
-    position: relative;
-    width: 1260px;
-    height: 900px;
-    bottom: 76px;
-    border: 1px solid #333;
-    margin-left: 149px;
-    /* background: white; */
-    border-radius: 2px;
-    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
+	position: relative;
+	/* width: 1260px; */
+	/* height: 900px; */
+	/* bottom: 76px; */
+	/* border: 1px solid #333; */
+	margin-left: 140px;
+	/* background: white; */
+	/* border-radius: 2px; */
+	/* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
+	display: block;
 }
 
 ul.container-onglets {
@@ -48,10 +49,10 @@ ul.container-onglets {
 } */
 
 .contenu {
-    height: 70%;
-    height: 100%;
-    position: absolute;
-    opacity: 0;
+	/* height: 70%; */
+	height: 100%;
+	position: relative;
+	opacity: 0;
 }
 
 .contenu h3 {
@@ -100,12 +101,12 @@ ul.container-onglets {
     .container {
         position: relative;
         width: auto;
-        height: 900px;
+        /* height: 900px; */
         bottom: auto;
         margin: 10px;
-        border: 1px solid #333;
+        /* border: 1px solid #333; */
         margin-top: 15%;
-        border-radius: 2px;
+        /* border-radius: 2px; */
     }
 
     .container-onglets {

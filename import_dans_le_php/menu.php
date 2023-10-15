@@ -28,12 +28,12 @@
 </div>
   <!-- menu -->
   <nav id='menu'>
-    <input type='checkbox' id='responsive-menu' onclick='updatemenu()'><label></label>
+    <input class="input" type='checkbox' id='responsive-menu' onclick='updatemenu()'><label class="label"></label>
     <ul>
-      <li><a class="nav-link" href="/#accueil">ACCUEIL</a></li>
+      <li><a class="a nav-link" href="/#accueil">ACCUEIL</a></li>
       <!-- <li><a class="nav-link" href="/#identifier">S'IDENTIFIER</a></li> -->
       <li>
-        <a class="nav-link" href="/divers/astronomie.php">ASTRONOMIE</a>
+        <a class="a nav-link" href="/divers/astronomie.php">ASTRONOMIE</a>
         <!-- <ul class="sous-menu">
           <li><a class="sous-nav-link" href="#" title="Page dans Astronomie en construction">test 1</a></li>
           <li><a class="sous-nav-link" href="#" title="Page dans Astronomie en construction">test 2</a></li>
@@ -43,7 +43,7 @@
         </ul> -->
       </li>
       <li>
-        <a class="nav-link" href="/divers/meteorologie.php">MÉTÉOROLOGIE</a>
+        <a class="a nav-link" href="/divers/meteorologie.php">MÉTÉOROLOGIE</a>
         <!-- <ul class="sous-menu">
           <li><a class="sous-nav-link" href="#" title="Page dans Météorologie en construction">test 1</a></li>
           <li><a class="sous-nav-link" href="#" title="Page dans Météorologie en construction">test 2</a></li>
@@ -52,7 +52,8 @@
           <li><a class="sous-nav-link" href="#" title="Page dans Météorologie en construction">test 5</a></li>
         </ul> -->
       </li>
-      <li><a class="nav-link" href="/#contacts">CONTACTS</a></li>
+      <li><a class="a nav-link" href="/#contacts">CONTACTS</a></li>
+      <li><a class="a nav-link" href="/connexion/login.php">CONNEXION</a></li>
     </ul>
   </nav>
   <!-- bouton-retour -->
@@ -62,7 +63,6 @@
   <div id="scroll_to_top">
     <a href="#top"><img src="../ressources/79101209-flèche-vers-le-haut-icône-rouge-flèche-avec-bordure-dorée-isolé-sur-fond-blanc-bouton-rond-arrondi.jpg" alt="Retourner en haut" /></a>
 </div>
-
 <p id="minuteur"></p>
   <script>
   var deadline = new Date("April 15, 2022 10:15:00").getTime();

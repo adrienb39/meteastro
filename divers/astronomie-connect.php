@@ -1,4 +1,13 @@
 <?php
+// Initialiser la session
+session_start();
+// Vérifiez si l'utilisateur est connecté, sinon redirigez-le vers la page de connexion
+if (!isset($_SESSION["type"])) {
+    header("Location: /connexion/login.php");
+    exit();
+}
+?>
+<?php
 $servername = "localhost";
 $username = "root";
 $password = "Robot500";
@@ -48,7 +57,7 @@ input.seemore:checked~span.hide { display: inline; background-color: black; colo
 
 <body>
     <?php
-    include "../import_dans_le_php/menu.php";
+    include "../import_dans_le_php/menu-connect.php";
     ?>
     <!-- Contenu de la page principale pour l'Astronomie -->
     <div class="navbar-onglets">
