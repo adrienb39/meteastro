@@ -1,8 +1,15 @@
-html, body {
-    height: auto;
-    width: 100%;
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: auto;
+	width: 100%;
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 /* logo */
@@ -24,126 +31,176 @@ html, body {
 }
 
 /* menu */
-#menu {
-	top: 0;
-	left: 0;
-	right: 0;
-	background: black;
-	color: grey;
-	/* height: 45px; */
-	/* padding-left: 18px; */
-	/* padding-right: 18px; */
-	/* border-radius: 10px; */
-	/* width: 100%;
-	margin: auto; */
-	position: sticky;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	padding: 15px auto;
-	box-shadow: inset 0px -1px 0px red;
-	z-index: 2;
+.container {
+	margin: 0 auto;
+	width: 75%;
+	height: 25vh;
 }
 
-#menu ul, #menu li {
-	margin: 0 auto;
-	padding: 0;
-	list-style: none;
-}
-
-#menu ul {
-	width: 65%;
-	margin: 0 auto;
-	list-style: none;
-	display: flex;
-	padding: 0 2%;
+.mobile-nav {
+	background: #555;
+	color: #fff;
+	display: none;
 	justify-content: space-between;
 	align-items: center;
+	height: 35px;
+	padding: 20px;
+	font-size: 20px;
 }
 
-#menu li {
-	float: left;
-	display: inline;
-	position: relative;
-}
-
-#menu .a {
-	display: block;
-	line-height: 45px;
-	padding: 0 14px;
-	text-decoration: none;
-	color: gainsboro;
-	font-size: 16px;
-	font-weight: bold;
-	transition: all 0.25s;
-}
-
-#menu .a .nav-link:after {
-	content: "\25BE";
-	margin-left: 5px;
-}
-
-#menu li .a:hover {
-	color: red;
-	background-color: orange;
-	border-radius: 10px;
-}
-
-/* #menu li .nav-link-deroulant::after {
-	content: " ▼";
-	color: bisque;
-} */
-
-#menu .input {
-	display: none;
-	margin: 0;
-	padding: 0;
-	height: 45px;
-	width: 10%;
-	opacity: 0;
+.mobile-nav .nav-btn {
 	cursor: pointer;
 }
 
-#menu .label {
-	display: none;
-	line-height: 45px;
-	text-align: right;
-	position: absolute;
+.nav {
+	background: red;
+	display: flex;
+	justify-content: center;
+	z-index: 50;
+	position: relative;
 }
 
-#menu .label:before {
-	font-size: 1.6em;
-	content: "\2261"; 
-	margin-left: 20px;
+ul {
+	list-style: none;
+	display: flex;
+	background: red;
 }
 
-#menu ul.sous-menu{
-	height: auto;
-	overflow: hidden;
-	width: 170px;
-	background: rgb(70, 70, 70);
-	position: absolute;
-	z-index: 99;
-	display: none;
+ul li a,
+ul li {
+	cursor: pointer;
+	font-size: 20px;
+	text-decoration: none;
 }
 
-#menu ul.sous-menu li {
+ul li {
 	display: block;
-	width: 100%;
 }
 
-#menu ul.sous-menu a {
-	color: white;
-	font-size: 16px;
+ul li a {
+	padding: 15px 25px;
+	background: red;
+	color: #fff;
+	display: block;
 }
 
-#menu li:hover ul.sous-menu {
-	display: block
+li a:hover {
+	background-color: #ccc3;
+	color: #111;
 }
 
-#menu ul.sous-menu a:hover{
-	background-color: rgb(226, 147, 0);
-	color: red;
+ul li ul {
+	background: #555;
+	padding-left: 5px;
+	position: absolute;
+	width: 10em;
+	display: none;
+}
+
+li ul li a {
+	padding: 10px;
+	background: #555;
+	color: #fff;
+}
+
+li ul li a:hover {
+	background: #555;
+}
+
+ul li ul li {
+	position: relative;
+}
+
+ul li ul li ul {
+	position: absolute;
+	top: 5px;
+	left: 100%;
+}
+
+li:hover>ul,
+li:active>ul {
+	display: block;
+}
+
+.dropdown {
+	position: relative;
+}
+
+.dropdown>a,
+.dropdown>a:hover,
+.dropdown.active>a,
+.dropdown.active>a:hover {
+	background: url(./img/arrow.svg);
+	background-position: right;
+	background-size: 15px;
+	background-repeat: no-repeat;
+	color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+	.mobile-nav {
+		display: flex;
+	}
+
+	ul.nav {
+		visibility: hidden;
+		transform: translateY(-120%);
+		opacity: 0;
+		transition: 0.5s ease-in-out;
+	}
+
+	ul.nav.toggle {
+		visibility: visible;
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	ul {
+		flex-direction: column;
+	}
+
+	ul li {
+		overflow: hidden;
+		border: none;
+	}
+
+	ul li ul {
+		position: relative;
+		width: 90%;
+		padding: 0 5%;
+		transform: translateX(-100%);
+		display: block;
+		visibility: hidden;
+		height: 0;
+		overflow: hidden;
+		transition: transform 400ms ease;
+	}
+
+	ul li ul li ul {
+		position: initial;
+		background: #555;
+		top: 0;
+		width: 96%;
+		padding: 0 2%;
+	}
+
+	li:hover>ul,
+	li:active>ul {
+		display: block;
+	}
+
+	li.active>ul {
+		transform: translateX(0);
+		visibility: visible;
+		height: 100%;
+	}
+
+	.dropdown>a,
+	.dropdown>a:hover,
+	.dropdown.active>a,
+	.dropdown.active>a:hover {
+		background-position: 95% 50%;
+	}
 }
 
 /* bouton-retour */
@@ -154,8 +211,9 @@ html, body {
 	bottom: 125px;
 	right: 30px; */
 	display: none;
-  }
-  /* #scroll_to_top img {
+}
+
+/* #scroll_to_top img {
 	width: 50px;
 	border-radius: 50px;
   } */
@@ -179,7 +237,7 @@ section {
 	overflow: hidden;
 }
 
-.marquee > .info {
+.marquee>.info {
 	color: orange;
 	display: inline-block;
 	white-space: nowrap;
@@ -188,7 +246,7 @@ section {
 	padding: 10px 2em 10px 100%;
 }
 
-.marquee:hover > .info {
+.marquee:hover>.info {
 	animation-play-state: paused;
 }
 
@@ -203,8 +261,8 @@ section {
 		transform: translate(-100%);
 	}
 }
-  
-.marquee > .info {
+
+.marquee>.info {
 	font-size: 1.5em;
 }
 
@@ -224,7 +282,7 @@ section {
 #minuteur {
 	color: red;
 	display: inline;
-  }
+}
 
 /* footer */
 footer {
@@ -310,67 +368,7 @@ legend {
 }
 
 /* responsive */
-@media screen and (max-width: 1000px){
-	#menu {
-		position: sticky;
-	}
-
-	#menu ul {
-		background: #111;
-		position: absolute;
-		top: 100%;
-		right: 0;
-		left: 0;
-		z-index: 3;
-		height: auto;
-		display: none;
-		padding: 10px 2px;
-	}
-
-	#menu .a {
-		transition: none;
-	}
-
-	#menu ul.sous-menu {
-		width: 98%;
-		position: static;
-		margin-bottom: 10px;
-	}
-
-	#menu ul.sous-menu a {
-		padding-left: 30px;
-	}
-
-	#menu li {
-		display: block;
-		float: none;
-		width: auto;
-	}
-
-	#menu .input, #menu .label {
-		position: absolute;
-		top: 0;
-		left: 0;
-		display: block;
-		left: 85%;
-	}
-
-	#menu .input {
-		z-index: 4
-	}
-
-	#menu .input:checked + .label {
-		color: red
-	}
-
-	#menu .input:checked + .label:before {
-		content: "\00d7";
-	}
-
-	#menu .input:checked ~ ul {
-		display: block
-	}
-
+@media screen and (max-width: 1000px) {
 	.div-logo {
 		text-align: center;
 		margin-top: 0;
@@ -397,9 +395,9 @@ legend {
 	#scroll_to_top img {
 		width: 50px;
 		border-radius: 50px;
-  	}
+	}
 
-	  footer {
+	footer {
 		display: block;
 		text-align: center;
 	}
@@ -411,7 +409,7 @@ legend {
 		height: 1px;
 		border-top: 1px solid white;
 		margin: 1rem auto;
-	  }
+	}
 }
 
 .change {
@@ -424,9 +422,9 @@ legend {
 	margin-left: 8px;
 }
 
-.dark{
+.dark {
 	background-image: url('/ressources/background_sombre.gif');
-    background-size: cover;
+	background-size: cover;
 	color: #e6e6e6;
 }
 

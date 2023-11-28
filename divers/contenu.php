@@ -100,7 +100,7 @@
 			margin: 0;
 			cursor: pointer;
 			text-align: center;
-			color: #fff;
+			color: black;
 			font-weight: bold;
 			background: none;
 			border: none;
@@ -291,7 +291,7 @@
 
 <body>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<button id="popup_open">CONTENUS</button>
+	<button id="popup_open">ACCÈS À L'AJOUT DU CONTENU</button>
 	<div id="popup_overlay" style="display: none;"></div>
 	<div id="popup_box" style="top: -2000px;">
 		<a id="popup_close">X</a>

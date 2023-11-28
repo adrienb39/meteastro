@@ -7,12 +7,12 @@
     <meta name="description" content="Ce site permet d'avoir les informations d'astronomie et de météorologie et de contacter pour avoir des renseignement supplémentaire et bien d'autre">
     <meta name="keywords" content="">
     <title>Meteastro : Astronomie / meteorologie</title>
-    
     <link rel="icon" type="image/png" sizes="16x16"  href="/ressources/logo.png">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    
     <link rel="stylesheet" href="../CSS/style.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/js/all.min.js"></script>
+    <script src="/import_dans_le_php/menu.js" defer></script>
 </head>
 <body>
   <!-- logo -->
@@ -27,60 +27,57 @@
     </div>
 </div>
   <!-- menu -->
-  <nav id='menu'>
-    <input class="input" type='checkbox' id='responsive-menu' onclick='updatemenu()'><label class="label"></label>
-    <ul>
-      <li><a class="a nav-link" href="/#accueil">ACCUEIL</a></li>
-      <!-- <li><a class="nav-link" href="/#identifier">S'IDENTIFIER</a></li> -->
-      <li>
-        <a class="a nav-link" href="/divers/astronomie.php">ASTRONOMIE</a>
-        <!-- <ul class="sous-menu">
-          <li><a class="sous-nav-link" href="#" title="Page dans Astronomie en construction">test 1</a></li>
-          <li><a class="sous-nav-link" href="#" title="Page dans Astronomie en construction">test 2</a></li>
-          <li><a class="sous-nav-link" href="#" title="Page dans Astronomie en construction">test 3</a></li>
-          <li><a class="sous-nav-link" href="#" title="Page dans Astronomie en construction">test 4</a></li>
-          <li><a class="sous-nav-link" href="#" title="Page dans Astronomie en construction">test 5</a></li>
-        </ul> -->
-      </li>
-      <li>
-        <a class="a nav-link" href="/divers/meteorologie.php">MÉTÉOROLOGIE</a>
-        <!-- <ul class="sous-menu">
-          <li><a class="sous-nav-link" href="#" title="Page dans Météorologie en construction">test 1</a></li>
-          <li><a class="sous-nav-link" href="#" title="Page dans Météorologie en construction">test 2</a></li>
-          <li><a class="sous-nav-link" href="#" title="Page dans Météorologie en construction">test 3</a></li>
-          <li><a class="sous-nav-link" href="#" title="Page dans Météorologie en construction">test 4</a></li>
-          <li><a class="sous-nav-link" href="#" title="Page dans Météorologie en construction">test 5</a></li>
-        </ul> -->
-      </li>
-      <li><a class="a nav-link" href="/#contacts">CONTACTS</a></li>
-      <li><a class="a nav-link" href="/connexion/login.php">CONNEXION</a></li>
-    </ul>
-  </nav>
-  <!-- bouton-retour -->
-  <!-- <div class="top-page">
-    <a class="top-page-fleche" href="#">˄</a>
-  </div> -->
-  <div id="scroll_to_top">
-    <a href="#top"><img src="../ressources/79101209-flèche-vers-le-haut-icône-rouge-flèche-avec-bordure-dorée-isolé-sur-fond-blanc-bouton-rond-arrondi.jpg" alt="Retourner en haut" /></a>
-</div>
-<p id="minuteur"></p>
-  <script>
-  var deadline = new Date("April 15, 2022 10:15:00").getTime();
-  var x = setInterval(function() {
-  var now = new Date().getTime();
-  var t = deadline - now;
-  var days = Math.floor(t / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((t%(1000 * 60 * 60 * 24))/(1000 * 60 * 60));
-  var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((t % (1000 * 60)) / 1000);
-  document.getElementById("minuteur").innerHTML = days + "d " 
-  + hours + "h " + minutes + "m " + seconds + "s ";
-      if (t < 0) {
-          clearInterval(x);
-          document.getElementById("minuteur").innerHTML = "";
-      }
-  }, 1000);
-  </script>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <div class="mobile-nav">
+        <span>Menu</span>
+        <div class="nav-btn">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
 
+      <ul class="nav">
+        <?php 
+            include 'db.class.php';
+            $obj = new Db;
+            $result = $obj->query('SELECT * from menu_principal');
+
+            menu($result);
+
+            function menu($data, $parent_id=0){
+                foreach ($data as $key => $value) {
+                    if ($value['parent'] == $parent_id) {
+                        html($data, $value);
+                    }
+                }
+            }
+
+
+            function html($data, $menu){
+                $count = 0;
+
+                foreach ($data as $key => $value) {
+                    if ($value['parent'] == $menu['id']) {
+                        $count++;
+                    }
+                }
+
+                if ($count > 0) {
+                    echo '<li class=dropdown><a href=' . $menu['url'] . '>'.ucfirst($menu['menu_name']).'</a><ul>';
+                        menu($data, $menu['id']);
+                    echo '</ul></li>';
+                }
+
+                else{
+                    echo '<li><a href=' . $menu['url'] . '>'.ucfirst($menu['menu_name']).'</a></li>';
+                    echo '';
+                }
+            }
+        ?>
+      </ul>
+    </nav>
+  </div>
 </body>
 </html>

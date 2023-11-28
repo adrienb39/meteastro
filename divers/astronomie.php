@@ -25,6 +25,7 @@ if ($conn->connect_error) {
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="/divers/divers.css">
+    <script src="/divers/sidebar.js" defer></script>
     <!-- <style>
         .blc-seemore{
             position: relative;
