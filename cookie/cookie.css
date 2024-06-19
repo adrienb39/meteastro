@@ -12,6 +12,20 @@
     z-index: 2;
 }
 
+.darkmode .wrapper {
+    position: fixed;
+    bottom: 50px;
+    right: -400px;
+    max-width: 345px;
+    width: 100%;
+    background: black;
+    border-radius: 20px;
+    padding: 15px 25px 22px;
+    transition: right 0.3s ease;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
 .wrapper.show {
     right: 20px;
 }
@@ -139,3 +153,9 @@ header h2 {
         width: 75%;
     }
 }
+
+/* .cookie-banner {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+} */

@@ -15,14 +15,15 @@ body {
 
 .container {
     position: relative;
-    width: 1260px;
-    height: 900px;
-    bottom: 76px;
-    border: 1px solid #333;
-    margin-left: 149px;
+    /* width: 1260px; */
+    /* height: 900px; */
+    /* bottom: 76px; */
+    /* border: 1px solid #333; */
+    margin-left: 140px;
     /* background: white; */
-    border-radius: 2px;
+    /* border-radius: 2px; */
     /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
+    display: block;
 }
 
 ul.container-onglets {
@@ -48,9 +49,9 @@ ul.container-onglets {
 } */
 
 .contenu {
-    height: 70%;
+    /* height: 70%; */
     height: 100%;
-    position: absolute;
+    position: relative;
     opacity: 0;
 }
 
@@ -100,17 +101,17 @@ ul.container-onglets {
     .container {
         position: relative;
         width: auto;
-        height: 900px;
+        /* height: 900px; */
         bottom: auto;
         margin: 10px;
-        border: 1px solid #333;
+        /* border: 1px solid #333; */
         margin-top: 15%;
-        border-radius: 2px;
+        /* border-radius: 2px; */
     }
 
     .container-onglets {
-        width: 15%;
-        z-index: 99;
+        width: 100%;
+        z-index: 2;
         height: 20%;
         position: relative;
         top: 120px;
@@ -120,10 +121,6 @@ ul.container-onglets {
         background-color: rgb(255, 128, 128);
         padding: 10px;
         width: 200px;
-    }
-
-    .navbar-onglets {
-        height: 60px;
     }
 
     .navbar-onglets .container-onglets {
@@ -145,4 +142,221 @@ ul.container-onglets {
     #toggle:checked+.container-onglets {
         display: flex;
     }
+}
+
+
+
+
+
+.page {
+    display: flex;
+    grid-column-gap: 100px;
+    max-width: 1280px;
+    height: auto;
+    border-radius: 20px;
+    margin: 40px auto 0 auto;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 0 15px rgb(222 169 73);
+}
+
+.right {
+    overflow: auto;
+    padding-right: 30px;
+
+}
+
+.right h2 {
+    font-weight: normal;
+    margin-bottom: 30px;
+    border-bottom: thin solid #e4e4e4;
+    padding-bottom: 10px;
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+select {
+    padding: 10px 35px;
+    font-size: 18px;
+    color: white;
+    background: linear-gradient(45deg, red, yellow);
+    border: none;
+    border-radius: 10px;
+    z-index: 1;
+    position: relative;
+    width: 100%;
+}
+
+select:focus {
+    outline: none;
+}
+
+.product {
+    display: grid;
+    grid-template-columns: 0 1fr;
+    grid-column-gap: 30px;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: thin solid #e4e4e4;
+    padding-bottom: 10px;
+}
+
+.product p {
+    margin-bottom: 10px;
+    line-height: 26px;
+}
+
+p.title,
+p.price {
+    font-size: 20px;
+}
+
+p.description {
+    font-size: 16px;
+}
+
+select option {
+    padding: 0.5em 0.5em;
+    background-color: red;
+    appearance: none;
+    background-origin: content-box;
+    background-position: right -1em center;
+    background-repeat: no-repeat;
+    background-size: auto;
+    box-sizing: border-box;
+    padding-right: 1.5em;
+}
+
+@media screen and (max-width: 1000px) {
+    .page {
+        display: block;
+    }
+}
+
+:root {
+    --clr-gray-light: #d7dfe2;
+    --clr-gray-med: #616b74;
+    --clr-gray-dark: #414b56;
+    --clr-link: #4d97b2;
+    --clr-popular: #ef2525;
+    --clr-technology: #651fff;
+    --clr-psychology: #e85808;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 75%;
+    margin: 0 13%;
+}
+
+.card {
+    overflow: hidden;
+    box-shadow: 0px 2px 20px var(--clr-gray-light);
+    background: white;
+    border-radius: 0.5rem;
+    position: relative;
+    width: 350px;
+    margin: 1rem;
+    transition: 250ms all ease-in-out;
+    cursor: pointer;
+    color: black;
+}
+
+.darkmode .card {
+    overflow: hidden;
+    box-shadow: white 0 0 10px;
+    background: var(--night-300);
+    border-radius: 0.5rem;
+    position: relative;
+    width: 350px;
+    margin: 1rem;
+    transition: 250ms all ease-in-out;
+    cursor: pointer;
+    color: white;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 2px 40px var(--clr-gray-light);
+}
+
+.banner-img {
+    position: absolute;
+    object-fit: cover;
+    height: 14rem;
+    width: 100%;
+}
+
+.category-tag {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+    background: red;
+    padding: 0.5rem 1.3rem 0.5rem 1rem;
+    text-transform: uppercase;
+    position: absolute;
+    z-index: 1;
+    top: 1rem;
+    border-radius: 0 2rem 2rem 0;
+}
+
+.popular {
+    background: var(--clr-popular);
+}
+
+.technology {
+    background: var(--clr-technology);
+}
+
+.psychology {
+    background: var(--clr-psychology);
+}
+
+.card-body {
+    margin: 15rem 1rem 1rem 1rem;
+}
+
+.blog-hashtag {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--clr-link);
+}
+
+.blog-title {
+    line-height: 1.5rem;
+    margin: 1rem 0 0.5rem;
+}
+
+.blog-description {
+    color: var(--clr-gray-med);
+    font-size: 0.9rem;
+}
+
+.card-profile {
+    display: flex;
+    margin-top: 2rem;
+    align-items: center;
+}
+
+.profile-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.card-profile-info {
+    margin-left: 1rem;
+}
+
+.profile-name {
+    font-size: 1rem;
+}
+
+.profile-followers {
+    color: var(--clr-gray-med);
+    font-size: 0.9rem;
 }
