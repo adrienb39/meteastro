@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-$bdd = new PDO('mysql:host=localhost;dbname=meteastro', 'root', 'Robot500');
-
 if (isset($_SESSION['id'])) {
 	$requser = $bdd->prepare("SELECT * FROM membres WHERE id = ?");
 	$requser->execute(array($_SESSION['id']));

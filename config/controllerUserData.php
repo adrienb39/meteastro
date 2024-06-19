@@ -1,16 +1,16 @@
 <?php
-session_start();
-require "connection.php";
+// session_start();
+require "connexion_bdd.php";
 $email = "";
 $name = "";
 $errors = array();
 
 //if user signup button
 if (isset($_POST['signup'])) {
-    $name = mysqli_real_escape_string($con, $_POST['name']);
-    $email = mysqli_real_escape_string($con, $_POST['email']);
-    $password = mysqli_real_escape_string($con, $_POST['password']);
-    $cpassword = mysqli_real_escape_string($con, $_POST['cpassword']);
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $cpassword = mysqli_real_escape_string($conn, $_POST['cpassword']);
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "L'adresse électronique n'est pas valide !";
     }
@@ -25,7 +25,7 @@ if (isset($_POST['signup'])) {
         $errors['password'] = "Le mot de passe de confirmation ne correspond pas !";
     }
     $email_check = "SELECT * FROM usertable WHERE email = '$email'";
-    $res = mysqli_query($con, $email_check);
+    $res = mysqli_query($conn, $email_check);
     if (mysqli_num_rows($res) > 0) {
         $errors['email'] = "L'email que vous avez saisi existe déjà !";
     }
@@ -35,7 +35,7 @@ if (isset($_POST['signup'])) {
         $status = "notverified";
         $insert_data = "INSERT INTO usertable (name, email, password, code, status)
                         values('$name', '$email', '$encpass', '$code', '$status')";
-        $data_check = mysqli_query($con, $insert_data);
+        $data_check = mysqli_query($conn, $insert_data);
         if ($data_check) {
             $subject = "Code de vérification de l'email";
             // $subject = "Mise à jour de la page de connexion sur le site Meteastro";
@@ -77,9 +77,9 @@ Cordialement, L’équipe Meteastro
 //if user click verification code submit button
 if (isset($_POST['check'])) {
     $_SESSION['info'] = "";
-    $otp_code = mysqli_real_escape_string($con, $_POST['otp']);
+    $otp_code = mysqli_real_escape_string($conn, $_POST['otp']);
     $check_code = "SELECT * FROM usertable WHERE code = $otp_code";
-    $code_res = mysqli_query($con, $check_code);
+    $code_res = mysqli_query($conn, $check_code);
     if (mysqli_num_rows($code_res) > 0) {
         $fetch_data = mysqli_fetch_assoc($code_res);
         $fetch_code = $fetch_data['code'];
@@ -87,7 +87,7 @@ if (isset($_POST['check'])) {
         $code = 0;
         $status = 'verified';
         $update_otp = "UPDATE usertable SET code = $code, status = '$status' WHERE code = $fetch_code";
-        $update_res = mysqli_query($con, $update_otp);
+        $update_res = mysqli_query($conn, $update_otp);
         if ($update_res) {
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
@@ -103,10 +103,10 @@ if (isset($_POST['check'])) {
 
 //if user click login button
 if (isset($_POST['login'])) {
-    $email = mysqli_real_escape_string($con, $_POST['email']);
-    $password = mysqli_real_escape_string($con, $_POST['password']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
     $check_email = "SELECT * FROM usertable WHERE email = '$email'";
-    $res = mysqli_query($con, $check_email);
+    $res = mysqli_query($conn, $check_email);
     if (mysqli_num_rows($res) > 0) {
         $fetch = mysqli_fetch_assoc($res);
         $fetch_pass = $fetch['password'];
@@ -132,13 +132,13 @@ if (isset($_POST['login'])) {
 
 //if user click continue button in forgot password form
 if (isset($_POST['check-email'])) {
-    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
     $check_email = "SELECT * FROM usertable WHERE email='$email'";
-    $run_sql = mysqli_query($con, $check_email);
+    $run_sql = mysqli_query($conn, $check_email);
     if (mysqli_num_rows($run_sql) > 0) {
         $code = rand(999999, 111111);
         $insert_code = "UPDATE usertable SET code = $code WHERE email = '$email'";
-        $run_query = mysqli_query($con, $insert_code);
+        $run_query = mysqli_query($conn, $insert_code);
         if ($run_query) {
             $subject = "Code de réinitialisation du mot de passe";
             $message = "Votre code de réinitialisation du mot de passe est $code";
@@ -163,9 +163,9 @@ if (isset($_POST['check-email'])) {
 //if user click check reset otp button
 if (isset($_POST['check-reset-otp'])) {
     $_SESSION['info'] = "";
-    $otp_code = mysqli_real_escape_string($con, $_POST['otp']);
+    $otp_code = mysqli_real_escape_string($conn, $_POST['otp']);
     $check_code = "SELECT * FROM usertable WHERE code = $otp_code";
-    $code_res = mysqli_query($con, $check_code);
+    $code_res = mysqli_query($conn, $check_code);
     if (mysqli_num_rows($code_res) > 0) {
         $fetch_data = mysqli_fetch_assoc($code_res);
         $email = $fetch_data['email'];
@@ -182,8 +182,8 @@ if (isset($_POST['check-reset-otp'])) {
 //if user click change password button
 if (isset($_POST['change-password'])) {
     $_SESSION['info'] = "";
-    $password = mysqli_real_escape_string($con, $_POST['password']);
-    $cpassword = mysqli_real_escape_string($con, $_POST['cpassword']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $cpassword = mysqli_real_escape_string($conn, $_POST['cpassword']);
     if ($password !== $cpassword) {
         $errors['password'] = "Le mot de passe de confirmation ne correspond pas !";
     } else {
@@ -191,7 +191,7 @@ if (isset($_POST['change-password'])) {
         $email = $_SESSION['email']; //getting this email using session
         $encpass = password_hash($password, PASSWORD_BCRYPT);
         $update_pass = "UPDATE usertable SET code = $code, password = '$encpass' WHERE email = '$email'";
-        $run_query = mysqli_query($con, $update_pass);
+        $run_query = mysqli_query($conn, $update_pass);
         if ($run_query) {
             $info = "Votre mot de passe a changé. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.";
             $_SESSION['info'] = $info;

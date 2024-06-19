@@ -1,5 +1,5 @@
 <?php
-include "db_conn.php";
+require_once "../config/connexion_bdd.php";
 
 if (isset($_POST["submit"])) {
    $first_name = $_POST['first_name'];

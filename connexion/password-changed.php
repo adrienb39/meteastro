@@ -1,4 +1,4 @@
-<?php require_once "controllerUserData.php"; ?>
+<?php require_once "../config/controllerUserData.php"; ?>
 <?php
 if ($_SESSION['info'] == false) {
     header('Location: login.php');

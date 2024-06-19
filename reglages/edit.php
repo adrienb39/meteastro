@@ -1,5 +1,5 @@
 <?php
-include "db_conn.php";
+include "../config/connexion_bdd.php";
 $id = $_GET["id"];
 
 if (isset($_POST["submit"])) {

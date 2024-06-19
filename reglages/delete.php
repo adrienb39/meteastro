@@ -1,5 +1,5 @@
 <?php
-include "db_conn.php";
+include "../config/connexion_bdd.php";
 $id = $_GET["id"];
 $sql = "DELETE FROM `crud` WHERE id = $id";
 $result = mysqli_query($conn, $sql);

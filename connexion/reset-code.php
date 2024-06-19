@@ -1,4 +1,4 @@
-<?php require_once "controllerUserData.php"; ?>
+<?php require_once "../config/controllerUserData.php"; ?>
 <?php
 $email = $_SESSION['email'];
 if ($email == false) {

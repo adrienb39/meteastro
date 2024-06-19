@@ -1,21 +1,16 @@
 <?php
 require_once '../../config/connexion_bdd.php';
-?>
-<?php
-$query = "SELECT title FROM astronomie";
-$result = $conn->query($query);
-if ($result->num_rows > 0) {
-    $options = mysqli_fetch_all($result, MYSQLI_ASSOC);
-}
-?>
-<?php
-$conn = new PDO("mysql:host=localhost;dbname=meteastro;charset=utf8", "root", "Robot500");
-if (isset($_GET['id']) and !empty($_GET['id'])) {
+
+if (isset($_GET['id']) && !empty($_GET['id'])) {
     $get_id = htmlspecialchars($_GET['id']);
-    $article = $conn->prepare('SELECT * FROM astronomie, usertable WHERE astronomie.id_users = usertable.id_users AND id = ?');
-    $article->execute(array($get_id));
-    if ($article->rowCount() == 1) {
-        $article = $article->fetch();
+    $query = 'SELECT * FROM astronomie, usertable WHERE astronomie.id_users = usertable.id_users AND id = ?';
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $get_id); // 'i' pour un paramètre entier
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $article = $result->fetch_assoc();
         $title = $article['title'];
         $filename = $article['filename'];
         $title_contenu = $article['title_contenu'];
@@ -29,6 +24,7 @@ if (isset($_GET['id']) and !empty($_GET['id'])) {
     die('Erreur');
 }
 ?>
+
 <?php include "functions.php" ?>
 <!DOCTYPE html>
 <html lang="fr-FR">

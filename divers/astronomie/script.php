@@ -6,8 +6,6 @@
 
 		if($category === ""){
 			$products = getAllProducts();
-		}else{
-			$products = getProductsByCategory($category);
 		}
 		echo json_encode($products);
 	}

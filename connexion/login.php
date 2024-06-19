@@ -65,7 +65,8 @@ if (isset($_POST['formconnexion'])) {
         $erreur = "Tous les champs doivent être complétés !";
     }
 } */
-require_once "controllerUserData.php";
+// require_once "../config/connexion_bdd.php";
+require_once "../config/controllerUserData.php";
 ?>
 
 <!DOCTYPE html>

@@ -2,24 +2,14 @@
 // Initialiser la session
 session_start();
 // Vérifiez si l'utilisateur est connecté, sinon redirigez-le vers la page de connexion
-if (!isset($_SESSION["type"])) {
+if (!isset ($_SESSION["type"])) {
     header("Location: /connexion/login.php");
     exit();
 }
 ?>
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "Robot500";
-$dbname = "meteastro";
-
-// Créer une connexion
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Vérifier la connexion
-if ($conn->connect_error) {
-    die("Connexion a échouée: " . $conn->connect_error);
-}
-?>
+require_once '../config/connexion_bdd.php'
+    ?>
 <!DOCTYPE html>
 <html lang="fr-FR">
 

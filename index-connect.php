@@ -1,10 +1,10 @@
-<?php require_once "connexion/controllerUserData.php"; ?>
+<?php require_once "config/controllerUserData.php"; ?>
 <?php
 $email = $_SESSION['email'];
 $password = $_SESSION['password'];
 if ($email != false && $password != false) {
     $sql = "SELECT * FROM usertable WHERE email = '$email'";
-    $run_Sql = mysqli_query($con, $sql);
+    $run_Sql = mysqli_query($conn, $sql);
     if ($run_Sql) {
         $fetch_info = mysqli_fetch_assoc($run_Sql);
         $status = $fetch_info['status'];
@@ -20,17 +20,6 @@ if ($email != false && $password != false) {
 } else {
     header('Location: connexion/login.php');
 }
-?>
-<?php
-/* session_start();
-
-$bdd = new PDO('mysql:host=localhost;dbname=meteastro', 'root', 'Robot500');
-
-if (isset($_GET['id']) and $_GET['id'] > 0) {
-    $getid = intval($_GET['id']);
-    $requser = $bdd->prepare('SELECT * FROM membres WHERE id = ?');
-    $requser->execute(array($getid));
-    $userinfo = $requser->fetch(); */
 ?>
 <?php
 require_once 'config/connexion_bdd.php';

@@ -1,8 +1,9 @@
 <?php
+session_start();
 $servername = "localhost";
 $username = "root";
-$password = "Robot500";
-$dbname = "meteastro";
+$password = "";
+$dbname = "";
 
 // Créer une connexion
 $conn = new mysqli($servername, $username, $password, $dbname);
