@@ -13,7 +13,7 @@
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="CSS/style.css"/>
-
+    
     <style>
     .blc-astro-meteo {
 	display: flex;
