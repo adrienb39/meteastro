@@ -1,149 +1,253 @@
-html, body {
-    height: auto;
-    width: 100%;
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: auto;
+	width: 100%;
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #fff;
 }
 
 /* logo */
 .div-logo {
-	background-color: black;
+	background-color: white;
 	text-align: center;
-	margin-top: 0;
+}
+
+.darkmode .div-logo {
+	background-color: hsl(217, 27%, 12%);
+	text-align: center;
 }
 
 .logo {
 	text-decoration: none;
 	color: red;
-	font-size: 32px;
+	font-size: 40px;
 	font-weight: bold;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .logo-icon {
-	width: 40px;
+	width: 80px;
+}
+
+.title-logo {
+	background-color: red;
+	color: white;
+	padding: 4px 8px;
+	text-align: center;
+	border-radius: 5px;
 }
 
 /* menu */
-#menu {
-	top: 0;
-	left: 0;
-	right: 0;
-	background: black;
-	color: grey;
-	/* height: 45px; */
-	/* padding-left: 18px; */
-	/* padding-right: 18px; */
-	/* border-radius: 10px; */
-	/* width: 100%;
-	margin: auto; */
-	position: sticky;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	padding: 15px auto;
-	box-shadow: inset 0px -1px 0px red;
-	z-index: 2;
+.container {
+	margin: 0 auto;
+	/* width: 75%; */
+	/* height: 25vh; */
+	z-index: 99;
 }
 
-#menu ul, #menu li {
-	margin: 0 auto;
-	padding: 0;
-	list-style: none;
-}
-
-#menu ul {
-	width: 65%;
-	margin: 0 auto;
-	list-style: none;
-	display: flex;
-	padding: 0 2%;
+.mobile-nav {
+	background: #555;
+	color: #fff;
+	display: none;
 	justify-content: space-between;
 	align-items: center;
+	height: 35px;
+	padding: 20px;
+	font-size: 20px;
 }
 
-#menu li {
-	float: left;
-	display: inline;
-	position: relative;
-}
-
-#menu a {
-	display: block;
-	line-height: 45px;
-	padding: 0 14px;
-	text-decoration: none;
-	color: gainsboro;
-	font-size: 16px;
-	font-weight: bold;
-	transition: all 0.25s;
-}
-
-#menu a .nav-link:after {
-	content: "\25BE";
-	margin-left: 5px;
-}
-
-#menu li a:hover {
-	color: red;
-	background-color: orange;
-	border-radius: 10px;
-}
-
-/* #menu li .nav-link-deroulant::after {
-	content: " ▼";
-	color: bisque;
-} */
-
-#menu input {
-	display: none;
-	margin: 0;
-	padding: 0;
-	height: 45px;
-	width: 10%;
-	opacity: 0;
+.mobile-nav .nav-btn {
 	cursor: pointer;
 }
 
-#menu label {
-	display: none;
-	line-height: 45px;
-	text-align: right;
-	position: absolute;
+.nav {
+	background: white;
+	display: flex;
+	justify-content: center;
+	z-index: 50;
+	position: relative;
+	border-bottom: 1px solid red;
 }
 
-#menu label:before {
-	font-size: 1.6em;
-	content: "\2261"; 
-	margin-left: 20px;
-}
-
-#menu ul.sous-menu{
-	height: auto;
-	overflow: hidden;
-	width: 170px;
-	background: rgb(70, 70, 70);
-	position: absolute;
-	z-index: 99;
-	display: none;
-}
-
-#menu ul.sous-menu li {
-	display: block;
+.relative {
+	position: relative;
+	top: 0;
 	width: 100%;
 }
 
-#menu ul.sous-menu a {
+.sticky {
+	position: sticky;
+	top: 0;
+	width: 100%;
+}
+
+ul {
+	list-style: none;
+	display: flex;
+	background: black;
+}
+
+ul li a,
+ul li {
+	cursor: pointer;
+	font-size: 20px;
+	text-decoration: none;
+}
+
+ul li {
+	display: block;
+}
+
+ul li a {
+	padding: 15px 25px;
+	background: white;
+	color: black;
+	display: block;
+}
+
+li a:hover {
+	background-color: red;
 	color: white;
-	font-size: 16px;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
 }
 
-#menu li:hover ul.sous-menu {
-	display: block
+.darkmode li a:hover {
+	background-color: red;
+	color: white;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
 }
 
-#menu ul.sous-menu a:hover{
-	background-color: rgb(226, 147, 0);
-	color: red;
+ul li ul {
+	background: #555;
+	padding-left: 5px;
+	position: absolute;
+	width: 10em;
+	display: none;
+}
+
+li ul li a {
+	padding: 10px;
+	background: #555;
+	color: #fff;
+}
+
+li ul li a:hover {
+	background: #555;
+}
+
+.darkmode li ul li a:hover {
+	background: #555;
+}
+
+ul li ul li {
+	position: relative;
+}
+
+ul li ul li ul {
+	position: absolute;
+	top: 5px;
+	left: 100%;
+}
+
+li:hover>ul,
+li:active>ul {
+	display: block;
+}
+
+.dropdown {
+	position: relative;
+}
+
+.dropdown>a,
+.dropdown>a:hover,
+.dropdown.active>a,
+.dropdown.active>a:hover {
+	background: url(./img/arrow.svg);
+	background-position: right;
+	background-size: 15px;
+	background-repeat: no-repeat;
+	color: black;
+}
+
+@media screen and (max-width: 768px) {
+	.mobile-nav {
+		display: flex;
+	}
+
+	ul.nav {
+		visibility: hidden;
+		transform: translateY(-120%);
+		opacity: 0;
+		transition: 0.5s ease-in-out;
+	}
+
+	ul.nav.toggle {
+		visibility: visible;
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	ul {
+		flex-direction: column;
+	}
+
+	ul li {
+		overflow: hidden;
+		border: none;
+	}
+
+	ul li ul {
+		position: relative;
+		width: 90%;
+		padding: 0 5%;
+		transform: translateX(-100%);
+		display: block;
+		visibility: hidden;
+		height: 0;
+		overflow: hidden;
+		transition: transform 400ms ease;
+	}
+
+	ul li ul li ul {
+		position: initial;
+		background: #555;
+		top: 0;
+		width: 96%;
+		padding: 0 2%;
+	}
+
+	li:hover>ul,
+	li:active>ul {
+		display: block;
+	}
+
+	li.active>ul {
+		transform: translateX(0);
+		visibility: visible;
+		height: 100%;
+	}
+
+	.dropdown>a,
+	.dropdown>a:hover,
+	.dropdown.active>a,
+	.dropdown.active>a:hover {
+		background-position: 95% 50%;
+	}
+
+	li a:hover {
+		border-radius: 12px;
+	}
 }
 
 /* bouton-retour */
@@ -154,8 +258,9 @@ html, body {
 	bottom: 125px;
 	right: 30px; */
 	display: none;
-  }
-  /* #scroll_to_top img {
+}
+
+/* #scroll_to_top img {
 	width: 50px;
 	border-radius: 50px;
   } */
@@ -170,8 +275,19 @@ html, body {
 	text-align: center;
 }
 
+.darkmode .main {
+	width: 50%;
+	position: relative;
+	top: 50px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	color: white;
+}
+
 section {
-	margin-bottom: 50px;
+	/* margin-bottom: 50px; */
+	margin-bottom: 25vh;
 }
 
 /* animation-info */
@@ -179,8 +295,8 @@ section {
 	overflow: hidden;
 }
 
-.marquee > .info {
-	color: orange;
+.marquee>.info {
+	color: grey;
 	display: inline-block;
 	white-space: nowrap;
 	animation: defilement-rtl 30s infinite linear;
@@ -188,9 +304,9 @@ section {
 	padding: 10px 2em 10px 100%;
 }
 
-.marquee:hover > .info {
+/* .marquee:hover>.info {
 	animation-play-state: paused;
-}
+} */
 
 @keyframes defilement-rtl {
 	0% {
@@ -203,8 +319,8 @@ section {
 		transform: translate(-100%);
 	}
 }
-  
-.marquee > .info {
+
+.marquee>.info {
 	font-size: 1.5em;
 }
 
@@ -224,18 +340,20 @@ section {
 #minuteur {
 	color: red;
 	display: inline;
-  }
+}
 
 /* footer */
 footer {
 	display: flex;
 	/* justify-content: center; */
 	padding: 20px 5px;
-	background-color: black;
-	color: #fff;
+	/* background-color: black; */
+	background: linear-gradient(45deg, white, #ffa3a3, white);
+	color: black;
 	justify-content: space-evenly;
 	align-items: center;
 	margin-top: 100px;
+	box-shadow: #ff0000 0 0 10px;
 }
 
 /* accueil */
@@ -245,23 +363,27 @@ footer {
 
 /* formulaire de contact */
 fieldset {
-	background-color: transparent;
-	border-color: red;
-	border-top-right-radius: 20px;
-	border-top-left-radius: 20px;
+	background-color: white;
+	border-color: transparent;
+	/* border-top-right-radius: 20px;
+	border-top-left-radius: 20px; */
+	border-radius: 20px;
 	transition: all 0.5s;
+	box-shadow: black 0 0 10px;
 }
 
-fieldset:hover {
+/* fieldset:hover {
 	background-color: darkorange;
-}
+} */
 
 legend {
 	font-size: 50px;
 	margin: auto;
 	margin-bottom: 4%;
 	font-weight: bold;
-	background-color: orangered;
+	background-color: red;
+	color: white;
+	border-radius: 12px;
 }
 
 .contener-contacts {
@@ -269,7 +391,7 @@ legend {
 	display: inline-block;
 }
 
-/* input, textarea {
+/* .input, textarea {
 	border-radius: 10px;
 } */
 
@@ -279,17 +401,45 @@ legend {
 
 .contact {
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	/* width: 100%; */
+	/* height: calc(2rem + 4px); */
+	/* border: 1px solid rgb(187, 187, 187); */
+	margin-bottom: 10px;
+	height: 45px;
+	display: block;
 	width: 100%;
-	height: calc(2rem + 4px);
-	border: 1px solid rgb(187, 187, 187);
-	margin-bottom: 2.5px;
+	border-radius: 30px;
+	border: none;
+	outline: none;
+	background-color: #f7f7f7;
+	font-size: 16px;
+	padding: 0 15px;
+	transition: all 0.3s ease;
+	color: #646f87;
+	margin-top: 10px;
+	box-shadow: black 0 0 1px;
 }
 
 .contact-message {
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	/* width: 100%; */
+	/* height: calc(2rem + 4px); */
+	/* height: 10rem; */
+	height: 240px;
+	display: block;
 	width: 100%;
-	height: calc(2rem + 4px);
-	height: 10rem;
+	border-radius: 30px;
+	border: none;
+	outline: none;
+	background-color: #f7f7f7;
+	font-size: 16px;
+	padding: 0 15px;
+	padding-top: 15px;
+	transition: all 0.3s ease;
+	color: #646f87;
+	resize: none;
+	margin-top: 10px;
+	box-shadow: black 0 0 1px;
 }
 
 .blc-btn {
@@ -302,75 +452,17 @@ legend {
 	padding: 10px 4px;
 	font-weight: 500;
 	color: white;
-	background-color: orangered;
+	background-color: red;
+	margin-bottom: 20px;
 }
 
 .btn:hover {
-	background-color: rgb(255, 110, 55);
+	background-color: rgb(255, 55, 55);
+	cursor: pointer;
 }
 
 /* responsive */
-@media screen and (max-width: 1000px){
-	#menu {
-		position: sticky;
-	}
-
-	#menu ul {
-		background: #111;
-		position: absolute;
-		top: 100%;
-		right: 0;
-		left: 0;
-		z-index: 3;
-		height: auto;
-		display: none;
-		padding: 10px 2px;
-	}
-
-	#menu a {
-		transition: none;
-	}
-
-	#menu ul.sous-menu {
-		width: 98%;
-		position: static;
-		margin-bottom: 10px;
-	}
-
-	#menu ul.sous-menu a {
-		padding-left: 30px;
-	}
-
-	#menu li {
-		display: block;
-		float: none;
-		width: auto;
-	}
-
-	#menu input, #menu label {
-		position: absolute;
-		top: 0;
-		left: 0;
-		display: block;
-		left: 85%;
-	}
-
-	#menu input {
-		z-index: 4
-	}
-
-	#menu input:checked + label {
-		color: red
-	}
-
-	#menu input:checked + label:before {
-		content: "\00d7";
-	}
-
-	#menu input:checked ~ ul {
-		display: block
-	}
-
+@media screen and (max-width: 1000px) {
 	.div-logo {
 		text-align: center;
 		margin-top: 0;
@@ -397,11 +489,14 @@ legend {
 	#scroll_to_top img {
 		width: 50px;
 		border-radius: 50px;
-  	}
+	}
 
-	  footer {
-		display: block;
+	footer {
+		display: flex;
 		text-align: center;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
 	}
 
 	.footer_block::after {
@@ -411,7 +506,7 @@ legend {
 		height: 1px;
 		border-top: 1px solid white;
 		margin: 1rem auto;
-	  }
+	}
 }
 
 .change {
@@ -424,12 +519,86 @@ legend {
 	margin-left: 8px;
 }
 
-.dark{
-	background-image: url('/ressources/background_sombre.gif');
-    background-size: cover;
-	color: #e6e6e6;
+.dark {
+	background-color: hsl(215, 27%, 8%);
+	color: black;
 }
 
 .light {
 	background-color: white;
+}
+
+.switch {
+	position: relative;
+	display: block;
+	cursor: pointer;
+	user-select: none;
+	margin-right: 0.5rem;
+	color: black;
+}
+
+.switch-light,
+.switch-dark {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform-origin: center;
+	transform: translate(-50%, -50%);
+	transition: all 0.3s ease-in;
+}
+
+.switch-light {
+	font-size: 1.3rem;
+	visibility: visible;
+	color: var(--black-300);
+}
+
+.darkmode .switch-light {
+	font-size: 0rem;
+	visibility: hidden;
+}
+
+.switch-dark {
+	font-size: 0rem;
+	visibility: hidden;
+	color: var(--white-100);
+}
+
+.darkmode .switch-dark {
+	font-size: 1.3rem;
+	visibility: visible;
+}
+
+body.darkmode {
+	background-color: hsl(215, 27%, 8%);
+}
+
+.darkmode .nav {
+	background: hsl(217, 27%, 12%);
+}
+
+.darkmode ul li a {
+	background: hsl(217, 27%, 12%);
+	color: white;
+}
+
+.darkmode footer {
+	background: linear-gradient(45deg, black, #f00, black);
+	color: white;
+}
+
+.darkmode .switch {
+	color: white;
+}
+
+.darkmode fieldset {
+	background-color: var(--night-300);
+	border-color: transparent;
+	border-radius: 20px;
+	transition: all 0.5s;
+	box-shadow: white 0 0 10px;
+}
+
+.darkmode .contener-contacts form label {
+	color: white;
 }
