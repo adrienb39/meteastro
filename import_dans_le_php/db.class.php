@@ -1,8 +1,8 @@
 <?php
 class Db
 {
-    private $servername = "localhost";
-    private $username = "root";
+    private $servername = "";
+    private $username = "";
     private $password = "";
     private $dbname = "";
     private $conn;

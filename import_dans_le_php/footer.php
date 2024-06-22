@@ -31,37 +31,11 @@
             <?php include "counter.php"; ?>
         </p>
 
-        <button class="switch" id="switch">
+        <div class="switch" id="switch">
             <span class="switch-light">OFF</span>
             <span class="switch-dark">ON</span>
-        </button>
-
-        <!-- <div class="mode">
-            mode sombre:
-            <span class="change">OFF</span>
-        </div> -->
-
-
+        </div>
     </footer>
-
-    <!-- <script>
-        $(".change").on("click", function () {
-            if ($("body").hasClass("dark")) {
-                $("body").addClass("light");
-                $("body").addClass("light");
-                $("body").removeClass("dark");
-                $("body").removeClass("dark");
-                $(".change").text("OFF");
-            } else {
-                $("body").hasClass("light")
-                $("body").removeClass("light");
-                $("body").removeClass("light");
-                $("body").addClass("dark");
-                $("body").addClass("dark");
-                $(".change").text("ON");
-            }
-        });
-    </script> -->
     <script src="/import_dans_le_php/footer.js"></script>
 </body>
 
