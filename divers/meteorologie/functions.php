@@ -5,7 +5,8 @@ function getAllProducts()
 {
 	global $conn;
     $products = [];
-	$res = $conn->query("SELECT * FROM meteorologie ORDER BY id DESC");
+
+	$res = $conn->query("SELECT * FROM meteorologie, usertable WHERE meteorologie.id_users = usertable.id_users AND verified = 'y' ORDER BY meteorologie.date_meteorologie DESC;");
 	while ($row = $res->fetch_assoc()) {
 		$products[] = $row;
 	}
