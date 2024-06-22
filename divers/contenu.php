@@ -446,13 +446,14 @@ if (isset($_POST['insert-meteorologie'])) {
 					<h1>Ajout du contenu pour la Meteorologie</h1>
 					<div class="container">
 						<div class="form-group">
-							<form action="" method="post">
+							<form action="" method="post" enctype="multipart/form-data">
+								<input class="ajout-contenu" type="file" name="uploadfile" value="" />
 								<input type="text" class="ajout-contenu" name="title" placeholder="Titre">
 								<input type="text" class="ajout-contenu" name="title_contenu"
 									placeholder="Titre du contenu">
 								<textarea class="form-control" id="contenu-meteorologie" name="contenu"
 									style="height: 300px;"></textarea>
-								<input style="display: none;" type="text" class="ajout-contenu" name="title_contenu"
+								<input style="display: none;" type="text" class="ajout-contenu" name="verified"
 									value="n">
 								<?php $users = $_SESSION['username']; ?>
 								<input style="display: none;" type="text" name="users"
@@ -462,8 +463,8 @@ if (isset($_POST['insert-meteorologie'])) {
 						</div>
 					</div>
 				</div>
-			</section>
-		</div>
+		</section>
+	</div>
 	</div>
 	<script src="divers/popup.js"></script>
 </body>

@@ -30,48 +30,47 @@ if ($result->num_rows > 0) {
     <?php
     include "../../import_dans_le_php/menu.php";
     ?>
-    <!-- Contenu de la page principale pour la Météorologie -->
-    <div class="page">
-        <div class="left">
-            <select name="products" id="products">
-                <option value="">Tous sur la Météorologie</option>
-                <?php
-                foreach ($options as $option) {
-                    ?>
-                    <option value="<?php echo $option['title']; ?>">
-                        <?php echo $option['title']; ?>
-                    </option>
-                    <?php
-                }
-                ?>
-            </select>
-        </div>
-        <div class="right">
-            <h2>Tous sur la Météorologie</h2>
-            <div class="product-wrapper">
+    <!-- Contenu de la page principale pour l'Astronomie -->
+    <div class="cards">
+        <?php $products = getAllProducts(); ?>
+        <?php foreach ($products as $product) { ?>
+            <a href="contenu-meteorologie.php?id=<?= $product['id'] ?>" class="card">
+                <div class="card-banner">
+                    <p class="category-tag popular">
+                        <?php echo $product['title'] ?>
+                    </p>
+                    <img class="banner-img" src="../../uploads/<?php echo $product['filename']; ?>" alt="">
+                </div>
+                <div class="card-body">
+                    <!-- <p class="blog-hashtag">#webdevelopment #frontend</p> -->
+                    <h2 class="blog-title">
+                        <?php echo $product['title_contenu'] ?>
+                    </h2>
+                    <p class="blog-description">
+                        <?php if ($product["contenu"] > 10) {
+                            echo "<p>" . substr(substr($product["contenu"], 0, 100), 0, strrpos(substr($product["contenu"], 0, 100), ' ')) . "... <span style='color: red;' href='contenu-meteorologie.php?id=" . $product['id'] . "'>Lire plus</span></p>";
+                        } ?>
+                    </p>
 
-                <?php
-                $products = getAllProducts();
-                foreach ($products as $product) {
-                    ?>
-                    <div class="product">
-                        <div class="left">
-
-                        </div>
-                        <div class="right">
-                            <p class="title">
-                                <?php echo $product['title_contenu'] ?>
-                            </p>
-                            <p class="description">
-                                <?php echo $product['contenu'] ?>
-                            </p>
+                    <div class="card-profile">
+                        <!-- <img class="profile-img"
+                            src='https://images.unsplash.com/photo-1554780336-390462301acf?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ'
+                            alt=''> -->
+                        <div class="card-profile-info">
+                            <h3 class="profile-name">
+                                Date :
+                                <?php echo date("d/m/Y H:i:s", strtotime($product['date_meteorologie'])) ?>
+                            </h3>
+                            <h3 class="profile-name">
+                                Auteur :
+                                <?php echo $product['name'] ?>
+                            </h3>
+                            <!-- <p class="profile-followers">1.2k followers</p> -->
                         </div>
                     </div>
-                    <?php
-                }
-                ?>
-            </div>
-        </div>
+                </div>
+            </a>
+        <?php } ?>
     </div>
 
 
