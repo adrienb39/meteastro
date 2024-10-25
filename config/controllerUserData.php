@@ -1,16 +1,17 @@
 <?php
 // session_start();
-require "connexion_bdd.php";
+require "connexion_bdd.php"; // Assurez-vous que ce fichier établit une connexion PDO
 $email = "";
 $name = "";
 $errors = array();
 
-//if user signup button
+// Si l'utilisateur clique sur le bouton d'inscription
 if (isset($_POST['signup'])) {
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $cpassword = mysqli_real_escape_string($conn, $_POST['cpassword']);
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $cpassword = $_POST['cpassword'];
+
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "L'adresse électronique n'est pas valide !";
     }
@@ -24,43 +25,37 @@ if (isset($_POST['signup'])) {
     if ($password !== $cpassword) {
         $errors['password'] = "Le mot de passe de confirmation ne correspond pas !";
     }
-    $email_check = "SELECT * FROM usertable WHERE email = '$email'";
-    $res = mysqli_query($conn, $email_check);
-    if (mysqli_num_rows($res) > 0) {
+
+    // Vérification de l'email
+    $email_check = "SELECT * FROM usertable WHERE email = :email";
+    $stmt = $db->prepare($email_check);
+    $stmt->execute(['email' => $email]);
+    if ($stmt->rowCount() > 0) {
         $errors['email'] = "L'email que vous avez saisi existe déjà !";
     }
+
     if (count($errors) === 0) {
         $encpass = password_hash($password, PASSWORD_BCRYPT);
         $code = rand(999999, 111111);
         $status = "notverified";
+
         $insert_data = "INSERT INTO usertable (name, email, password, code, status)
-                        values('$name', '$email', '$encpass', '$code', '$status')";
-        $data_check = mysqli_query($conn, $insert_data);
+                        VALUES (:name, :email, :password, :code, :status)";
+        $stmt = $db->prepare($insert_data);
+        $data_check = $stmt->execute([
+            'name' => $name,
+            'email' => $email,
+            'password' => $encpass,
+            'code' => $code,
+            'status' => $status,
+        ]);
+
         if ($data_check) {
             $subject = "Code de vérification de l'email";
-            // $subject = "Mise à jour de la page de connexion sur le site Meteastro";
             $message = "Votre code de vérification est $code";
-            /* $message = "Cher utilisateur de Meteastro,
-            
-Nous sommes ravis de vous annoncer que la page de connexion subira bientôt une mise à jour pour améliorer votre expérience d’utilisation. Cette mise à niveau s’inscrit dans le cadre de notre engagement continu à fournir un service de qualité.
-            
-Voici ce que vous pouvez attendre de cette mise à jour :
-            
-    . La nouvelle page de connexion sera plus moderne et conviviale, avec un design épuré et adaptatif.
-    . Elle sera compatible avec tous les appareils, qu’il s’agisse d’un ordinateur, d’une tablette ou d’un smartphone.
-    . Sécurité renforcée : Nous avons mis en place des mesures de sécurité supplémentaires pour protéger vos informations personnelles.
-    . Fonctionnalités améliorées : Vous bénéficierez d’une expérience de connexion plus fluide et rapide.
-    . Si vous êtes déjà inscrit, vous recevrez un e-mail contenant des instructions pour vous réinscrire avec la nouvelle page de connexion. Veuillez suivre ces étapes pour continuer à accéder à votre compte en toute sécurité.
-            
-Nous vous remercions de votre confiance et de votre fidélité. Restez à l’écoute pour plus de détails sur la date de déploiement de cette mise à jour et pour découvrir le nouveau look de la page de connexion ! Nous sommes impatients de vous offrir une expérience encore meilleure sur Meteastro !
-            
-Cordialement, L’équipe Meteastro
-
-\"Ce mail a été générer automatiquement, vous ne devez pas répondre à ce mail\""; */
             $sender = "From: meteastro@astrometech.com";
             if (mail($email, $subject, $message, $sender)) {
                 $info = "Nous avons envoyé un code de vérification à votre adresse électronique. - $email";
-                // $info = "Une information a été envoyer à l'adresse électronique. - $email";
                 $_SESSION['info'] = $info;
                 $_SESSION['email'] = $email;
                 $_SESSION['password'] = $password;
@@ -74,20 +69,26 @@ Cordialement, L’équipe Meteastro
         }
     }
 }
-//if user click verification code submit button
+
+// Si l'utilisateur clique sur le bouton de soumission du code de vérification
 if (isset($_POST['check'])) {
     $_SESSION['info'] = "";
-    $otp_code = mysqli_real_escape_string($conn, $_POST['otp']);
-    $check_code = "SELECT * FROM usertable WHERE code = $otp_code";
-    $code_res = mysqli_query($conn, $check_code);
-    if (mysqli_num_rows($code_res) > 0) {
-        $fetch_data = mysqli_fetch_assoc($code_res);
+    $otp_code = $_POST['otp'];
+    $check_code = "SELECT * FROM usertable WHERE code = :code";
+    $stmt = $db->prepare($check_code);
+    $stmt->execute(['code' => $otp_code]);
+    
+    if ($stmt->rowCount() > 0) {
+        $fetch_data = $stmt->fetch(PDO::FETCH_ASSOC);
         $fetch_code = $fetch_data['code'];
         $email = $fetch_data['email'];
         $code = 0;
         $status = 'verified';
-        $update_otp = "UPDATE usertable SET code = $code, status = '$status' WHERE code = $fetch_code";
-        $update_res = mysqli_query($conn, $update_otp);
+
+        $update_otp = "UPDATE usertable SET code = :code, status = :status WHERE code = :fetch_code";
+        $stmt = $db->prepare($update_otp);
+        $update_res = $stmt->execute(['code' => $code, 'status' => $status, 'fetch_code' => $fetch_code]);
+
         if ($update_res) {
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
@@ -101,20 +102,21 @@ if (isset($_POST['check'])) {
     }
 }
 
-//if user click login button
+// Si l'utilisateur clique sur le bouton de connexion
 if (isset($_POST['login'])) {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $check_email = "SELECT * FROM usertable WHERE email = '$email'";
-    $res = mysqli_query($conn, $check_email);
-    if (mysqli_num_rows($res) > 0) {
-        $fetch = mysqli_fetch_assoc($res);
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $check_email = "SELECT * FROM usertable WHERE email = :email";
+    $stmt = $db->prepare($check_email);
+    $stmt->execute(['email' => $email]);
+
+    if ($stmt->rowCount() > 0) {
+        $fetch = $stmt->fetch(PDO::FETCH_ASSOC);
         $fetch_pass = $fetch['password'];
         if (password_verify($password, $fetch_pass)) {
             $_SESSION['email'] = $email;
             $status = $fetch['status'];
             if ($status == 'verified') {
-                $_SESSION['email'] = $email;
                 $_SESSION['password'] = $password;
                 header('location: /index-connect.php');
             } else {
@@ -130,15 +132,19 @@ if (isset($_POST['login'])) {
     }
 }
 
-//if user click continue button in forgot password form
+// Si l'utilisateur clique sur le bouton "continuer" dans le formulaire de mot de passe oublié
 if (isset($_POST['check-email'])) {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $check_email = "SELECT * FROM usertable WHERE email='$email'";
-    $run_sql = mysqli_query($conn, $check_email);
-    if (mysqli_num_rows($run_sql) > 0) {
+    $email = $_POST['email'];
+    $check_email = "SELECT * FROM usertable WHERE email = :email";
+    $stmt = $db->prepare($check_email);
+    $stmt->execute(['email' => $email]);
+
+    if ($stmt->rowCount() > 0) {
         $code = rand(999999, 111111);
-        $insert_code = "UPDATE usertable SET code = $code WHERE email = '$email'";
-        $run_query = mysqli_query($conn, $insert_code);
+        $insert_code = "UPDATE usertable SET code = :code WHERE email = :email";
+        $stmt = $db->prepare($insert_code);
+        $run_query = $stmt->execute(['code' => $code, 'email' => $email]);
+
         if ($run_query) {
             $subject = "Code de réinitialisation du mot de passe";
             $message = "Votre code de réinitialisation du mot de passe est $code";
@@ -160,14 +166,16 @@ if (isset($_POST['check-email'])) {
     }
 }
 
-//if user click check reset otp button
+// Si l'utilisateur clique sur le bouton de vérification du code de réinitialisation
 if (isset($_POST['check-reset-otp'])) {
     $_SESSION['info'] = "";
-    $otp_code = mysqli_real_escape_string($conn, $_POST['otp']);
-    $check_code = "SELECT * FROM usertable WHERE code = $otp_code";
-    $code_res = mysqli_query($conn, $check_code);
-    if (mysqli_num_rows($code_res) > 0) {
-        $fetch_data = mysqli_fetch_assoc($code_res);
+    $otp_code = $_POST['otp'];
+    $check_code = "SELECT * FROM usertable WHERE code = :code";
+    $stmt = $db->prepare($check_code);
+    $stmt->execute(['code' => $otp_code]);
+
+    if ($stmt->rowCount() > 0) {
+        $fetch_data = $stmt->fetch(PDO::FETCH_ASSOC);
         $email = $fetch_data['email'];
         $_SESSION['email'] = $email;
         $info = "Veuillez créer un nouveau mot de passe que vous n'utilisez sur aucun autre site.";
@@ -179,19 +187,21 @@ if (isset($_POST['check-reset-otp'])) {
     }
 }
 
-//if user click change password button
+// Si l'utilisateur clique sur le bouton de changement de mot de passe
 if (isset($_POST['change-password'])) {
     $_SESSION['info'] = "";
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $cpassword = mysqli_real_escape_string($conn, $_POST['cpassword']);
+    $password = $_POST['password'];
+    $cpassword = $_POST['cpassword'];
     if ($password !== $cpassword) {
         $errors['password'] = "Le mot de passe de confirmation ne correspond pas !";
     } else {
         $code = 0;
-        $email = $_SESSION['email']; //getting this email using session
+        $email = $_SESSION['email']; // Récupération de cet email via la session
         $encpass = password_hash($password, PASSWORD_BCRYPT);
-        $update_pass = "UPDATE usertable SET code = $code, password = '$encpass' WHERE email = '$email'";
-        $run_query = mysqli_query($conn, $update_pass);
+        $update_pass = "UPDATE usertable SET code = :code, password = :password WHERE email = :email";
+        $stmt = $db->prepare($update_pass);
+        $run_query = $stmt->execute(['code' => $code, 'password' => $encpass, 'email' => $email]);
+        
         if ($run_query) {
             $info = "Votre mot de passe a changé. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.";
             $_SESSION['info'] = $info;
@@ -202,8 +212,7 @@ if (isset($_POST['change-password'])) {
     }
 }
 
-//if login now button click
+// Si l'utilisateur clique sur le bouton "se connecter maintenant"
 if (isset($_POST['login-now'])) {
     header('Location: login.php');
 }
-?>
