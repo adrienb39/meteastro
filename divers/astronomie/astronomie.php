@@ -1,14 +1,25 @@
 <?php
 require_once '../../config/connexion_bdd.php';
-?>
-<?php
-$query = "SELECT title FROM astronomie";
-$result = $conn->query($query);
-if ($result->num_rows > 0) {
-    $options = mysqli_fetch_all($result, MYSQLI_ASSOC);
+function afficherContenu($db, $table)
+{
+    $sql = "SELECT * FROM $table, usertable WHERE astronomie.id_users = usertable.id_users AND verified = 'y' ORDER BY astronomie.date_astronomie DESC;";
+
+    try {
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $contenus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($contenus) {
+            return $contenus; // Return the results for further processing
+        } else {
+            return []; // Return an empty array if no results
+        }
+    } catch (PDOException $e) {
+        echo "Erreur : " . htmlspecialchars($e->getMessage());
+        return [];
+    }
 }
 ?>
-<?php include "functions.php" ?>
 <!DOCTYPE html>
 <html lang="fr-FR">
 
@@ -32,7 +43,7 @@ if ($result->num_rows > 0) {
     ?>
     <!-- Contenu de la page principale pour l'Astronomie -->
     <div class="cards">
-        <?php $products = getAllProducts(); ?>
+        <?php $products = afficherContenu($db, 'astronomie'); ?>
         <?php foreach ($products as $product) { ?>
             <a href="contenu-astronomie.php?id=<?= $product['id'] ?>" class="card">
                 <div class="card-banner">
