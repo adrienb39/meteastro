@@ -339,42 +339,42 @@ require_once 'config/connexion_bdd.php';
                 <section>
                     <div class="content content-1">
                         <?php
-                        $sql = "SELECT * FROM astronomie WHERE verified='y' ORDER BY id DESC LIMIT 1";
-                        $result = $conn->query($sql);
+                        function afficherContenu($db, $table)
+                        {
+                            $sql = "SELECT * FROM $table WHERE verified='y' ORDER BY id DESC LIMIT 1";
 
-                        if ($result->num_rows > 0) {
-                            // Afficher les résultats de chaque ligne
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<div class='title'>" . $row["title_contenu"] . "</div>";
-                                if ($row["contenu"] > 10) {
-                                    echo "<p>" . substr(substr($row["contenu"], 0, 100), 0, strrpos(substr($row["contenu"], 0, 100), ' ')) . "... <a style='color: red;' href='/divers/astronomie/astronomie.php'>Lire plus</a></p>";
+                            try {
+                                $stmt = $db->prepare($sql);
+                                $stmt->execute();
+                                $contenus = $stmt->fetchAll(PDO::FETCH_ASSOC); // Récupère tous les résultats sous forme de tableau
+                        
+                                if ($contenus) {
+                                    foreach ($contenus as $row) {
+                                        echo "<div class='title'>" . htmlspecialchars($row["title_contenu"]) . "</div>";
+                                        if (strlen($row["contenu"]) > 10) {
+                                            $contenu = substr($row["contenu"], 0, 100);
+                                            $contenu = substr($contenu, 0, strrpos($contenu, ' '));
+                                            echo "<p>" . htmlspecialchars($contenu) . "... <a style='color: red;' href='/divers/$table/$table.php'>Lire plus</a></p>";
+                                        }
+                                    }
+                                } else {
+                                    echo "0 résultat";
                                 }
+                            } catch (PDOException $e) {
+                                echo "Erreur : " . $e->getMessage();
                             }
-                        } else {
-                            echo "0 resultat";
                         }
+
+                        // Assure-toi que $pdo est bien ta connexion PDO
+                        afficherContenu($db, 'astronomie');
                         ?>
                     </div>
                     <div class="content content-2">
                         <?php
-                        $sql = "SELECT * FROM meteorologie WHERE verified='y' ORDER BY id DESC LIMIT 1";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0) {
-                            // Afficher les résultats de chaque ligne
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<div class='title'>" . $row["title_contenu"] . "</div>";
-                                if ($row["contenu"] > 10) {
-                                    echo "<p>" . substr(substr($row["contenu"], 0, 100), 0, strrpos(substr($row["contenu"], 0, 100), ' ')) . "... <a style='color: red;' href='/divers/astronomie/astronomie.php'>Lire plus</a></p>";
-                                }
-                            }
-                        } else {
-                            echo "0 resultat";
-                        }
-
-                        $conn->close();
+                        afficherContenu($db, 'meteorologie');
                         ?>
                     </div>
+
                 </section>
             </div>
             </div>

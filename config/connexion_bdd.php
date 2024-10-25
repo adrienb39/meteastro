@@ -1,14 +1,8 @@
 <?php
-session_start();
-$servername = "";
-$username = "";
-$password = "";
-$dbname = "";
 
-// Créer une connexion
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Vérifier la connexion
-if ($conn->connect_error) {
-     die("Connexion a échouée: " . $conn->connect_error);
-}
-?>
+require_once __DIR__ . "/../vendor/autoload.php";
+
+$dotEnv = Dotenv\Dotenv::createImmutable(__DIR__ ."/../");
+$dotEnv->load();
+
+$db = new PDO("mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}", $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);

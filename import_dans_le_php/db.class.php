@@ -1,16 +1,17 @@
 <?php
+
+require_once __DIR__ . "/../vendor/autoload.php";
+
 class Db
 {
-    private $servername = "";
-    private $username = "";
-    private $password = "";
-    private $dbname = "";
-    private $conn;
 
     public function __construct()
     {
         try {
-            $this->conn = new PDO("mysql:host=" . $this->servername . ";dbname=" . $this->dbname, $this->username, $this->password);
+            $dotEnv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
+            $dotEnv->load();
+
+            $this->conn = new PDO("mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}", $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
 
             $this->conn->setAttribute(
                 PDO::ATTR_ERRMODE,
