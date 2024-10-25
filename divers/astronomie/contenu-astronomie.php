@@ -1,31 +1,38 @@
 <?php
 require_once '../../config/connexion_bdd.php';
 
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $get_id = htmlspecialchars($_GET['id']);
-    $query = 'SELECT * FROM astronomie, usertable WHERE astronomie.id_users = usertable.id_users AND id = ?';
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('i', $get_id); // 'i' pour un paramètre entier
-    $stmt->execute();
-    $result = $stmt->get_result();
+function getArticle($db, $id) {
+    $sql = 'SELECT * FROM astronomie, usertable WHERE astronomie.id_users = usertable.id_users AND astronomie.id = :id';
+    
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT); // Lier le paramètre
 
-    if ($result->num_rows == 1) {
-        $article = $result->fetch_assoc();
-        $title = $article['title'];
-        $filename = $article['filename'];
-        $title_contenu = $article['title_contenu'];
-        $name = $article['name'];
-        $contenu = $article['contenu'];
-        $date_astronomie = $article['date_astronomie'];
+    if (!$stmt->execute()) {
+        die('Erreur lors de l\'exécution de la requête.');
+    }
+
+    if ($stmt->rowCount() === 1) {
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Retourne l'article trouvé
     } else {
         die('Cet article n\'existe pas !');
     }
+}
+
+// Vérification de l'ID dans l'URL
+if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $id = htmlspecialchars($_GET['id']);
+    $article = getArticle($db, $id);
+    
+    // Assignation des variables à partir de l'article récupéré
+    $title = $article['title'];
+    $filename = $article['filename'];
+    $title_contenu = $article['title_contenu'];
+    $contenu = $article['contenu'];
+    $date_astronomie = $article['date_astronomie'];
 } else {
-    die('Erreur');
+    die('Erreur : ID manquant.');
 }
 ?>
-
-<?php include "functions.php" ?>
 <!DOCTYPE html>
 <html lang="fr-FR">
 

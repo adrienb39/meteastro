@@ -1,31 +1,38 @@
 <?php
 require_once '../../config/connexion_bdd.php';
 
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $get_id = htmlspecialchars($_GET['id']);
-    $query = 'SELECT * FROM meteorologie, usertable WHERE meteorologie.id_users = meteorologie.id_users AND id = ?';
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('i', $get_id); // 'i' pour un paramètre entier
-    $stmt->execute();
-    $result = $stmt->get_result();
+function getArticle($db, $id) {
+    $sql = 'SELECT * FROM meteorologie, usertable WHERE meteorologie.id_users = usertable.id_users AND meteorologie.id = :id';
+    
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT); // Lier le paramètre
 
-    if ($result->num_rows == 1) {
-        $article = $result->fetch_assoc();
-        $title = $article['title'];
-        $filename = $article['filename'];
-        $title_contenu = $article['title_contenu'];
-        $name = $article['name'];
-        $contenu = $article['contenu'];
-        $date_meteorologie = $article['date_meteorologie'];
+    if (!$stmt->execute()) {
+        die('Erreur lors de l\'exécution de la requête.');
+    }
+
+    if ($stmt->rowCount() === 1) {
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Retourne l'article trouvé
     } else {
         die('Cet article n\'existe pas !');
     }
+}
+
+// Vérification de l'ID dans l'URL
+if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $id = htmlspecialchars($_GET['id']);
+    $article = getArticle($db, $id);
+    
+    // Assignation des variables à partir de l'article récupéré
+    $title = $article['title'];
+    $filename = $article['filename'];
+    $title_contenu = $article['title_contenu'];
+    $contenu = $article['contenu'];
+    $date_astronomie = $article['date_meteorologie'];
 } else {
-    die('Erreur');
+    die('Erreur : ID manquant.');
 }
 ?>
-
-<?php include "functions.php" ?>
 <!DOCTYPE html>
 <html lang="fr-FR">
 
@@ -129,7 +136,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <div class="card-profile-info">
                         <h3 class="profile-name">
                             Date :
-                            <?php echo date("d/m/Y H:i:s", strtotime($date_meteorologie)) ?>
+                            <?php echo date("d/m/Y H:i:s", strtotime($date_astronomie)) ?>
                         </h3>
                         <h3 class="profile-name">
                             Auteur :
