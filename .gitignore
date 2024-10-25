@@ -3,3 +3,5 @@ BingSiteAuth.xml
 sitemap.xml
 
 connexion2/
+/vendor/
+.env
