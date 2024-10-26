@@ -1,10 +1,23 @@
-<?php require_once "config/controllerUserData.php"; ?>
-<?php
+<?php 
+
+require_once "config/controllerUserData.php";
+
+$dbType = 'mysqli';
+
+if ($dbType === 'pdo') {
+    $db = createPdoConnection();
+} else {
+    $mysqli = createMysqliConnection();
+}
+
+if (!isset($mysqli)) {
+    die("La connexion à la base de données a échoué.");
+}
 $email = $_SESSION['email'];
 $password = $_SESSION['password'];
 if ($email != false && $password != false) {
     $sql = "SELECT * FROM usertable WHERE email = '$email'";
-    $run_Sql = mysqli_query($conn, $sql);
+    $run_Sql = mysqli_query($mysqli, $sql);
     if ($run_Sql) {
         $fetch_info = mysqli_fetch_assoc($run_Sql);
         $status = $fetch_info['status'];
@@ -20,9 +33,6 @@ if ($email != false && $password != false) {
 } else {
     header('Location: connexion/login.php');
 }
-?>
-<?php
-require_once 'config/connexion_bdd.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr-FR">
