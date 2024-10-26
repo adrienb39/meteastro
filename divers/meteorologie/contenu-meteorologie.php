@@ -1,6 +1,14 @@
 <?php
 require_once '../../config/connexion_bdd.php';
 
+$dbType = 'pdo';
+
+if ($dbType === 'pdo') {
+    $db = createPdoConnection();
+} else {
+    $mysqli = createMysqliConnection();
+}
+
 function getArticle($db, $id) {
     $sql = 'SELECT * FROM meteorologie, usertable WHERE meteorologie.id_users = usertable.id_users AND meteorologie.id = :id';
     

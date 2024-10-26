@@ -1,16 +1,17 @@
 <?php
 
 session_start();
-require "connexion_bdd.php";
+require "connexion_bdd.php"; // Assurez-vous que ce fichier contient la fonction createMysqliConnection()
 
 $dbType = 'mysqli';
 
 if ($dbType === 'pdo') {
     $db = createPdoConnection();
 } else {
-    $mysqli = createMysqliConnection();
+    $mysqli = createMysqliConnection(); // Créez une connexion MySQLi
 }
 
+// Variables
 $email = "";
 $name = "";
 $errors = array();
@@ -22,6 +23,7 @@ if (isset($_POST['signup'])) {
     $password = $_POST['password'];
     $cpassword = $_POST['cpassword'];
 
+    // Validation des entrées
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "L'adresse électronique n'est pas valide !";
     }
@@ -38,7 +40,7 @@ if (isset($_POST['signup'])) {
 
     // Vérification de l'email
     $email_check = "SELECT * FROM usertable WHERE email = ?";
-    $stmt = $db->prepare($email_check);
+    $stmt = $mysqli->prepare($email_check);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -46,6 +48,7 @@ if (isset($_POST['signup'])) {
         $errors['email'] = "L'email que vous avez saisi existe déjà !";
     }
 
+    // Si pas d'erreurs, insérer l'utilisateur
     if (count($errors) === 0) {
         $encpass = password_hash($password, PASSWORD_BCRYPT);
         $code = rand(999999, 111111); // Générer le code de vérification
@@ -53,17 +56,17 @@ if (isset($_POST['signup'])) {
 
         // Insérer les données dans la base
         $insert_data = "INSERT INTO usertable (name, email, password, code, status) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $db->prepare($insert_data);
+        $stmt = $mysqli->prepare($insert_data);
         $stmt->bind_param("sssss", $name, $email, $encpass, $code, $status);
         $data_check = $stmt->execute();
 
         if ($data_check) {
-            // Afficher le code de vérification au lieu de l'envoyer par email
+            // Afficher le code de vérification
             $info = "Votre code de vérification est : $code";
             $_SESSION['info'] = $info;
             $_SESSION['email'] = $email;
             $_SESSION['password'] = $password;
-            header('location: user-otp.php'); // Rediriger vers la page de saisie du code
+            header('location: user-otp.php');
             exit();
         } else {
             $errors['db-error'] = "Échec lors de l'insertion de données dans la base de données !";
@@ -76,7 +79,7 @@ if (isset($_POST['check'])) {
     $_SESSION['info'] = "";
     $otp_code = $_POST['otp'];
     $check_code = "SELECT * FROM usertable WHERE code = ?";
-    $stmt = $db->prepare($check_code);
+    $stmt = $mysqli->prepare($check_code);
     $stmt->bind_param("s", $otp_code);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -90,14 +93,14 @@ if (isset($_POST['check'])) {
 
         // Mettre à jour le code et le statut
         $update_otp = "UPDATE usertable SET code = ?, status = ? WHERE code = ?";
-        $stmt = $db->prepare($update_otp);
+        $stmt = $mysqli->prepare($update_otp);
         $stmt->bind_param("ssi", $code, $status, $fetch_code);
         $update_res = $stmt->execute();
 
         if ($update_res) {
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
-            header('location: /index-connect.php'); // Rediriger vers la page d'accueil
+            header('location: /index-connect.php');
             exit();
         } else {
             $errors['otp-error'] = "Échec lors de la mise à jour du code !";
@@ -112,7 +115,7 @@ if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $check_email = "SELECT * FROM usertable WHERE email = ?";
-    $stmt = $db->prepare($check_email);
+    $stmt = $mysqli->prepare($check_email);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -143,7 +146,7 @@ if (isset($_POST['login'])) {
 if (isset($_POST['check-email'])) {
     $email = $_POST['email'];
     $check_email = "SELECT * FROM usertable WHERE email = ?";
-    $stmt = $db->prepare($check_email);
+    $stmt = $mysqli->prepare($check_email);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -151,12 +154,12 @@ if (isset($_POST['check-email'])) {
     if ($result->num_rows > 0) {
         $code = rand(999999, 111111);
         $insert_code = "UPDATE usertable SET code = ? WHERE email = ?";
-        $stmt = $db->prepare($insert_code);
+        $stmt = $mysqli->prepare($insert_code);
         $stmt->bind_param("is", $code, $email);
         $run_query = $stmt->execute();
 
         if ($run_query) {
-            // Ici aussi, vous pouvez afficher le code au lieu de l'envoyer par email
+            // Afficher le code au lieu de l'envoyer par email
             $info = "Votre code de réinitialisation du mot de passe est : $code";
             $_SESSION['info'] = $info;
             $_SESSION['email'] = $email;
@@ -175,7 +178,7 @@ if (isset($_POST['check-reset-otp'])) {
     $_SESSION['info'] = "";
     $otp_code = $_POST['otp'];
     $check_code = "SELECT * FROM usertable WHERE code = ?";
-    $stmt = $db->prepare($check_code);
+    $stmt = $mysqli->prepare($check_code);
     $stmt->bind_param("s", $otp_code);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -205,7 +208,7 @@ if (isset($_POST['change-password'])) {
         $email = $_SESSION['email']; // Récupération de cet email via la session
         $encpass = password_hash($password, PASSWORD_BCRYPT);
         $update_pass = "UPDATE usertable SET code = ?, password = ? WHERE email = ?";
-        $stmt = $db->prepare($update_pass);
+        $stmt = $mysqli->prepare($update_pass);
         $stmt->bind_param("iss", $code, $encpass, $email);
         $run_query = $stmt->execute();
         
