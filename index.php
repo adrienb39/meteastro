@@ -1,6 +1,14 @@
 <?php
 session_start();
 require_once 'config/connexion_bdd.php';
+
+$dbType = 'pdo';
+
+if ($dbType === 'pdo') {
+    $db = createPdoConnection();
+} else {
+    $mysqli = createMysqliConnection();
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr-FR">

@@ -1,6 +1,14 @@
 <?php
 require_once '../../config/connexion_bdd.php';
 
+$dbType = 'pdo';
+
+if ($dbType === 'pdo') {
+    $db = createPdoConnection();
+} else {
+    $mysqli = createMysqliConnection();
+}
+
 function getAllProducts()
 {
 	global $conn;

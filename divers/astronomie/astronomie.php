@@ -1,5 +1,14 @@
 <?php
 require_once '../../config/connexion_bdd.php';
+
+$dbType = 'pdo';
+
+if ($dbType === 'pdo') {
+    $db = createPdoConnection();
+} else {
+    $mysqli = createMysqliConnection();
+}
+
 function afficherContenu($db, $table)
 {
     $sql = "SELECT * FROM $table, usertable WHERE astronomie.id_users = usertable.id_users AND verified = 'y' ORDER BY astronomie.date_astronomie DESC;";
