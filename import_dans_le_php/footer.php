@@ -26,8 +26,8 @@
         </p>
         <p class="footer_block">
             Site Web créé le : <b>Vendredi 8 Avril 2022</b><br>
-            Dernière mise à jour du Site Web : <b>Vendredi 5 Avril 2024</b><br>
-            Version du Site Web : <b>1.6.2</b><br>
+            Dernière mise à jour du Site Web : <b>Samedi 26 Octobre 2024</b><br>
+            Version du Site Web : <b>1.6.3</b><br>
             <?php // include "counter.php"; ?>
         </p>
 
