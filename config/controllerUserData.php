@@ -1,218 +1,132 @@
 <?php
-// session_start();
-require "connexion_bdd.php"; // Assurez-vous que ce fichier établit une connexion PDO
+session_start();
+require "connexion_bdd.php"; // Établir une connexion PDO
 $email = "";
 $name = "";
 $errors = array();
 
-// Si l'utilisateur clique sur le bouton d'inscription
+// Inscription
 if (isset($_POST['signup'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
     $cpassword = $_POST['cpassword'];
 
+    // Validation des données
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "L'adresse électronique n'est pas valide !";
     }
     if (strlen($password) < 8) {
-        $errors['password'] = "La longueur du mot de passe doit être d'au moins 8 caractères !";
-    }
-    $pattern = '/^(?=.*\d)(?=.*[A-Za-z])(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/';
-    if (!preg_match($pattern, $password)) {
-        $errors['password'] = "Le mot de passe doit contenir au moins un chiffre, une lettre majuscule, une lettre minuscule et un caractère spécial.";
+        $errors['password'] = "Le mot de passe doit contenir au moins 8 caractères !";
     }
     if ($password !== $cpassword) {
-        $errors['password'] = "Le mot de passe de confirmation ne correspond pas !";
+        $errors['password'] = "Les mots de passe ne correspondent pas !";
     }
 
     // Vérification de l'email
-    $email_check = "SELECT * FROM usertable WHERE email = :email";
-    $stmt = $db->prepare($email_check);
+    $stmt = $db->prepare("SELECT * FROM usertable WHERE email = :email");
     $stmt->execute(['email' => $email]);
     if ($stmt->rowCount() > 0) {
-        $errors['email'] = "L'email que vous avez saisi existe déjà !";
+        $errors['email'] = "Cet email est déjà enregistré !";
     }
 
-    if (count($errors) === 0) {
+    // Inscription si aucune erreur
+    if (empty($errors)) {
         $encpass = password_hash($password, PASSWORD_BCRYPT);
-        $code = rand(999999, 111111);
-        $status = "notverified";
-
-        $insert_data = "INSERT INTO usertable (name, email, password, code, status)
-                        VALUES (:name, :email, :password, :code, :status)";
+        $code = rand(999999, 111111); // Générer un code de vérification
+        $insert_data = "INSERT INTO usertable (name, email, password, code, status) VALUES (:name, :email, :password, :code, 'notverified')";
         $stmt = $db->prepare($insert_data);
-        $data_check = $stmt->execute([
-            'name' => $name,
-            'email' => $email,
-            'password' => $encpass,
-            'code' => $code,
-            'status' => $status,
-        ]);
-
-        if ($data_check) {
-            $subject = "Code de vérification de l'email";
-            $message = "Votre code de vérification est $code";
-            $sender = "From: meteastro@astrometech.com";
-            if (mail($email, $subject, $message, $sender)) {
-                $info = "Nous avons envoyé un code de vérification à votre adresse électronique. - $email";
-                $_SESSION['info'] = $info;
-                $_SESSION['email'] = $email;
-                $_SESSION['password'] = $password;
-                header('location: user-otp.php');
-                exit();
-            } else {
-                $errors['otp-error'] = "Échec lors de l'envoi du code !";
-            }
+        if ($stmt->execute(['name' => $name, 'email' => $email, 'password' => $encpass, 'code' => $code])) {
+            $_SESSION['info'] = "Inscription réussie. Votre code de vérification est : $code"; // Affichage du code
+            $_SESSION['email'] = $email;
+            header('Location: user-otp.php'); // Rediriger vers la page de vérification
+            exit();
         } else {
-            $errors['db-error'] = "Échec lors de l'insertion de données dans la base de données !";
+            $errors['db-error'] = "Erreur lors de l'inscription. Veuillez réessayer.";
         }
     }
 }
 
-// Si l'utilisateur clique sur le bouton de soumission du code de vérification
-if (isset($_POST['check'])) {
-    $_SESSION['info'] = "";
-    $otp_code = $_POST['otp'];
-    $check_code = "SELECT * FROM usertable WHERE code = :code";
-    $stmt = $db->prepare($check_code);
-    $stmt->execute(['code' => $otp_code]);
-    
+// Connexion
+if (isset($_POST['login'])) {
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+
+    $stmt = $db->prepare("SELECT * FROM usertable WHERE email = :email");
+    $stmt->execute(['email' => $email]);
+
     if ($stmt->rowCount() > 0) {
-        $fetch_data = $stmt->fetch(PDO::FETCH_ASSOC);
-        $fetch_code = $fetch_data['code'];
-        $email = $fetch_data['email'];
-        $code = 0;
-        $status = 'verified';
-
-        $update_otp = "UPDATE usertable SET code = :code, status = :status WHERE code = :fetch_code";
-        $stmt = $db->prepare($update_otp);
-        $update_res = $stmt->execute(['code' => $code, 'status' => $status, 'fetch_code' => $fetch_code]);
-
-        if ($update_res) {
-            $_SESSION['name'] = $name;
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (password_verify($password, $user['password'])) {
             $_SESSION['email'] = $email;
+            $_SESSION['name'] = $user['name'];
             header('location: /index-connect.php');
             exit();
         } else {
-            $errors['otp-error'] = "Échec lors de la mise à jour du code !";
+            $errors['login'] = "Courriel ou mot de passe incorrect !";
         }
     } else {
-        $errors['otp-error'] = "Vous avez saisi un code incorrect !";
+        $errors['login'] = "Aucun utilisateur trouvé avec cet email.";
     }
 }
 
-// Si l'utilisateur clique sur le bouton de connexion
-if (isset($_POST['login'])) {
-    $email = $_POST['email'];
+// Changement de mot de passe
+if (isset($_POST['change-password'])) {
     $password = $_POST['password'];
-    $check_email = "SELECT * FROM usertable WHERE email = :email";
-    $stmt = $db->prepare($check_email);
-    $stmt->execute(['email' => $email]);
+    $cpassword = $_POST['cpassword'];
 
-    if ($stmt->rowCount() > 0) {
-        $fetch = $stmt->fetch(PDO::FETCH_ASSOC);
-        $fetch_pass = $fetch['password'];
-        if (password_verify($password, $fetch_pass)) {
-            $_SESSION['email'] = $email;
-            $status = $fetch['status'];
-            if ($status == 'verified') {
-                $_SESSION['password'] = $password;
-                header('location: /index-connect.php');
-            } else {
-                $info = "Il semble que vous n'ayez pas encore vérifié votre adresse e-mail. - $email";
-                $_SESSION['info'] = $info;
-                header('location: user-otp.php');
-            }
-        } else {
-            $errors['email'] = "Courriel ou mot de passe incorrect !";
-        }
+    if ($password !== $cpassword) {
+        $errors['password'] = "Les mots de passe ne correspondent pas !";
     } else {
-        $errors['email'] = "Il semblerait que vous ne soyez pas encore membre ! Cliquez sur le lien du bas pour vous inscrire.";
+        $email = $_SESSION['email'];
+        $encpass = password_hash($password, PASSWORD_BCRYPT);
+        $stmt = $db->prepare("UPDATE usertable SET password = :password WHERE email = :email");
+        if ($stmt->execute(['password' => $encpass, 'email' => $email])) {
+            $_SESSION['info'] = "Votre mot de passe a été modifié avec succès.";
+            header('Location: password-changed.php');
+            exit();
+        } else {
+            $errors['db-error'] = "Erreur lors du changement de mot de passe. Veuillez réessayer.";
+        }
     }
 }
 
-// Si l'utilisateur clique sur le bouton "continuer" dans le formulaire de mot de passe oublié
+// Mot de passe oublié
 if (isset($_POST['check-email'])) {
-    $email = $_POST['email'];
-    $check_email = "SELECT * FROM usertable WHERE email = :email";
-    $stmt = $db->prepare($check_email);
+    $email = trim($_POST['email']);
+    $stmt = $db->prepare("SELECT * FROM usertable WHERE email = :email");
     $stmt->execute(['email' => $email]);
 
     if ($stmt->rowCount() > 0) {
-        $code = rand(999999, 111111);
-        $insert_code = "UPDATE usertable SET code = :code WHERE email = :email";
-        $stmt = $db->prepare($insert_code);
-        $run_query = $stmt->execute(['code' => $code, 'email' => $email]);
-
-        if ($run_query) {
-            $subject = "Code de réinitialisation du mot de passe";
-            $message = "Votre code de réinitialisation du mot de passe est $code";
-            $sender = "From: meteastro@astrometech.com";
-            if (mail($email, $subject, $message, $sender)) {
-                $info = "Nous avons envoyé une demande de réinitialisation de mot de passe à votre adresse électronique. - $email";
-                $_SESSION['info'] = $info;
-                $_SESSION['email'] = $email;
-                header('location: reset-code.php');
-                exit();
-            } else {
-                $errors['otp-error'] = "Échec lors de l'envoi du code !";
-            }
-        } else {
-            $errors['db-error'] = "Quelque chose n'a pas fonctionné !";
-        }
+        $code = rand(999999, 111111); // Générer un code aléatoire
+        $_SESSION['reset_code'] = $code; // Stocker le code dans la session
+        $_SESSION['email'] = $email; // Stocker l'email dans la session
+        $_SESSION['info'] = "Votre code de réinitialisation est : $code"; // Message d'information
+        header('Location: reset-code.php'); // Rediriger vers la page de réinitialisation
+        exit();
     } else {
         $errors['email'] = "Cette adresse e-mail n'existe pas !";
     }
 }
 
-// Si l'utilisateur clique sur le bouton de vérification du code de réinitialisation
+// Vérification du code de réinitialisation
 if (isset($_POST['check-reset-otp'])) {
-    $_SESSION['info'] = "";
     $otp_code = $_POST['otp'];
-    $check_code = "SELECT * FROM usertable WHERE code = :code";
-    $stmt = $db->prepare($check_code);
-    $stmt->execute(['code' => $otp_code]);
-
-    if ($stmt->rowCount() > 0) {
-        $fetch_data = $stmt->fetch(PDO::FETCH_ASSOC);
-        $email = $fetch_data['email'];
-        $_SESSION['email'] = $email;
-        $info = "Veuillez créer un nouveau mot de passe que vous n'utilisez sur aucun autre site.";
-        $_SESSION['info'] = $info;
-        header('location: new-password.php');
+    if ($otp_code == $_SESSION['reset_code']) {
+        header('Location: new-password.php'); // Rediriger vers la page de création de nouveau mot de passe
         exit();
     } else {
-        $errors['otp-error'] = "Vous avez saisi un code incorrect !";
+        $errors['otp-error'] = "Le code de réinitialisation est incorrect !";
     }
 }
 
-// Si l'utilisateur clique sur le bouton de changement de mot de passe
-if (isset($_POST['change-password'])) {
-    $_SESSION['info'] = "";
-    $password = $_POST['password'];
-    $cpassword = $_POST['cpassword'];
-    if ($password !== $cpassword) {
-        $errors['password'] = "Le mot de passe de confirmation ne correspond pas !";
-    } else {
-        $code = 0;
-        $email = $_SESSION['email']; // Récupération de cet email via la session
-        $encpass = password_hash($password, PASSWORD_BCRYPT);
-        $update_pass = "UPDATE usertable SET code = :code, password = :password WHERE email = :email";
-        $stmt = $db->prepare($update_pass);
-        $run_query = $stmt->execute(['code' => $code, 'password' => $encpass, 'email' => $email]);
-        
-        if ($run_query) {
-            $info = "Votre mot de passe a changé. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.";
-            $_SESSION['info'] = $info;
-            header('Location: password-changed.php');
-        } else {
-            $errors['db-error'] = "Le changement de mot de passe a échoué !";
-        }
+// Affichage des erreurs
+if (!empty($errors)) {
+    foreach ($errors as $error) {
+        echo "<div class='error'>$error</div>";
     }
 }
 
-// Si l'utilisateur clique sur le bouton "se connecter maintenant"
 if (isset($_POST['login-now'])) {
     header('Location: login.php');
 }
