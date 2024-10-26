@@ -100,7 +100,7 @@ if (isset($_POST['check'])) {
         if ($update_res) {
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
-            header('location: /index-connect.php');
+            header('location: /index.php');
             exit();
         } else {
             $errors['otp-error'] = "Échec lors de la mise à jour du code !";
@@ -128,7 +128,7 @@ if (isset($_POST['login'])) {
             $status = $fetch['status'];
             if ($status == 'verified') {
                 $_SESSION['password'] = $password;
-                header('location: /index-connect.php');
+                header('location: /index.php');
             } else {
                 $info = "Il semble que vous n'ayez pas encore vérifié votre adresse e-mail. - $email";
                 $_SESSION['info'] = $info;

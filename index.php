@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/connexion_bdd.php';
+require_once "config/controllerUserData.php";
 
 $dbType = 'pdo';
 
