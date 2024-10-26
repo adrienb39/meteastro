@@ -1,24 +1,13 @@
-﻿<?php require_once "config/controllerUserData.php"; ?>
-<?php
-$email = $_SESSION['email'];
-$password = $_SESSION['password'];
-if ($email != false && $password != false) {
-	$sql = "SELECT * FROM usertable WHERE email = '$email'";
-	$run_Sql = mysqli_query($conn, $sql);
-	if ($run_Sql) {
-		$fetch_info = mysqli_fetch_assoc($run_Sql);
-		$status = $fetch_info['status'];
-		$code = $fetch_info['code'];
-		if ($status == "verified") {
-			if ($code != 0) {
-				header('Location: connexion/reset-code.php');
-			}
-		} else {
-			header('Location: connexion/user-otp.php');
-		}
-	}
+﻿<?php
+session_start();
+require_once "config/controllerUserData.php";
+
+$dbType = 'mysqli';
+
+if ($dbType === 'pdo') {
+    $db = createPdoConnection();
 } else {
-	header('Location: connexion/login-user.php');
+    $mysqli = createMysqliConnection();
 }
 ?>
 <?php
@@ -50,7 +39,7 @@ if (isset($_POST['insert-astronomie'])) {
 	$sqlAstronomie = "INSERT INTO astronomie (title, title_contenu, contenu, filename, verified, id_users) VALUES ('$title', '$title_contenu', '$contenu', '$filename', '$verified', '$id_users')";
 	$result = mysqli_query($conn, $sqlAstronomie);
 	if ($result) {
-		header("Location: ../index-connect.php?msg=Donnée enregistrée avec succes");
+		header("Location: ../index.php?msg=Donnée enregistrée avec succes");
 	} else {
 
 	}
@@ -85,7 +74,7 @@ if (isset($_POST['insert-meteorologie'])) {
 	$sqlMeteorologie = "INSERT INTO meteorologie (title, title_contenu, contenu, filename, verified, id_users) VALUES ('$title', '$title_contenu', '$contenu', '$filename', '$verified', '$id_users')";
 	$result = mysqli_query($conn, $sqlMeteorologie);
 	if ($result) {
-		header("Location: ../index-connect.php?msg=Donnée enregistrée avec succes");
+		header("Location: ../index.php?msg=Donnée enregistrée avec succes");
 	} else {
 
 	}
@@ -407,6 +396,7 @@ if (isset($_POST['insert-meteorologie'])) {
 </head>
 
 <body>
+<?php if (isset($_SESSION['email']) && isset($_SESSION['password'])) { ?>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<button class="btn btn-close-white btn-outline-danger fs-5 mb-5" id="popup_open">ACCÈS À L'AJOUT DU CONTENU</button>
 	<div id="popup_overlay" style="display: none;"></div>
@@ -467,6 +457,9 @@ if (isset($_POST['insert-meteorologie'])) {
 	</div>
 	</div>
 	<script src="divers/popup.js"></script>
+	<?php } else {
+		header('Location: connexion/login.php');
+	} ?>
 </body>
 
 </html>
