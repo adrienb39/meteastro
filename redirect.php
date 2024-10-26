@@ -1,24 +1,13 @@
-<?php require_once "config/controllerUserData.php"; ?>
 <?php
-$email = $_SESSION['email'];
-$password = $_SESSION['password'];
-if ($email != false && $password != false) {
-    $sql = "SELECT * FROM usertable WHERE email = '$email'";
-    $run_Sql = mysqli_query($conn, $sql);
-    if ($run_Sql) {
-        $fetch_info = mysqli_fetch_assoc($run_Sql);
-        $status = $fetch_info['status'];
-        $code = $fetch_info['code'];
-        if ($status == "verified") {
-            if ($code != 0) {
-                header('Location: connexion/reset-code.php');
-            }
-        } else {
-            header('Location: connexion/user-otp.php');
-        }
-    }
+session_start();
+require_once "config/controllerUserData.php";
+
+$dbType = 'mysqli';
+
+if ($dbType === 'pdo') {
+    $db = createPdoConnection();
 } else {
-    header('Location: connexion/login.php');
+    $mysqli = createMysqliConnection();
 }
 ?>
 <!DOCTYPE html>
@@ -74,6 +63,7 @@ if ($email != false && $password != false) {
 </head>
 
 <body>
+<?php if (isset($_SESSION['email']) && isset($_SESSION['password'])) { ?>
     <div class="container">
         <div class="row">
             <div class="col col-5 mx-auto mt-4">
@@ -84,7 +74,7 @@ if ($email != false && $password != false) {
                     <p class="fs-4 text-danger opacity-75">Faites décoler vos idées...</p>
                     <?php include "divers/contenu.php"; ?>
                 </div>
-                <a href="index-connect.php" class="btn btn-close-white btn-outline-danger fs-5 mb-5"
+                <a href="index.php" class="btn btn-close-white btn-outline-danger fs-5 mb-5"
                     style="text-decoration: none;">Retour sur la page d'accueil du Site Web de
                     votre
                     espace</a>
@@ -117,6 +107,9 @@ if ($email != false && $password != false) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"></script>
     <!-- partial -->
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <?php } else {
+        header('Location: connexion/login.php');
+    } ?>
 </body>
 
 </html>
