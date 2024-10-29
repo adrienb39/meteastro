@@ -26,7 +26,7 @@ $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']); // Ada
   <div class="div-logo">
     <a class="logo" href="/">
       <img class="logo-icon" src="/ressources/logo.png" alt="logo">
-      <span class="title-logo">METEASTRO</span>
+      <span class="title-logo">METEASTRO - <?php echo $_SESSION['name'] ?></span>
     </a>
     <div class="marquee">
       <div class="info">Bienvenue sur le site de Meteastro !</div>

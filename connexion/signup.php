@@ -22,7 +22,7 @@ require_once "../config/controllerUserData.php";
             <div class="forms-container">
                 <div class="signin-signup">
                     <form class="box sign-in-form" action="" method="post" name="login" novalidate>
-                        <h2 class="box-title title">CONNEXION</h2>
+                        <h2 class="box-title title">INSCRIPTION</h2>
                         <div class="input-field-session">Vous êtes déjà connecté ! Vous voulez vous déconnecter ?
                         </div>
                         <a class="box-button btn-session solid" href="logout.php">Déconnexion</a>
@@ -34,30 +34,50 @@ require_once "../config/controllerUserData.php";
         <div class="container">
             <div class="forms-container">
                 <div class="signin-signup">
-
-                    <form class="box sign-in-form" action="login.php" method="post" name="login" novalidate>
-                        <h2 class="box-title title">CONNEXION</h2>
+                    <form class="box sign-in-form" action="signup.php" method="post" name="signup" novalidate>
+                        <h2 class="box-title title">INSCRIPTION</h2>
                         <div class="input-field">
                             <i class="fas fa-user"></i>
-                            <input type="email" class="box-input" name="email" placeholder="Email"
+                            <input type="text" class="box-input" name="name" placeholder="Nom complet" required
+                                value="<?php echo $name ?>">
+                        </div>
+                        <div class="input-field">
+                            <i class="fas fa-envelope"></i>
+                            <input type="text" class="box-input" name="email" placeholder="Email" required
                                 value="<?php echo $email ?>">
                         </div>
                         <div class="input-field">
                             <i class="fas fa-lock"></i>
-                            <input type="password" class="box-input" name="password" placeholder="Mot de passe">
+                            <input type="password" class="box-input" name="password" placeholder="Mot de passe" required />
                         </div>
-                        <input type="submit" value="Se connecter " name="login" class="box-button btn solid">
-                        <div><a style="text-decoration: none; color: red;" href="forgot-password.php">Mot de passe oublié
-                                ?</a>
+                        <div class="input-field">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" class="box-input" name="cpassword"
+                                placeholder="Confirmation de votre mot de passe" required />
                         </div>
+                        <input type="submit" name="signup" value="S'inscrire" class="box-button btn" />
                         <?php
-                        if (count($errors) > 0) {
+                        if (count($errors) == 1) {
                             ?>
                             <div style="color: red; text-align: center; padding: 0 100px;">
                                 <?php
                                 foreach ($errors as $showerror) {
                                     echo $showerror;
                                     echo PHP_EOL;
+                                }
+                                ?>
+                            </div>
+                            <?php
+                        } elseif (count($errors) > 1) {
+                            ?>
+                            <div style="color: red; text-align: center; padding: 0 100px;">
+                                <?php
+                                foreach ($errors as $showerror) {
+                                    ?>
+                                    <li>
+                                        <?php echo $showerror; ?>
+                                    </li>
+                                    <?php
                                 }
                                 ?>
                             </div>
@@ -74,15 +94,16 @@ require_once "../config/controllerUserData.php";
             <div class="panels-container">
                 <div class="panel left-panel">
                     <div class="content">
-                        <h3>Nouveau ici ?</h3>
+                        <h3>Déjà inscrit ?</h3>
                         <p>
-                            Inscrivez-vous pour pouvoir accéder au fonctionnalités et au contenus supplémentaire !
+                            Si vous êtes déjà inscrit, vous pouvez vous connecter pour accéder au fonctionnalités et au
+                            contenus supplémentaire !
                         </p>
-                        <a class="btn transparent" href="signup.php">
-                            INSCRIPTION
+                        <a class="btn transparent" href="login.php">
+                            CONNEXION
                         </a>
                     </div>
-                    <img src="https://i.ibb.co/6HXL6q1/Privacy-policy-rafiki.png" class="image" alt="" />
+                    <img src="https://i.ibb.co/nP8H853/Mobile-login-rafiki.png" class="image" alt="" />
                 </div>
             </div>
         </div>
