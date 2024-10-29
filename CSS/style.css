@@ -95,7 +95,7 @@ ul {
 	background: black;
 }
 
-ul li a,
+ul li .nav-link,
 ul li {
 	cursor: pointer;
 	font-size: 20px;
@@ -106,21 +106,21 @@ ul li {
 	display: block;
 }
 
-ul li a {
+ul li .nav-link {
 	padding: 15px 25px;
 	background: white;
 	color: black;
 	display: block;
 }
 
-li a:hover {
+li .nav-link:hover {
 	background-color: red;
 	color: white;
 	border-top-left-radius: 12px;
 	border-top-right-radius: 12px;
 }
 
-.darkmode li a:hover {
+.darkmode li .nav-link:hover {
 	background-color: red;
 	color: white;
 	border-top-left-radius: 12px;
@@ -135,17 +135,17 @@ ul li ul {
 	display: none;
 }
 
-li ul li a {
+li ul li .nav-link {
 	padding: 10px;
 	background: #555;
 	color: #fff;
 }
 
-li ul li a:hover {
+li ul li .nav-link:hover {
 	background: #555;
 }
 
-.darkmode li ul li a:hover {
+.darkmode li ul li .nav-link:hover {
 	background: #555;
 }
 
@@ -168,10 +168,10 @@ li:active>ul {
 	position: relative;
 }
 
-.dropdown>a,
-.dropdown>a:hover,
-.dropdown.active>a,
-.dropdown.active>a:hover {
+.dropdown>.nav-link,
+.dropdown>.nav-link:hover,
+.dropdown.active>.nav-link,
+.dropdown.active>.nav-link:hover {
 	background: url(./img/arrow.svg);
 	background-position: right;
 	background-size: 15px;
@@ -237,14 +237,14 @@ li:active>ul {
 		height: 100%;
 	}
 
-	.dropdown>a,
-	.dropdown>a:hover,
-	.dropdown.active>a,
-	.dropdown.active>a:hover {
+	.dropdown>.nav-link,
+	.dropdown>.nav-link:hover,
+	.dropdown.active>.nav-link,
+	.dropdown.active>.nav-link:hover {
 		background-position: 95% 50%;
 	}
 
-	li a:hover {
+	li .nav-link:hover {
 		border-radius: 12px;
 	}
 }
