@@ -70,11 +70,11 @@ $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']); // Ada
           }
 
           if ($count > 0) {
-            echo '<li class=dropdown><a href=' . $menu['url'] . '>' . utf8_encode(ucfirst($menu['menu_name'])) . '</a><ul>';
+            echo '<li class=dropdown><a href=' . $menu['url'] . '>' . ucfirst($menu['menu_name']) . '</a><ul>';
             menu($data, $menu['id']);
             echo '</ul></li>';
           } else {
-            echo '<li><a href=' . $menu['url'] . '>' . utf8_encode(ucfirst($menu['menu_name'])) . '</a></li>';
+            echo '<li><a href=' . $menu['url'] . '>' . ucfirst($menu['menu_name']) . '</a></li>';
           }
         }
         ?>
