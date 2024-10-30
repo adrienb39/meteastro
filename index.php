@@ -315,6 +315,7 @@ if ($dbType === 'pdo') {
     ?>
     <!-- contenu de la page principale -->
     <main class="main">
+        <p style="margin: 20px; color: blue;">Gestimag est disponible en version 1.0-rc1 le Jeudi 31 Octobre 2024 par Meteastro</p>
         <section id="accueil">
             <!-- <h1>
                 <a class="typewrite" data-period="10000"
