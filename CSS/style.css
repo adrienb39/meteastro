@@ -179,9 +179,31 @@ li:active>ul {
 	color: black;
 }
 
+.nav-link-gestimag {
+    display: inline-block; /* Permet d'ajuster la taille */
+    background-color: #007BFF; /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    padding: 15px 30px; /* Espacement intérieur */
+    text-decoration: none; /* Enlève le soulignement */
+    font-size: 20px; /* Taille de la police */
+    border-radius: 25px; /* Coins arrondis */
+    transition: background-color 0.3s, transform 0.3s; /* Effet de transition */
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); /* Ombre portée */
+}
+
+.nav-link-gestima:hover {
+    background-color: #0056b3; /* Change la couleur au survol */
+    transform: translateY(-3px); /* Légère élévation au survol */
+}
+
+.nav-link-gestima:active {
+    transform: translateY(1px); /* Réduction de la taille lors du clic */
+}
+
 @media screen and (max-width: 768px) {
 	.mobile-nav {
 		display: flex;
+		margin-bottom: -300px;
 	}
 
 	ul.nav {
