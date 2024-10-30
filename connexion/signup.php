@@ -1,7 +1,5 @@
 <?php
-
 require_once "../config/controllerUserData.php";
-
 ?>
 
 <!DOCTYPE html>
@@ -39,12 +37,12 @@ require_once "../config/controllerUserData.php";
                         <div class="input-field">
                             <i class="fas fa-user"></i>
                             <input type="text" class="box-input" name="name" placeholder="Nom complet" required
-                                value="<?php echo $name ?>">
+                                value="<?php echo htmlspecialchars($name); ?>">
                         </div>
                         <div class="input-field">
                             <i class="fas fa-envelope"></i>
                             <input type="text" class="box-input" name="email" placeholder="Email" required
-                                value="<?php echo $email ?>">
+                                value="<?php echo htmlspecialchars($email); ?>">
                         </div>
                         <div class="input-field">
                             <i class="fas fa-lock"></i>
@@ -55,6 +53,10 @@ require_once "../config/controllerUserData.php";
                             <input type="password" class="box-input" name="cpassword"
                                 placeholder="Confirmation de votre mot de passe" required />
                         </div>
+                        <div>
+                            <input type="checkbox" name="consent" id="consent" required />
+                            <label for="consent">J'accepte les <a href="terms.php" target="_blank">termes et conditions</a>.</label>
+                        </div>
                         <input type="submit" name="signup" value="S'inscrire" class="box-button btn" />
                         <?php
                         if (count($errors) == 1) {
@@ -62,7 +64,7 @@ require_once "../config/controllerUserData.php";
                             <div style="color: red; text-align: center; padding: 0 100px;">
                                 <?php
                                 foreach ($errors as $showerror) {
-                                    echo $showerror;
+                                    echo htmlspecialchars($showerror);
                                     echo PHP_EOL;
                                 }
                                 ?>
@@ -71,15 +73,15 @@ require_once "../config/controllerUserData.php";
                         } elseif (count($errors) > 1) {
                             ?>
                             <div style="color: red; text-align: center; padding: 0 100px;">
-                                <?php
-                                foreach ($errors as $showerror) {
-                                    ?>
-                                    <li>
-                                        <?php echo $showerror; ?>
-                                    </li>
+                                <ul>
                                     <?php
-                                }
-                                ?>
+                                    foreach ($errors as $showerror) {
+                                        ?>
+                                        <li><?php echo htmlspecialchars($showerror); ?></li>
+                                        <?php
+                                    }
+                                    ?>
+                                </ul>
                             </div>
                             <?php
                         }
@@ -96,8 +98,8 @@ require_once "../config/controllerUserData.php";
                     <div class="content">
                         <h3>Déjà inscrit ?</h3>
                         <p>
-                            Si vous êtes déjà inscrit, vous pouvez vous connecter pour accéder au fonctionnalités et au
-                            contenus supplémentaire !
+                            Si vous êtes déjà inscrit, vous pouvez vous connecter pour accéder aux fonctionnalités et aux
+                            contenus supplémentaires !
                         </p>
                         <a class="btn transparent" href="login.php">
                             CONNEXION
