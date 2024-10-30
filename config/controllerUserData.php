@@ -37,6 +37,9 @@ if (isset($_POST['signup'])) {
     if ($password !== $cpassword) {
         $errors['password'] = "Le mot de passe de confirmation ne correspond pas !";
     }
+    if (!isset($_POST['consent'])) {
+        $errors[] = "Vous devez accepter les termes et conditions.";
+    }    
 
     // Vérification de l'email
     $email_check = "SELECT * FROM usertable WHERE email = ?";
