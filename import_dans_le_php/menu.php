@@ -98,5 +98,18 @@ $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']); // Ada
       }
     }
   </script>
+  <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const img = document.querySelector('img');
+            if (img) {
+                img.addEventListener('contextmenu', function (event) {
+                    event.preventDefault();
+                });
+                img.addEventListener('dragstart', function (event) {
+                    event.preventDefault(); // Empêche le glisser-déposer
+                });
+            }
+        });
+    </script>
 </body>
 </html>
