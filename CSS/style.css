@@ -171,7 +171,7 @@ body {
 	background-color: #0056b3;
 	transform: translateY(-3px);
   }
-  
+
   .nav-link-gestimag:active {
 	transform: translateY(1px);
   }
