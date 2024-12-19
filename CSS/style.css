@@ -17,13 +17,13 @@ body {
 .div-logo {
 	background-color: white;
 	text-align: center;
-  }
-  
-  .darkmode .div-logo {
+}
+
+.darkmode .div-logo {
 	background-color: hsl(217, 27%, 12%);
-  }
-  
-  .logo {
+}
+
+.logo {
 	text-decoration: none;
 	color: red;
 	font-size: 40px;
@@ -31,27 +31,27 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  }
-  
-  .logo-icon {
+}
+
+.logo-icon {
 	width: 80px;
-  }
-  
-  .title-logo {
+}
+
+.title-logo {
 	background-color: red;
 	color: white;
 	padding: 4px 8px;
 	border-radius: 5px;
 	text-align: center;
-  }
-  
-  /* Menu de navigation */
-  .container {
+}
+
+/* Menu de navigation */
+.container {
 	margin: 0 auto;
 	z-index: 99;
-  }
-  
-  .mobile-nav {
+}
+
+.mobile-nav {
 	background: #555;
 	color: #fff;
 	display: none;
@@ -60,74 +60,74 @@ body {
 	height: 35px;
 	padding: 20px;
 	font-size: 20px;
-  }
-  
-  .mobile-nav .nav-btn {
+}
+
+.mobile-nav .nav-btn {
 	cursor: pointer;
-  }
-  
-  .nav {
+}
+
+.nav {
 	background: white;
 	display: flex;
 	justify-content: center;
 	z-index: 50;
 	position: relative;
 	border-bottom: 1px solid red;
-  }
-  
-  .relative {
+}
+
+.relative {
 	position: relative;
 	top: 0;
 	width: 100%;
-  }
-  
-  .sticky {
+}
+
+.sticky {
 	position: sticky;
 	top: 0;
 	width: 100%;
-  }
-  
-  ul {
+}
+
+ul {
 	list-style: none;
 	display: flex;
 	background: black;
 	margin: 0;
 	padding: 0;
-  }
-  
-  ul li .nav-link,
-  ul li {
+}
+
+ul li .nav-link,
+ul li {
 	cursor: pointer;
 	font-size: 20px;
 	text-decoration: none;
-  }
-  
-  ul li {
+}
+
+ul li {
 	display: block;
-  }
-  
-  ul li .nav-link {
+}
+
+ul li .nav-link {
 	padding: 15px 25px;
 	background: white;
 	color: black;
 	display: block;
 	transition: all 0.3s ease-in-out;
-  }
-  
-  li .nav-link:hover {
+}
+
+li .nav-link:hover {
 	background-color: red;
 	color: white;
 	border-radius: 12px;
-  }
-  
-  .darkmode li .nav-link:hover {
+}
+
+.darkmode li .nav-link:hover {
 	background-color: red;
 	color: white;
 	border-radius: 12px;
-  }
-  
-  /* Menu dropdown */
-  ul li ul {
+}
+
+/* Menu dropdown */
+ul li ul {
 	background: #555;
 	padding-left: 5px;
 	position: absolute;
@@ -136,112 +136,150 @@ body {
 	height: 0;
 	overflow: hidden;
 	transition: transform 0.4s ease, height 0.4s ease;
-  }
-  
-  li:hover>ul,
-  li:active>ul {
+}
+
+li:hover>ul,
+li:active>ul {
 	display: block;
 	height: auto;
-  }
-  
-  .dropdown {
+}
+
+.dropdown {
 	position: relative;
-  }
-  
-  .dropdown>.nav-link {
+}
+
+.dropdown>.nav-link {
 	background: url(./img/arrow.svg) no-repeat right center;
 	background-size: 15px;
 	color: black;
 	padding-right: 20px;
-  }
-  
-  .nav-link-gestimag {
+}
+
+.nav-link-gestimag {
 	display: inline-block;
 	background-color: #007BFF;
 	color: white;
-	padding: 15px 30px;
+	padding: 16px 32px;
 	text-decoration: none;
-	font-size: 20px;
-	border-radius: 25px;
-	transition: background-color 0.3s, transform 0.3s;
-	box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-  }
-  
-  .nav-link-gestimag:hover {
-	background-color: #0056b3;
-	transform: translateY(-3px);
-  }
+	font-size: 18px;
+	font-weight: 600;
+	border-radius: 30px;
+	/* Plus arrondi */
+	transition: all 0.3s ease-in-out;
+	box-shadow: 0 8px 25px rgba(0, 123, 255, 0.2);
+	/* Ombre plus subtile et large */
+	text-transform: uppercase;
+	/* Texte en majuscules */
+	letter-spacing: 1px;
+	/* Espacement entre les lettres */
+	position: relative;
+}
 
-  .nav-link-gestimag:active {
-	transform: translateY(1px);
-  }
-  
-  /* Menu mobile */
-  @media screen and (max-width: 768px) {
+.nav-link-gestimag::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: linear-gradient(45deg, #00b4ff, #006bb3);
+	/* Dégradé d'arrière-plan */
+	border-radius: 30px;
+	opacity: 0;
+	transition: opacity 0.4s ease-in-out;
+	z-index: -1;
+	/* Placer derrière le texte */
+}
+
+.nav-link-gestimag:hover {
+	background-color: #0056b3;
+	transform: translateY(-5px);
+	box-shadow: 0 12px 30px rgba(0, 123, 255, 0.4);
+	/* Ombre plus grande sur hover */
+}
+
+.nav-link-gestimag:hover::before {
+	opacity: 1;
+}
+
+.nav-link-gestimag:active {
+	transform: translateY(2px);
+	/* Légère descente sur active */
+	box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+	/* Ombre plus douce sur active */
+}
+
+/* Menu mobile */
+@media screen and (max-width: 768px) {
 	.mobile-nav {
-	  display: flex;
-	  margin-bottom: 0;
+		display: flex;
+		margin-bottom: 0;
 	}
-  
+
 	ul.nav {
 		visibility: hidden;
 		transform: translateY(-120%);
 		opacity: 0;
-		position: absolute; /* Le menu est absolument positionné */
+		position: absolute;
+		/* Le menu est absolument positionné */
 		top: 0;
 		left: 0;
 		width: 100%;
 		transition: 0.5s ease-in-out;
-	  }
-  
-	  ul.nav.toggle {
+	}
+
+	ul.nav.toggle {
 		visibility: visible;
 		transform: translateY(0);
 		opacity: 1;
-	  }
-  
+	}
+
 	ul {
 		flex-direction: column;
-		margin: 0; /* Enlever la marge par défaut */
-		padding: 0; /* Enlever le padding par défaut */
-	  }
-  
-	  ul li {
-		margin: 0; /* Enlever la marge par défaut sur les items du menu */
+		margin: 0;
+		/* Enlever la marge par défaut */
+		padding: 0;
+		/* Enlever le padding par défaut */
+	}
+
+	ul li {
+		margin: 0;
+		/* Enlever la marge par défaut sur les items du menu */
 		border: none;
-	  }
-  
+	}
+
 	ul li ul {
-	  position: relative;
-	  width: 90%;
-	  padding: 0 5%;
-	  transform: translateX(-100%);
-	  display: block;
-	  visibility: hidden;
-	  height: 0;
+		position: relative;
+		width: 90%;
+		padding: 0 5%;
+		transform: translateX(-100%);
+		display: block;
+		visibility: hidden;
+		height: 0;
 	}
-  
+
 	ul li ul li ul {
-	  position: initial;
-	  background: #555;
-	  width: 96%;
-	  padding: 0 2%;
+		position: initial;
+		background: #555;
+		width: 96%;
+		padding: 0 2%;
 	}
-  
+
 	li.active>ul {
-	  transform: translateX(0);
-	  visibility: visible;
-	  height: 100%;
+		transform: translateX(0);
+		visibility: visible;
+		height: 100%;
 	}
-  
+
 	li .nav-link:hover {
-	  border-radius: 12px;
+		border-radius: 12px;
 	}
 
 	.main {
-		margin-top: 0; /* Supprimer la marge du haut */
-	  }
-  }  
+		margin-top: 0;
+		/* Supprimer la marge du haut */
+	}
+}
 
 /* bouton-retour */
 #scroll_to_top {
