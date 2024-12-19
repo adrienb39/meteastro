@@ -11,13 +11,15 @@ if ($_SESSION['info'] == false) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="connexion.css" />
     <link rel="stylesheet" href="information/information.css" />
     <title>Meteastro : Astronomie / meteorologie</title>
 </head>
 
 <body>
+    <div class="star-field"></div>
+    <div class="glowing-stars"></div>
     <div class="container">
         <div class="forms-container">
             <div class="signin-signup">
@@ -27,7 +29,7 @@ if ($_SESSION['info'] == false) {
                     <?php
                     if (isset($_SESSION['info'])) {
                         ?>
-                        <div style="color: red; text-align: center; padding: 0 100px;">
+                        <div style="color: red; text-align: center;">
                             <?php echo $_SESSION['info']; ?>
                         </div>
                         <?php
@@ -36,6 +38,10 @@ if ($_SESSION['info'] == false) {
                 </form>
             </div>
         </div>
+        <div class="planet"></div>
+        <div class="asteroid"></div>
+
+        <?php include "about.php"; ?>
 
         <script src="login.js"></script>
 </body>

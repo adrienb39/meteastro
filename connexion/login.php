@@ -10,13 +10,15 @@ require_once "../config/controllerUserData.php";
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="connexion.css" />
     <link rel="stylesheet" href="information/information.css" />
-    <title>Meteastro : Astronomie / meteorologie</title>
+    <title>Meteastro : Astronomie / Météorologie</title>
 </head>
 
 <body>
+    <div class="star-field"></div>
+    <div class="glowing-stars"></div>
     <?php if (isset($_SESSION['email']) && isset($_SESSION['password'])) { ?>
         <div class="container">
             <div class="forms-container">
@@ -38,22 +40,28 @@ require_once "../config/controllerUserData.php";
                     <form class="box sign-in-form" action="login.php" method="post" name="login" novalidate>
                         <h2 class="box-title title">CONNEXION</h2>
                         <div class="input-field">
-                            <i class="fas fa-user"></i>
+                        <i class="fa-solid fa-user"></i>
                             <input type="email" class="box-input" name="email" placeholder="Email"
                                 value="<?php echo $email ?>">
                         </div>
                         <div class="input-field">
-                            <i class="fas fa-lock"></i>
+                            <i class="fa-solid fa-lock"></i>
                             <input type="password" class="box-input" name="password" placeholder="Mot de passe">
                         </div>
                         <input type="submit" value="Se connecter " name="login" class="box-button btn solid">
                         <div><a style="text-decoration: none; color: red;" href="forgot-password.php">Mot de passe oublié
                                 ?</a>
                         </div>
+                        <div style="display: block ruby;">
+                            <h3>Nouveau ici ? </h3>
+                            <a style="text-decoration: none; color: red;" class="btn transparent" href="signup.php">
+                                INSCRIPTION
+                            </a>
+                        </div>
                         <?php
                         if (count($errors) > 0) {
                             ?>
-                            <div style="color: red; text-align: center; padding: 0 100px;">
+                            <div style="color: red; text-align: center;">
                                 <?php
                                 foreach ($errors as $showerror) {
                                     echo $showerror;
@@ -70,29 +78,12 @@ require_once "../config/controllerUserData.php";
                     </form>
                 </div>
             </div>
-
-            <div class="panels-container">
-                <div class="panel left-panel">
-                    <div class="content">
-                        <h3>Nouveau ici ?</h3>
-                        <p>
-                            Inscrivez-vous pour pouvoir accéder au fonctionnalités et au contenus supplémentaire !
-                        </p>
-                        <a class="btn transparent" href="signup.php">
-                            INSCRIPTION
-                        </a>
-                    </div>
-                    <img src="https://i.ibb.co/6HXL6q1/Privacy-policy-rafiki.png" class="image" alt="" />
-                </div>
-            </div>
         </div>
     <?php } ?>
-    <div id="cookie-banner"
-        style="position: fixed; bottom: 0; width: 100%; background-color: #333; color: #fff; padding: 10px; text-align: center; z-index: 1000;">
-        <div id="stars-background"></div>
-        <p>Une nouvelle version majeure (version 4) de la page de connexion/inscription sera bientôt disponible. Restez
-            à l'affût !</p>
-    </div>
+    <div class="planet"></div>
+    <div class="asteroid"></div>
+
+    <?php include "about.php"; ?>
 
     <script src="login.js"></script>
 
