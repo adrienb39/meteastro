@@ -13,17 +13,17 @@ body {
 }
 
 /* logo */
+/* Structure générale du logo */
 .div-logo {
 	background-color: white;
 	text-align: center;
-}
-
-.darkmode .div-logo {
+  }
+  
+  .darkmode .div-logo {
 	background-color: hsl(217, 27%, 12%);
-	text-align: center;
-}
-
-.logo {
+  }
+  
+  .logo {
 	text-decoration: none;
 	color: red;
 	font-size: 40px;
@@ -31,29 +31,27 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
-
-.logo-icon {
+  }
+  
+  .logo-icon {
 	width: 80px;
-}
-
-.title-logo {
+  }
+  
+  .title-logo {
 	background-color: red;
 	color: white;
 	padding: 4px 8px;
-	text-align: center;
 	border-radius: 5px;
-}
-
-/* menu */
-.container {
+	text-align: center;
+  }
+  
+  /* Menu de navigation */
+  .container {
 	margin: 0 auto;
-	/* width: 75%; */
-	/* height: 25vh; */
 	z-index: 99;
-}
-
-.mobile-nav {
+  }
+  
+  .mobile-nav {
 	background: #555;
 	color: #fff;
 	display: none;
@@ -62,214 +60,188 @@ body {
 	height: 35px;
 	padding: 20px;
 	font-size: 20px;
-}
-
-.mobile-nav .nav-btn {
+  }
+  
+  .mobile-nav .nav-btn {
 	cursor: pointer;
-}
-
-.nav {
+  }
+  
+  .nav {
 	background: white;
 	display: flex;
 	justify-content: center;
 	z-index: 50;
 	position: relative;
 	border-bottom: 1px solid red;
-}
-
-.relative {
+  }
+  
+  .relative {
 	position: relative;
 	top: 0;
 	width: 100%;
-}
-
-.sticky {
+  }
+  
+  .sticky {
 	position: sticky;
 	top: 0;
 	width: 100%;
-}
-
-ul {
+  }
+  
+  ul {
 	list-style: none;
 	display: flex;
 	background: black;
-}
-
-ul li .nav-link,
-ul li {
+	margin: 0;
+	padding: 0;
+  }
+  
+  ul li .nav-link,
+  ul li {
 	cursor: pointer;
 	font-size: 20px;
 	text-decoration: none;
-}
-
-ul li {
+  }
+  
+  ul li {
 	display: block;
-}
-
-ul li .nav-link {
+  }
+  
+  ul li .nav-link {
 	padding: 15px 25px;
 	background: white;
 	color: black;
 	display: block;
-}
-
-li .nav-link:hover {
+	transition: all 0.3s ease-in-out;
+  }
+  
+  li .nav-link:hover {
 	background-color: red;
 	color: white;
-	border-top-left-radius: 12px;
-	border-top-right-radius: 12px;
-}
-
-.darkmode li .nav-link:hover {
+	border-radius: 12px;
+  }
+  
+  .darkmode li .nav-link:hover {
 	background-color: red;
 	color: white;
-	border-top-left-radius: 12px;
-	border-top-right-radius: 12px;
-}
-
-ul li ul {
+	border-radius: 12px;
+  }
+  
+  /* Menu dropdown */
+  ul li ul {
 	background: #555;
 	padding-left: 5px;
 	position: absolute;
 	width: 10em;
 	display: none;
-}
-
-li ul li .nav-link {
-	padding: 10px;
-	background: #555;
-	color: #fff;
-}
-
-li ul li .nav-link:hover {
-	background: #555;
-}
-
-.darkmode li ul li .nav-link:hover {
-	background: #555;
-}
-
-ul li ul li {
-	position: relative;
-}
-
-ul li ul li ul {
-	position: absolute;
-	top: 5px;
-	left: 100%;
-}
-
-li:hover>ul,
-li:active>ul {
+	height: 0;
+	overflow: hidden;
+	transition: transform 0.4s ease, height 0.4s ease;
+  }
+  
+  li:hover>ul,
+  li:active>ul {
 	display: block;
-}
-
-.dropdown {
+	height: auto;
+  }
+  
+  .dropdown {
 	position: relative;
-}
-
-.dropdown>.nav-link,
-.dropdown>.nav-link:hover,
-.dropdown.active>.nav-link,
-.dropdown.active>.nav-link:hover {
-	background: url(./img/arrow.svg);
-	background-position: right;
+  }
+  
+  .dropdown>.nav-link {
+	background: url(./img/arrow.svg) no-repeat right center;
 	background-size: 15px;
-	background-repeat: no-repeat;
 	color: black;
-}
-
-.nav-link-gestimag {
-    display: inline-block; /* Permet d'ajuster la taille */
-    background-color: #007BFF; /* Couleur de fond */
-    color: white; /* Couleur du texte */
-    padding: 15px 30px; /* Espacement intérieur */
-    text-decoration: none; /* Enlève le soulignement */
-    font-size: 20px; /* Taille de la police */
-    border-radius: 25px; /* Coins arrondis */
-    transition: background-color 0.3s, transform 0.3s; /* Effet de transition */
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); /* Ombre portée */
-}
-
-.nav-link-gestima:hover {
-    background-color: #0056b3; /* Change la couleur au survol */
-    transform: translateY(-3px); /* Légère élévation au survol */
-}
-
-.nav-link-gestima:active {
-    transform: translateY(1px); /* Réduction de la taille lors du clic */
-}
-
-@media screen and (max-width: 768px) {
+	padding-right: 20px;
+  }
+  
+  .nav-link-gestimag {
+	display: inline-block;
+	background-color: #007BFF;
+	color: white;
+	padding: 15px 30px;
+	text-decoration: none;
+	font-size: 20px;
+	border-radius: 25px;
+	transition: background-color 0.3s, transform 0.3s;
+	box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  }
+  
+  .nav-link-gestima:hover {
+	background-color: #0056b3;
+	transform: translateY(-3px);
+  }
+  
+  .nav-link-gestima:active {
+	transform: translateY(1px);
+  }
+  
+  /* Menu mobile */
+  @media screen and (max-width: 768px) {
 	.mobile-nav {
-		display: flex;
-		margin-bottom: -300px;
+	  display: flex;
+	  margin-bottom: 0;
 	}
-
+  
 	ul.nav {
 		visibility: hidden;
 		transform: translateY(-120%);
 		opacity: 0;
+		position: absolute; /* Le menu est absolument positionné */
+		top: 0;
+		left: 0;
+		width: 100%;
 		transition: 0.5s ease-in-out;
-	}
-
-	ul.nav.toggle {
+	  }
+  
+	  ul.nav.toggle {
 		visibility: visible;
 		transform: translateY(0);
 		opacity: 1;
-	}
-
+	  }
+  
 	ul {
 		flex-direction: column;
-	}
-
-	ul li {
-		overflow: hidden;
+		margin: 0; /* Enlever la marge par défaut */
+		padding: 0; /* Enlever le padding par défaut */
+	  }
+  
+	  ul li {
+		margin: 0; /* Enlever la marge par défaut sur les items du menu */
 		border: none;
-	}
-
+	  }
+  
 	ul li ul {
-		position: relative;
-		width: 90%;
-		padding: 0 5%;
-		transform: translateX(-100%);
-		display: block;
-		visibility: hidden;
-		height: 0;
-		overflow: hidden;
-		transition: transform 400ms ease;
+	  position: relative;
+	  width: 90%;
+	  padding: 0 5%;
+	  transform: translateX(-100%);
+	  display: block;
+	  visibility: hidden;
+	  height: 0;
 	}
-
+  
 	ul li ul li ul {
-		position: initial;
-		background: #555;
-		top: 0;
-		width: 96%;
-		padding: 0 2%;
+	  position: initial;
+	  background: #555;
+	  width: 96%;
+	  padding: 0 2%;
 	}
-
-	li:hover>ul,
-	li:active>ul {
-		display: block;
-	}
-
+  
 	li.active>ul {
-		transform: translateX(0);
-		visibility: visible;
-		height: 100%;
+	  transform: translateX(0);
+	  visibility: visible;
+	  height: 100%;
 	}
-
-	.dropdown>.nav-link,
-	.dropdown>.nav-link:hover,
-	.dropdown.active>.nav-link,
-	.dropdown.active>.nav-link:hover {
-		background-position: 95% 50%;
-	}
-
+  
 	li .nav-link:hover {
-		border-radius: 12px;
+	  border-radius: 12px;
 	}
-}
+
+	.main {
+		margin-top: 0; /* Supprimer la marge du haut */
+	  }
+  }  
 
 /* bouton-retour */
 #scroll_to_top {

@@ -26,9 +26,9 @@
         </p>
         <p class="footer_block">
             Site Web créé le : <b>Vendredi 8 Avril 2022</b><br>
-            Dernière mise à jour du Site Web : <b>Mercredi 30 Octobre 2024</b><br>
-            Version du Site Web : <b>1.7</b><br>
-            <?php // include "counter.php"; ?>
+            Dernière mise à jour du Site Web : <b>Jeudi 19 Décembre 2024</b><br>
+            Version du Site Web : <b>1.7.2</b><br>
+            <?php include "counter.php"; ?>
         </p>
 
         <div class="switch" id="switch">
