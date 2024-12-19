@@ -87,6 +87,12 @@ require_once "../config/controllerUserData.php";
             </div>
         </div>
     <?php } ?>
+    <div id="cookie-banner"
+        style="position: fixed; bottom: 0; width: 100%; background-color: #333; color: #fff; padding: 10px; text-align: center; z-index: 1000;">
+        <div id="stars-background"></div>
+        <p>Une nouvelle version majeure (version 4) de la page de connexion/inscription sera bientôt disponible. Restez
+            à l'affût !</p>
+    </div>
 
     <script src="login.js"></script>
 
