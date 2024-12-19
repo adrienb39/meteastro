@@ -8,13 +8,15 @@ require_once "../config/controllerUserData.php";
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="connexion.css" />
     <link rel="stylesheet" href="information/information.css" />
     <title>Meteastro : Astronomie / meteorologie</title>
 </head>
 
 <body>
+    <div class="star-field"></div>
+    <div class="glowing-stars"></div>
     <?php if (isset($_SESSION['email']) && isset($_SESSION['password'])) { ?>
         <div class="container">
             <div class="forms-container">
@@ -55,13 +57,20 @@ require_once "../config/controllerUserData.php";
                         </div>
                         <div>
                             <input type="checkbox" name="consent" id="consent" required />
-                            <label for="consent">J'accepte les <a href="terms.php" target="_blank">termes et conditions</a>.</label>
+                            <label for="consent">J'accepte les <a style="text-decoration: none; color: red;"
+                                    href="terms.php" target="_blank">termes et conditions</a>.</label>
                         </div>
                         <input type="submit" name="signup" value="S'inscrire" class="box-button btn" />
+                        <div style="display: block ruby;">
+                            <h3>Déjà inscrit ? </h3>
+                            <a style="text-decoration: none; color: red;" class="btn transparent" href="login.php">
+                                CONNEXION
+                            </a>
+                        </div>
                         <?php
                         if (count($errors) == 1) {
                             ?>
-                            <div style="color: red; text-align: center; padding: 0 100px;">
+                            <div style="color: red; text-align: center;">
                                 <?php
                                 foreach ($errors as $showerror) {
                                     echo htmlspecialchars($showerror);
@@ -72,7 +81,7 @@ require_once "../config/controllerUserData.php";
                             <?php
                         } elseif (count($errors) > 1) {
                             ?>
-                            <div style="color: red; text-align: center; padding: 0 100px;">
+                            <div style="color: red; text-align: center;">
                                 <ul>
                                     <?php
                                     foreach ($errors as $showerror) {
@@ -92,24 +101,12 @@ require_once "../config/controllerUserData.php";
                     </form>
                 </div>
             </div>
-
-            <div class="panels-container">
-                <div class="panel left-panel">
-                    <div class="content">
-                        <h3>Déjà inscrit ?</h3>
-                        <p>
-                            Si vous êtes déjà inscrit, vous pouvez vous connecter pour accéder aux fonctionnalités et aux
-                            contenus supplémentaires !
-                        </p>
-                        <a class="btn transparent" href="login.php">
-                            CONNEXION
-                        </a>
-                    </div>
-                    <img src="https://i.ibb.co/nP8H853/Mobile-login-rafiki.png" class="image" alt="" />
-                </div>
-            </div>
         </div>
     <?php } ?>
+    <div class="planet"></div>
+    <div class="asteroid"></div>
+
+    <?php include "about.php"; ?>
 
     <script src="login.js"></script>
 
