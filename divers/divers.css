@@ -248,8 +248,8 @@ select option {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: 75%;
-    margin: 0 13%;
+    width: 100%;
+    margin: 0;
 }
 
 .card {

@@ -57,13 +57,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     <link rel="stylesheet" href="/divers/divers.css">
     <link rel="stylesheet" href="../../CSS/style.css">
     <style>
-        .cards {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 0 13%;
-        }
-
         .card {
             overflow: hidden;
             box-shadow: 0px 2px 20px var(--clr-gray-light);
