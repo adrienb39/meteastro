@@ -1,17 +1,5 @@
 ﻿<?php
 session_start();
-require_once "config/controllerUserData.php";
-
-$dbType = 'mysqli';
-
-if ($dbType === 'pdo') {
-    $db = createPdoConnection();
-} else {
-    $mysqli = createMysqliConnection();
-}
-?>
-<?php
-session_start();
 error_reporting(0);
 
 // Si le bouton d'insertion de données astronomiques est cliqué
@@ -21,7 +9,7 @@ if (isset($_POST['insert-astronomie'])) {
 	$title_contenu = $_POST['title_contenu'];
 	$contenu = $_POST['contenu'];
 	$verified = $_POST['verified'];
-	$id_users = $fetch_info['id_users']; // Assurez-vous que cette variable est définie correctement
+	$id_users = $_SESSION['user_id']; // Assurez-vous que cette variable est définie correctement
 
 	// Gestion du téléchargement d'image
 	$filename = $_FILES["uploadfile"]["name"];
@@ -37,7 +25,7 @@ if (isset($_POST['insert-astronomie'])) {
 
 	// Requête SQL pour insérer des données dans la table astronomie, y compris le nom de l'image
 	$sqlAstronomie = "INSERT INTO astronomie (title, title_contenu, contenu, filename, verified, id_users) VALUES ('$title', '$title_contenu', '$contenu', '$filename', '$verified', '$id_users')";
-	$result = mysqli_query($conn, $sqlAstronomie);
+	$result = mysqli_query($mysqli, $sqlAstronomie);
 	if ($result) {
 		header("Location: ../index.php?msg=Donnée enregistrée avec succes");
 	} else {
@@ -56,7 +44,7 @@ if (isset($_POST['insert-meteorologie'])) {
 	$title_contenu = $_POST['title_contenu'];
 	$contenu = $_POST['contenu'];
 	$verified = $_POST['verified'];
-	$id_users = $fetch_info['id_users']; // Assurez-vous que cette variable est définie correctement
+	$id_users = $_SESSION['user_id']; // Assurez-vous que cette variable est définie correctement
 
 	// Gestion du téléchargement d'image
 	$filename = $_FILES["uploadfile"]["name"];
@@ -72,7 +60,7 @@ if (isset($_POST['insert-meteorologie'])) {
 
 	// Requête SQL pour insérer des données dans la table meteorologie, y compris le nom de l'image
 	$sqlMeteorologie = "INSERT INTO meteorologie (title, title_contenu, contenu, filename, verified, id_users) VALUES ('$title', '$title_contenu', '$contenu', '$filename', '$verified', '$id_users')";
-	$result = mysqli_query($conn, $sqlMeteorologie);
+	$result = mysqli_query($mysqli, $sqlMeteorologie);
 	if ($result) {
 		header("Location: ../index.php?msg=Donnée enregistrée avec succes");
 	} else {
@@ -213,16 +201,14 @@ if (isset($_POST['insert-meteorologie'])) {
 		}
 
 		#popup_overlay {
-			position: fixed;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			z-index: 9999;
-			background: black;
-			opacity: 0.7;
-			cursor: pointer;
-		}
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
 
 		#popup_box {
 			position: fixed;
@@ -231,8 +217,6 @@ if (isset($_POST['insert-meteorologie'])) {
 			right: 25%;
 			background-color: #fff;
 			padding: 0;
-			border: 2px solid #ccc;
-			border-top: 0px solid #ccc;
 			border-radius: 0 0 20px 20px;
 			box-shadow: 0 1px 5px #333;
 			z-index: 99999;
