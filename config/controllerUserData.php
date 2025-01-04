@@ -129,6 +129,7 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $fetch_pass)) {
             $_SESSION['email'] = $email;
             $_SESSION['name'] = $fetch['name'];
+            $_SESSION['user_id'] = $fetch['id_users'];
             $status = $fetch['status'];
             if ($status == 'verified') {
                 $_SESSION['password'] = $password;
