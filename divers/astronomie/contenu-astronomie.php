@@ -37,6 +37,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $title_contenu = $article['title_contenu'];
     $contenu = $article['contenu'];
     $date_astronomie = $article['date_astronomie'];
+    $name = $article['name'];
 } else {
     die('Erreur : ID manquant.');
 }
