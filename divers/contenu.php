@@ -1,71 +1,112 @@
 ﻿<?php
 session_start();
-error_reporting(0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Si le bouton d'insertion de données astronomiques est cliqué
 if (isset($_POST['insert-astronomie'])) {
-	// Récupérer les valeurs du formulaire
-	$title = $_POST['title'];
-	$title_contenu = $_POST['title_contenu'];
-	$contenu = $_POST['contenu'];
-	$verified = $_POST['verified'];
-	$id_users = $_SESSION['user_id']; // Assurez-vous que cette variable est définie correctement
+    // Récupérer les valeurs du formulaire
+    $title = $_POST['title'];
+    $title_contenu = $_POST['title_contenu'];
+    $contenu = $_POST['contenu'];
+    $verified = $_POST['verified'];
+    $id_users = $_SESSION['user_id']; // Assurez-vous que la variable de session est définie
 
-	// Gestion du téléchargement d'image
-	$filename = $_FILES["uploadfile"]["name"];
-	$tempname = $_FILES["uploadfile"]["tmp_name"];
-	$folder = "./uploads/" . $filename;
+    // Gestion du téléchargement d'image
+    $filename = $_FILES["uploadfile"]["name"];
+    $tempname = $_FILES["uploadfile"]["tmp_name"];
+    $folder = "./uploads/" . $filename;
 
-	// Déplacer l'image téléchargée dans le dossier : upload
-	if (move_uploaded_file($tempname, $folder)) {
-		echo "<h3>Image téléchargée avec succès !</h3>";
-	} else {
-		echo "<h3>Échec du téléchargement de l'image !</h3>";
-	}
+    // Vérifier s'il y a des erreurs d'upload
+    if ($_FILES["uploadfile"]["error"] != 0) {
+        echo "Erreur lors du téléchargement de l'image : " . $_FILES["uploadfile"]["error"];
+        exit;
+    }
 
-	// Requête SQL pour insérer des données dans la table astronomie, y compris le nom de l'image
-	$sqlAstronomie = "INSERT INTO astronomie (title, title_contenu, contenu, filename, verified, id_users) VALUES ('$title', '$title_contenu', '$contenu', '$filename', '$verified', '$id_users')";
-	$result = mysqli_query($mysqli, $sqlAstronomie);
-	if ($result) {
-		header("Location: ../index.php?msg=Donnée enregistrée avec succes");
-	} else {
+    // Déplacer l'image téléchargée dans le dossier : upload
+    if (move_uploaded_file($tempname, $folder)) {
+        echo "<h3>Image téléchargée avec succès !</h3>";
+    } else {
+        echo "<h3>Échec du téléchargement de l'image !</h3>";
+        exit;
+    }
 
-	}
+    // Requête SQL pour insérer des données dans la table astronomie avec PDO
+    try {
+        // Préparation de la requête avec des paramètres liés
+        $stmt = $db->prepare("INSERT INTO astronomie (title, title_contenu, contenu, filename, verified, id_users) 
+                                VALUES (:title, :title_contenu, :contenu, :filename, :verified, :id_users)");
+
+        // Lier les paramètres
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':title_contenu', $title_contenu);
+        $stmt->bindParam(':contenu', $contenu);
+        $stmt->bindParam(':filename', $filename);
+        $stmt->bindParam(':verified', $verified);
+        $stmt->bindParam(':id_users', $id_users);
+
+        // Exécution de la requête
+        if ($stmt->execute()) {
+            header("Location: ../index.php?msg=Donnée enregistrée avec succès");
+        } else {
+            echo "Erreur lors de l'insertion.";
+        }
+    } catch (PDOException $e) {
+        echo "Erreur lors de l'insertion : " . $e->getMessage();
+    }
 }
-?>
-<?php
-session_start();
-error_reporting(0);
 
-// Si le bouton d'insertion de données météorologiques est cliqué
+// Si le bouton d'insertion de données astronomiques est cliqué
 if (isset($_POST['insert-meteorologie'])) {
-	// Récupérer les valeurs du formulaire
-	$title = $_POST['title'];
-	$title_contenu = $_POST['title_contenu'];
-	$contenu = $_POST['contenu'];
-	$verified = $_POST['verified'];
-	$id_users = $_SESSION['user_id']; // Assurez-vous que cette variable est définie correctement
+    // Récupérer les valeurs du formulaire
+    $title = $_POST['title'];
+    $title_contenu = $_POST['title_contenu'];
+    $contenu = $_POST['contenu'];
+    $verified = $_POST['verified'];
+    $id_users = $_SESSION['user_id']; // Assurez-vous que la variable de session est définie
 
-	// Gestion du téléchargement d'image
-	$filename = $_FILES["uploadfile"]["name"];
-	$tempname = $_FILES["uploadfile"]["tmp_name"];
-	$folder = "./uploads/" . $filename;
+    // Gestion du téléchargement d'image
+    $filename = $_FILES["uploadfile"]["name"];
+    $tempname = $_FILES["uploadfile"]["tmp_name"];
+    $folder = "./uploads/" . $filename;
 
-	// Déplacer l'image téléchargée dans le dossier : upload
-	if (move_uploaded_file($tempname, $folder)) {
-		echo "<h3>Image téléchargée avec succès !</h3>";
-	} else {
-		echo "<h3>Échec du téléchargement de l'image !</h3>";
-	}
+    // Vérifier s'il y a des erreurs d'upload
+    if ($_FILES["uploadfile"]["error"] != 0) {
+        echo "Erreur lors du téléchargement de l'image : " . $_FILES["uploadfile"]["error"];
+        exit;
+    }
 
-	// Requête SQL pour insérer des données dans la table meteorologie, y compris le nom de l'image
-	$sqlMeteorologie = "INSERT INTO meteorologie (title, title_contenu, contenu, filename, verified, id_users) VALUES ('$title', '$title_contenu', '$contenu', '$filename', '$verified', '$id_users')";
-	$result = mysqli_query($mysqli, $sqlMeteorologie);
-	if ($result) {
-		header("Location: ../index.php?msg=Donnée enregistrée avec succes");
-	} else {
+    // Déplacer l'image téléchargée dans le dossier : upload
+    if (move_uploaded_file($tempname, $folder)) {
+        echo "<h3>Image téléchargée avec succès !</h3>";
+    } else {
+        echo "<h3>Échec du téléchargement de l'image !</h3>";
+        exit;
+    }
 
-	}
+    // Requête SQL pour insérer des données dans la table astronomie avec PDO
+    try {
+        // Préparation de la requête avec des paramètres liés
+        $stmt = $db->prepare("INSERT INTO meteorologie (title, title_contenu, contenu, filename, verified, id_users) 
+                                VALUES (:title, :title_contenu, :contenu, :filename, :verified, :id_users)");
+
+        // Lier les paramètres
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':title_contenu', $title_contenu);
+        $stmt->bindParam(':contenu', $contenu);
+        $stmt->bindParam(':filename', $filename);
+        $stmt->bindParam(':verified', $verified);
+        $stmt->bindParam(':id_users', $id_users);
+
+        // Exécution de la requête
+        if ($stmt->execute()) {
+            header("Location: ../index.php?msg=Donnée enregistrée avec succès");
+        } else {
+            echo "Erreur lors de l'insertion.";
+        }
+    } catch (PDOException $e) {
+        echo "Erreur lors de l'insertion : " . $e->getMessage();
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -408,9 +449,6 @@ if (isset($_POST['insert-meteorologie'])) {
 									style="height: 300px;"></textarea>
 								<input style="display: none;" type="text" class="ajout-contenu" name="verified"
 									value="n">
-								<?php $users = $_SESSION['username']; ?>
-								<input style="display: none;" type="text" name="users"
-									value="<?php echo $_SESSION['username']; ?>" />
 								<input type="submit" class="submit-contenu" name="insert-astronomie" value="Insérer">
 							</form>
 						</div>
@@ -429,9 +467,6 @@ if (isset($_POST['insert-meteorologie'])) {
 									style="height: 300px;"></textarea>
 								<input style="display: none;" type="text" class="ajout-contenu" name="verified"
 									value="n">
-								<?php $users = $_SESSION['username']; ?>
-								<input style="display: none;" type="text" name="users"
-									value="<?php echo $_SESSION['username']; ?>" />
 								<input type="submit" class="submit-contenu" name="insert-meteorologie" value="Insérer">
 							</form>
 						</div>
