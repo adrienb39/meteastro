@@ -1,23 +1,66 @@
-const cookieBox = document.querySelector(".wrapper"),
-  buttons = document.querySelectorAll(".button");
+document.addEventListener("DOMContentLoaded", function () {
+  const cookieWrapper = document.querySelector(".cookie-wrapper");
+  const acceptAllButton = document.getElementById("accept-all");
+  const rejectAllButton = document.getElementById("reject-all");
+  const managePreferencesButton = document.getElementById("manage-preferences");
+  const savePreferencesButton = document.getElementById("save-preferences");
 
-const executeCodes = () => {
-  //if cookie contains codinglab it will be returned and below of this code will not run
-  if (document.cookie.includes("meteastro")) return;
-  cookieBox.classList.add("show");
+  const functionalCookiesCheckbox = document.getElementById("functional-cookies");
+  const analyticsCookiesCheckbox = document.getElementById("analytics-cookies");
+  const advertisingCookiesCheckbox = document.getElementById("advertising-cookies");
 
-  buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-      cookieBox.classList.remove("show");
+  const modal = document.getElementById("popup-policy");
+  const closeModalButton = document.querySelector(".close-modal");
 
-      //if button has acceptBtn id
-      if (button.id == "acceptBtn") {
-        //set cookies for 1 month. 60 = 1 min, 60 = 1 hours, 24 = 1 day, 30 = 30 days
-        document.cookie = "cookieBy= meteastro; max-age=" + 60 * 60 * 24 * 30;
-      }
-    });
+  const cookieConsentKey = "cookieByMeteastro";
+
+  // Vérifie si l'utilisateur a déjà donné son consentement
+  if (document.cookie.includes(cookieConsentKey)) {
+    cookieWrapper.style.display = "none";
+  } else {
+    cookieWrapper.style.display = "flex";
+  }
+
+  // Accepter tous les cookies
+  acceptAllButton.addEventListener("click", function () {
+    document.cookie = `${cookieConsentKey}=accepted; max-age=${60 * 60 * 24 * 30}`; // valable 30 jours
+    cookieWrapper.style.display = "none";
   });
-};
 
-//executeCodes function will be called on webpage load
-window.addEventListener("load", executeCodes);
+  // Refuser tous les cookies
+  rejectAllButton.addEventListener("click", function () {
+    document.cookie = `${cookieConsentKey}=rejected; max-age=${60 * 60 * 24 * 30}`; // valable 30 jours
+    cookieWrapper.style.display = "none";
+  });
+
+  // Gérer les préférences
+  managePreferencesButton.addEventListener("click", function () {
+    modal.style.display = "flex";
+  });
+
+  // Enregistrer les préférences
+  savePreferencesButton.addEventListener("click", function () {
+    const acceptedCookies = {
+      functional: functionalCookiesCheckbox.checked,
+      analytics: analyticsCookiesCheckbox.checked,
+      advertising: advertisingCookiesCheckbox.checked
+    };
+
+    // Exemple de cookie personnalisé (stockage des choix)
+    document.cookie = `${cookieConsentKey}=${JSON.stringify(acceptedCookies)}; max-age=${60 * 60 * 24 * 30}`;
+    modal.style.display = "none";
+    cookieWrapper.style.display = "none";
+  });
+
+  // Fermer le modal
+  closeModalButton.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
+
+  // Lien "En savoir plus..." pour ouvrir le modal
+  const moreInfoLink = document.getElementById("more-info-link");
+  moreInfoLink.addEventListener("click", function (event) {
+    event.preventDefault(); // Empêche le lien de se comporter normalement
+    modal.style.display = "flex"; // Affiche le modal
+  });
+});

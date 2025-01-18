@@ -1,6 +1,6 @@
 <?php
 
-require "connexion_bdd.php"; // Assurez-vous que ce fichier contient la fonction createMysqliConnection()
+require_once __DIR__ . "/../config/connexion_bdd.php"; // Assurez-vous que ce fichier contient la fonction createMysqliConnection()
 
 $dbType = 'pdo';
 

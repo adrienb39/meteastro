@@ -1127,3 +1127,75 @@ footer .copyright-text {
         max-width: 100%;
     }
 }
+
+/* Style de la superposition (overlay) */
+#overlay {
+    display: none; /* Caché par défaut */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    z-index: 1000; /* Assurez-vous qu'il soit au-dessus du contenu */
+}
+
+/* Contenu du formulaire dans le bloc */
+.form-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Bouton de fermeture de la modale */
+.close-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 16px;
+}
+
+.close-btn:hover {
+    background-color: #ff1a1a;
+}
+
+/* Style du formulaire */
+.form-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-container .btn-2 {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    border-radius: 4px;
+    cursor: pointer;
+    
+}
+
+.form-container .btn-2:hover {
+    color: var(--white);
+    background-color: var(--main-color);
+}
