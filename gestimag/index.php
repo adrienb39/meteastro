@@ -40,8 +40,8 @@ if (!isset($_SESSION['download_token'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestimag</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="/ressources/logo-gestimag2.png">
+    <title>Logiciel pour entreprises, boutiques et ateliers</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="ressources/logo-gestimag2.png">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
     <!--===== Font Awesome =====-->
@@ -135,89 +135,6 @@ if (!isset($_SESSION['download_token'])) {
             </div>
         </div>
         <div class="header-hero-shape"></div> <!--===== Hero Shape =====-->
-    </section>
-    <!--===== Home Section End =====-->
-    <section class="service-section section-padding" id="fonctionnalites">
-        <div class="container">
-            <div class="row">
-                <div class="section-title text-align">
-                    <h1 class="main-title" style="color: #046280;">Le logiciel développé <h1 class="main-title"
-                            style="color: orange;">pour les entreprises, boutiques et ateliers !</h1>
-                    </h1>
-                    <ul class="line">
-                        <li></li>
-                    </ul>
-                </div> <!--===== Section Title =====-->
-            </div>
-            <div class="row">
-                <!--===== Service Item Start =====-->
-                <div class="service-item">
-                    <div class="service-item-inner">
-                        <h3>Gagnez du temps</h3>
-                        <p>Gérez votre stock rapidement et simplement avec notre outil tout-en-un</p>
-                        <div style="display: flex; justify-content: end">
-                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!--===== Service Item End =====-->
-                <!--===== Service Item Start =====-->
-                <div class="service-item">
-                    <div class="service-item-inner">
-                        <h3>Augmentez vos marges</h3>
-                        <p>Contrôlez rapidement vos marges afin d'augmenter votre rentabilité</p>
-                        <div style="display: flex; justify-content: end">
-                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!--===== Service Item End =====-->
-                <!--===== Service Item Start =====-->
-                <div class="service-item">
-                    <div class="service-item-inner">
-                        <h3>Simplifiez votre quotidien</h3>
-                        <p>Concentrez-vous sur votre activité et votre savoir-faire</p>
-                        <div style="display: flex; justify-content: end">
-                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!--===== Service Item End =====-->
-                <!--===== Service Item Start =====-->
-                <div class="service-item">
-                    <div class="service-item-inner">
-                        <h3>Accélérez vos commandes</h3>
-                        <p>Accédez aux catalogues de vos fournisseurs en 1 clic</p>
-                        <div style="display: flex; justify-content: end">
-                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!--===== Service Item End =====-->
-                <!--===== Service Item Start =====-->
-                <div class="service-item">
-                    <div class="service-item-inner">
-                        <h3>Visualisez vos chiffres</h3>
-                        <p>Visualisez en 1 clic votre CA, vos marges, la valeur de votre stock...</p>
-                        <div style="display: flex; justify-content: end">
-                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!--===== Service Item End =====-->
-                <!--===== Service Item Start =====-->
-                <div class="service-item">
-                    <div class="service-item-inner">
-                        <h3>Commandes & inventaire</h3>
-                        <p>Accélérez et simplifiez vos commandes et réassorts en 1 clic</p>
-                        <div style="display: flex; justify-content: end">
-                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!--===== Service Item End =====-->
-            </div>
-        </div>
     </section>
     <!--===== Services Section Start =====-->
     <section class="service-section section-padding" id="fonctionnalites">
@@ -457,7 +374,7 @@ if (!isset($_SESSION['download_token'])) {
     <footer class="footer">
         <div class="container">
             <div class="row justify-content-center">
-                <p class="copyright-text">&copy; 2024 - Gestimag / <span style="color: red;">Propulsé par
+                <p class="copyright-text">&copy; <?php echo date("Y") ?> - Gestimag / <span style="color: red;">Propulsé par
                         Meteastro</span></p>
             </div>
         </div>

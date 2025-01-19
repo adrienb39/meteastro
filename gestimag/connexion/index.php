@@ -63,10 +63,13 @@ $licenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="fr-FR">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" sizes="16x16" href="../ressources/logo-gestimag2.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
 <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="connexion.css" />
 <link rel="stylesheet" href="information/information.css" />
-<title>Meteastro : Inscription et Connexion</title>
+<title>S'inscrire / Se connecter | Gestimag</title>
 <style>
     /* Styles des cartes */
     .software-cards {
@@ -311,6 +314,7 @@ $licenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="step" id="step-5">
                             <h2>Sélectionnez un logiciel</h2>
+                            <p>Vous pourrez modifié dans votre espace connecté</p>
                             <div class="software-cards">
                                 <?php
                                 $softwareQuery = "SELECT * FROM logiciels";
@@ -323,7 +327,7 @@ $licenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="card-content">
                                         <h3>' . htmlspecialchars($software['nom']) . '</h3>
                                         <p>' . htmlspecialchars($software['description']) . '</p>
-                                        <p class="price">Prix : ' . htmlspecialchars($software['prix']) . '€</p>
+                                        <p class="price">Prix : ' . htmlspecialchars($software['prix']) . ' €</p>
                                     </div>
                                   </div>';
                                     }
@@ -336,7 +340,7 @@ $licenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="selected-software">
                                 <p><strong>Logiciel sélectionné :</strong> <span id="selected-software-name">Aucun</span>
                                 </p>
-                                <p><strong>Prix :</strong> <span id="selected-price">0€</span></p>
+                                <p><strong>Prix :</strong> <span id="selected-price">0.00 €</span></p>
                             </div>
                             <button type="button" class="btn-nav" id="prev-btn-5">Précédent</button>
                             <button type="button" class="btn-nav" id="next-btn-5">Suivant</button>
@@ -533,7 +537,7 @@ $licenses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 // Afficher les informations du logiciel sélectionné
                 document.getElementById('selected-software-name').textContent = softwareName;
-                document.getElementById('selected-price').textContent = softwarePrice;
+                document.getElementById('selected-price').textContent = softwarePrice + ' €';
 
                 // Ajouter l'ID du logiciel sélectionné dans un champ caché
                 document.getElementById('software_id').value = softwareId;
