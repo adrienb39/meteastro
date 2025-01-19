@@ -43,6 +43,11 @@ img {
     vertical-align: middle;
 }
 
+.container-menu {
+    max-width: 1440px;
+    margin: auto;
+}
+
 .container {
     max-width: 1140px;
     margin: auto;

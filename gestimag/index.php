@@ -57,6 +57,11 @@ if (!isset($_SESSION['download_token'])) {
             text-decoration: none;
             /* Supprime le soulignement */
         }
+
+        .description-rapide {
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
     <script>
         // Fonction pour afficher la modale
@@ -74,7 +79,7 @@ if (!isset($_SESSION['download_token'])) {
 <body>
     <!--===== Navbar Start =====-->
     <nav class="navbar">
-        <div class="container">
+        <div class="container-menu">
             <div class="row justify-content-between">
                 <div class="logo"><a href="index.php">
                         <div class="img-logo"></div><span>GESTIMAG</span>
@@ -107,6 +112,7 @@ if (!isset($_SESSION['download_token'])) {
         <div class="container">
             <div class="row align-items-center">
                 <div class="home-text">
+                    <div>
                     <h1 style="color: #046280;">Logiciel de gestion pour<h1 style="color: orange;">boutiques, ateliers
                             et entreprises</h1>
                     </h1>
@@ -114,6 +120,12 @@ if (!isset($_SESSION['download_token'])) {
                         et connectez-vous à vos fournisseurs !</span>
                     <a href="#fonctionnalites" class="btn btn-1">En savoir +</a>
                     <a href="#contact" class="btn btn-1">Testez Gestimag</a>
+                    </div>
+                    <div class="description-rapide">
+                        <p><i class="fa-solid fa-gauge"></i> Rapide et expert</p>
+                        <p><i class="fa-solid fa-maximize"></i> Intuitif et évolutif</p>
+                        <p><i class="fa-solid fa-crop-simple"></i> Gestion simplifiée</p>
+                    </div>
                 </div>
                 <div class="home-image">
                     <div class="img-box">
@@ -125,6 +137,88 @@ if (!isset($_SESSION['download_token'])) {
         <div class="header-hero-shape"></div> <!--===== Hero Shape =====-->
     </section>
     <!--===== Home Section End =====-->
+    <section class="service-section section-padding" id="fonctionnalites">
+        <div class="container">
+            <div class="row">
+                <div class="section-title text-align">
+                    <h1 class="main-title" style="color: #046280;">Le logiciel développé <h1 class="main-title"
+                            style="color: orange;">pour les entreprises, boutiques et ateliers !</h1>
+                    </h1>
+                    <ul class="line">
+                        <li></li>
+                    </ul>
+                </div> <!--===== Section Title =====-->
+            </div>
+            <div class="row">
+                <!--===== Service Item Start =====-->
+                <div class="service-item">
+                    <div class="service-item-inner">
+                        <h3>Gagnez du temps</h3>
+                        <p>Gérez votre stock rapidement et simplement avec notre outil tout-en-un</p>
+                        <div style="display: flex; justify-content: end">
+                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!--===== Service Item End =====-->
+                <!--===== Service Item Start =====-->
+                <div class="service-item">
+                    <div class="service-item-inner">
+                        <h3>Augmentez vos marges</h3>
+                        <p>Contrôlez rapidement vos marges afin d'augmenter votre rentabilité</p>
+                        <div style="display: flex; justify-content: end">
+                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!--===== Service Item End =====-->
+                <!--===== Service Item Start =====-->
+                <div class="service-item">
+                    <div class="service-item-inner">
+                        <h3>Simplifiez votre quotidien</h3>
+                        <p>Concentrez-vous sur votre activité et votre savoir-faire</p>
+                        <div style="display: flex; justify-content: end">
+                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!--===== Service Item End =====-->
+                <!--===== Service Item Start =====-->
+                <div class="service-item">
+                    <div class="service-item-inner">
+                        <h3>Accélérez vos commandes</h3>
+                        <p>Accédez aux catalogues de vos fournisseurs en 1 clic</p>
+                        <div style="display: flex; justify-content: end">
+                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!--===== Service Item End =====-->
+                <!--===== Service Item Start =====-->
+                <div class="service-item">
+                    <div class="service-item-inner">
+                        <h3>Visualisez vos chiffres</h3>
+                        <p>Visualisez en 1 clic votre CA, vos marges, la valeur de votre stock...</p>
+                        <div style="display: flex; justify-content: end">
+                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!--===== Service Item End =====-->
+                <!--===== Service Item Start =====-->
+                <div class="service-item">
+                    <div class="service-item-inner">
+                        <h3>Commandes & inventaire</h3>
+                        <p>Accélérez et simplifiez vos commandes et réassorts en 1 clic</p>
+                        <div style="display: flex; justify-content: end">
+                            <a href=""><i class="fa-solid fa-circle-arrow-right" style="color: orange;"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!--===== Service Item End =====-->
+            </div>
+        </div>
+    </section>
     <!--===== Services Section Start =====-->
     <section class="service-section section-padding" id="fonctionnalites">
         <div class="container">
@@ -250,11 +344,11 @@ if (!isset($_SESSION['download_token'])) {
                         </div>
                         <div class="pricing-footer">
                             <?php if (!isset($_SESSION['user_email']) || !isset($_SESSION['user_password'])) { ?>
-                                <a href="#tarifs" class="btn-2" onclick="showForm()" style="pointer-events: none; text-decoration: none;">Télécharger</a>
+                                <a href="#tarifs" class="btn-2 disabled" onclick="showForm()">Télécharger</a>
                             <?php } else { ?>
                                 <!-- URL avec token -->
                                 <a href="download.php?file=Gestimag-1.0.0-alpha1.exe&token=<?php echo $_SESSION['download_token']; ?>"
-                                    class="btn-2" style="pointer-events: none; text-decoration: none;">Télécharger</a>
+                                    class="btn-2 disabled">Télécharger</a>
                             <?php } ?>
                         </div>
 
