@@ -250,11 +250,11 @@ if (!isset($_SESSION['download_token'])) {
                         </div>
                         <div class="pricing-footer">
                             <?php if (!isset($_SESSION['user_email']) || !isset($_SESSION['user_password'])) { ?>
-                                <a href="#tarifs" class="btn-2" onclick="showForm()">Télécharger</a>
+                                <a href="#tarifs" class="btn-2" onclick="showForm()" style="pointer-events: none; text-decoration: none;">Télécharger</a>
                             <?php } else { ?>
                                 <!-- URL avec token -->
                                 <a href="download.php?file=Gestimag-1.0.0-alpha1.exe&token=<?php echo $_SESSION['download_token']; ?>"
-                                    class="btn-2">Télécharger</a>
+                                    class="btn-2" style="pointer-events: none; text-decoration: none;">Télécharger</a>
                             <?php } ?>
                         </div>
 
