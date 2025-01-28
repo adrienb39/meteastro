@@ -14,7 +14,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js">
     </script>
-    <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
 
 </head>
 
@@ -26,14 +25,14 @@
         </p>
         <p class="footer_block">
             Site Web créé le : <b>Vendredi 8 Avril 2022</b><br>
-            Dernière mise à jour du Site Web : <b>Samedi 4 Janvier 2025</b><br>
+            Dernière mise à jour du Site Web : <b>Mardi 28 Janvier 2025</b><br>
             Version du Site Web : <b>1.9</b><br>
             <?php include "counter.php"; ?>
         </p>
 
         <div class="switch" id="switch">
-            <span class="switch-light">OFF</span>
-            <span class="switch-dark">ON</span>
+            <span class="switch-light"><img src="/ressources/sun-fill.svg" alt="soleil" style="width: 40px;"></span>
+            <span class="switch-dark"><img src="/ressources/moon-fill.svg" alt="lune" style="width: 40px;"></span>
         </div>
     </footer>
     <script src="/import_dans_le_php/footer.js"></script>
