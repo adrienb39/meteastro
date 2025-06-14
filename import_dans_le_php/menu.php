@@ -19,9 +19,11 @@ $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']); // Ada
   <link rel="stylesheet" href="../CSS/style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/js/all.min.js"></script>
   <script src="/import_dans_le_php/menu.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 
 <body>
+  
   <!-- logo -->
   <div class="div-logo">
     <a class="logo" href="/">
@@ -29,7 +31,7 @@ $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']); // Ada
       <span class="title-logo">METEASTRO <?php echo $isConnected ? '- ' . $_SESSION['name']: ''; ?></span>
     </a>
     <div class="marquee">
-      <div class="info">Bienvenue sur le site de Meteastro !</div>
+      <div class="info">Bienvenue sur le site de Meteastro ! Rendez-vous sur <a href="https://www.devmetastra.fr">devmetastra.fr</a> avec plus de fonctionnalités, avec une nouvelle interface.... Les comptes activés seront transférés sur DevMetAstra.</div>
     </div>
   </div>
   
