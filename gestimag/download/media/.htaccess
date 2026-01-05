@@ -1,4 +1,0 @@
-RewriteEngine on
-# Options +FollowSymlinks
-RewriteCond %{HTTP_REFERER} http://adrien.digitaledeluxe.fr/gestimag/download/media/ [NC,OR]
-RewriteRule .* - [F]
