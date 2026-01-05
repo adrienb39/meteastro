@@ -1,66 +1,143 @@
+/**
+ * Meteastro - Gestionnaire de Consentement Cookies
+ */
 document.addEventListener("DOMContentLoaded", function () {
-  const cookieWrapper = document.querySelector(".cookie-wrapper");
-  const acceptAllButton = document.getElementById("accept-all");
-  const rejectAllButton = document.getElementById("reject-all");
-  const managePreferencesButton = document.getElementById("manage-preferences");
-  const savePreferencesButton = document.getElementById("save-preferences");
+    // --- Configuration ---
+    const COOKIE_NAME = "cookieByMeteastro";
+    const EXPIRATION_DAYS = 30;
 
-  const functionalCookiesCheckbox = document.getElementById("functional-cookies");
-  const analyticsCookiesCheckbox = document.getElementById("analytics-cookies");
-  const advertisingCookiesCheckbox = document.getElementById("advertising-cookies");
+    // --- Éléments UI ---
+    const banner = document.getElementById("cookie-banner");
+    const modal = document.getElementById("cookie-modal");
+    
+    // Boutons de la bannière
+    const btnAcceptAll = document.getElementById("accept-all");
+    const btnRejectAll = document.getElementById("reject-all");
+    const btnManage = document.getElementById("manage-btn");
+    
+    // Boutons du modal
+    const btnSaveSettings = document.getElementById("save-settings");
+    const btnCloseModal = document.getElementById("close-modal");
 
-  const modal = document.getElementById("popup-policy");
-  const closeModalButton = document.querySelector(".close-modal");
+    /**
+     * Lit la valeur d'un cookie par son nom
+     */
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i].trim();
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
 
-  const cookieConsentKey = "cookieByMeteastro";
+    /**
+     * Enregistre le consentement et ferme l'interface proprement
+     * @param {Object|String} consentData - Les préférences de l'utilisateur
+     */
+    function setConsent(consentData) {
+        const date = new Date();
+        date.setTime(date.getTime() + (EXPIRATION_DAYS * 24 * 60 * 60 * 1000));
+        const expires = "; expires=" + date.toUTCString();
+        
+        // Stockage sous forme de chaîne JSON
+        const cookieValue = typeof consentData === 'object' ? JSON.stringify(consentData) : consentData;
+        
+        // Écriture du cookie
+        document.cookie = `${COOKIE_NAME}=${cookieValue}${expires}; path=/; SameSite=Lax`;
 
-  // Vérifie si l'utilisateur a déjà donné son consentement
-  if (document.cookie.includes(cookieConsentKey)) {
-    cookieWrapper.style.display = "none";
-  } else {
-    cookieWrapper.style.display = "flex";
-  }
+        // Animation de sortie
+        hideInterface();
+    }
 
-  // Accepter tous les cookies
-  acceptAllButton.addEventListener("click", function () {
-    document.cookie = `${cookieConsentKey}=accepted; max-age=${60 * 60 * 24 * 30}`; // valable 30 jours
-    cookieWrapper.style.display = "none";
-  });
+    /**
+     * Gère la fermeture visuelle de la bannière et du modal
+     */
+    function hideInterface() {
+        if (banner) {
+            banner.style.transition = "all 0.4s ease";
+            banner.style.opacity = "0";
+            banner.style.transform = "translateY(20px)";
+            setTimeout(() => { banner.style.display = "none"; }, 400);
+        }
+        if (modal) {
+            modal.style.display = "none";
+        }
+    }
 
-  // Refuser tous les cookies
-  rejectAllButton.addEventListener("click", function () {
-    document.cookie = `${cookieConsentKey}=rejected; max-age=${60 * 60 * 24 * 30}`; // valable 30 jours
-    cookieWrapper.style.display = "none";
-  });
+    // --- Initialisation ---
+    function init() {
+        // Si le cookie n'existe pas, on affiche la bannière
+        if (!getCookie(COOKIE_NAME)) {
+            // Petit délai pour laisser le site charger et l'animation se lancer
+            setTimeout(() => {
+                if (banner) banner.style.display = "block";
+            }, 600);
+        }
+    }
 
-  // Gérer les préférences
-  managePreferencesButton.addEventListener("click", function () {
-    modal.style.display = "flex";
-  });
+    // --- Événements ---
 
-  // Enregistrer les préférences
-  savePreferencesButton.addEventListener("click", function () {
-    const acceptedCookies = {
-      functional: functionalCookiesCheckbox.checked,
-      analytics: analyticsCookiesCheckbox.checked,
-      advertising: advertisingCookiesCheckbox.checked
+    // 1. Accepter tout (Bouton principal)
+    if (btnAcceptAll) {
+        btnAcceptAll.onclick = function() {
+            setConsent({ 
+                functional: true, 
+                analytics: true, 
+                ads: true, 
+                date: new Date().toISOString() 
+            });
+        };
+    }
+
+    // 2. Tout refuser (Bouton secondaire)
+    if (btnRejectAll) {
+        btnRejectAll.onclick = function() {
+            setConsent({ 
+                functional: true, 
+                analytics: false, 
+                ads: false 
+            });
+        };
+    }
+
+    // 3. Ouvrir les réglages
+    if (btnManage) {
+        btnManage.onclick = () => {
+            if (modal) modal.style.display = "flex";
+        };
+    }
+
+    // 4. Fermer le modal (Croix ou clic extérieur)
+    if (btnCloseModal) {
+        btnCloseModal.onclick = () => { modal.style.display = "none"; };
+    }
+    window.onclick = (event) => {
+        if (event.target === modal) modal.style.display = "none";
     };
 
-    // Exemple de cookie personnalisé (stockage des choix)
-    document.cookie = `${cookieConsentKey}=${JSON.stringify(acceptedCookies)}; max-age=${60 * 60 * 24 * 30}`;
-    modal.style.display = "none";
-    cookieWrapper.style.display = "none";
-  });
+    // 5. Enregistrer les préférences spécifiques
+    if (btnSaveSettings) {
+        btnSaveSettings.onclick = function() {
+            const analyticsCheck = document.getElementById("check-analytics");
+            const adsCheck = document.getElementById("check-ads");
 
-  // Fermer le modal
-  closeModalButton.addEventListener("click", function () {
-    modal.style.display = "none";
-  });
+            setConsent({
+                functional: true,
+                analytics: analyticsCheck ? analyticsCheck.checked : false,
+                ads: adsCheck ? adsCheck.checked : false
+            });
+        };
+    }
 
-  // Lien "En savoir plus..." pour ouvrir le modal
-  const moreInfoLink = document.getElementById("more-info-link");
-  moreInfoLink.addEventListener("click", function (event) {
-    event.preventDefault(); // Empêche le lien de se comporter normalement
-    modal.style.display = "flex"; // Affiche le modal
-  });
+    /**
+     * FONCTION DE DEBUG : Tapez resetMeteastro() dans la console pour faire réapparaître le bandeau
+     */
+    window.resetMeteastro = function() {
+        document.cookie = COOKIE_NAME + '=; Max-Age=-99999999; path=/;';
+        location.reload();
+    };
+
+    init();
 });

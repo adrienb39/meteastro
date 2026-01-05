@@ -12,47 +12,78 @@
 </head>
 
 <body>
-  <!-- Bandeau de consentement cookies -->
-  <div class="cookie-wrapper">
-    <div class="cookie-banner">
-      <header>
-        <i class="bx bx-cookie"></i>
-        <h2>Gestion des cookies</h2>
-      </header>
-      <div class="cookie-content">
-        <p>Ce site utilise des cookies pour améliorer votre expérience de navigation. Vous pouvez accepter ou gérer vos préférences. <a href="../connexion/terms.php">En savoir plus...</a></p>
-      </div>
-      <div class="cookie-actions">
-        <button id="accept-all" class="cookie-btn accept">Accepter tous les cookies</button>
-        <button id="reject-all" class="cookie-btn reject">Refuser tous les cookies</button>
-        <button id="manage-preferences" class="cookie-btn manage">Gérer les préférences</button>
-      </div>
-    </div>
-  </div>
+<div class="cookie-wrapper">
+    
+    <aside id="cookie-banner" class="cookie-banner" role="status" aria-labelledby="banner-title" style="display: none;">
+        <div class="cookie-container">
+            <header>
+                <div class="cookie-icon" aria-hidden="true">🍪</div>
+                <h2 id="banner-title">Gestion des cookies</h2>
+            </header>
+            
+            <div class="cookie-content">
+                <p>
+                    Meteastro utilise des cookies pour optimiser votre navigation stellaire. 
+                    Certains sont nécessaires au fonctionnement du vaisseau, d'autres nous aident à cartographier votre expérience. 
+                    <a href="../connexion/terms.php" class="cookie-link">Politique de confidentialité</a>.
+                </p>
+            </div>
+            
+            <div class="cookie-actions">
+                <button id="accept-all" class="cookie-btn btn-accept">Accepter tout</button>
+                <button id="reject-all" class="cookie-btn btn-reject">Refuser</button>
+                <button id="manage-btn" class="cookie-btn btn-manage">Paramétrer</button>
+            </div>
+        </div>
+    </aside>
 
-  <!-- Popup politique des cookies -->
-  <div id="popup-policy" class="modal">
-    <div class="modal-content">
-      <h3>Politique de confidentialité et cookies</h3>
-      <p>Nous utilisons des cookies pour analyser la performance du site, personnaliser le contenu et vous proposer des publicités ciblées. Vous pouvez personnaliser vos choix ci-dessous.</p>
-      <div class="cookie-settings">
-        <label>
-          <input type="checkbox" id="functional-cookies" checked disabled>
-          Cookies fonctionnels
-        </label>
-        <label>
-          <input type="checkbox" id="analytics-cookies">
-          Cookies analytiques
-        </label>
-        <label>
-          <input type="checkbox" id="advertising-cookies">
-          Cookies publicitaires
-        </label>
-      </div>
-      <button id="save-preferences" class="cookie-btn save">Enregistrer mes préférences</button>
-      <a href="#" class="close-modal">×</a>
+</div>
+
+<div id="cookie-modal" class="cookie-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display: none;">
+    <div class="cookie-modal-content">
+        <button id="close-modal" class="btn-close-modal" aria-label="Fermer la fenêtre">&times;</button>
+        
+        <header class="modal-header">
+            <h3 id="modal-title">Préférences spatiales</h3>
+            <p class="modal-subtitle">Choisissez les données que vous souhaitez partager avec la station.</p>
+        </header>
+        
+        <div class="cookie-settings-list">
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-name">Cookies Techniques</span>
+                    <span class="setting-desc">Indispensables pour la connexion et la sécurité.</span>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="check-essential" checked disabled>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-name">Mesures d'Audience</span>
+                    <span class="setting-desc">Nous permettent d'améliorer les instruments de bord.</span>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="check-analytics">
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-name">Personnalisation</span>
+                    <span class="setting-desc">Contenu adapté à vos précédentes explorations.</span>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="check-ads">
+                </div>
+            </div>
+        </div>
+
+        <footer class="modal-footer">
+            <button id="save-settings" class="cookie-btn btn-save">Enregistrer la configuration</button>
+        </footer>
     </div>
-  </div>
+</div>
 </body>
-
 </html>
