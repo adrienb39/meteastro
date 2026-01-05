@@ -1,11 +1,29 @@
-const sign_in_btn = document.querySelector("#sign-in-btn");
-const sign_up_btn = document.querySelector("#sign-up-btn");
-const container = document.querySelector(".container");
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('termsModal');
+    const openBtn = document.getElementById('openTerms');
+    const closeBtn = document.getElementById('closeTerms');
+    const acceptBtn = document.getElementById('acceptTermsBtn');
 
-sign_up_btn.addEventListener("click", () => {
-  container.classList.add("sign-up-mode");
-});
+    // Ouvrir le modal
+    openBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Empêche le défilement du fond
+    });
 
-sign_in_btn.addEventListener("click", () => {
-  container.classList.remove("sign-up-mode");
+    // Fermer le modal (Croix ou Bouton Accepter)
+    [closeBtn, acceptBtn].forEach(btn => {
+        btn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // Fermer si clic à l'extérieur
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
 });

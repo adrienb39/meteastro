@@ -25,7 +25,7 @@
                 <p>
                     Meteastro utilise des cookies pour optimiser votre navigation stellaire. 
                     Certains sont nécessaires au fonctionnement du vaisseau, d'autres nous aident à cartographier votre expérience. 
-                    <a href="../connexion/terms.php" class="cookie-link">Politique de confidentialité</a>.
+                    <a href="#" id="openTerms" class="cookie-link">Politique de confidentialité</a>.
                 </p>
             </div>
             

@@ -1,629 +1,398 @@
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+/* --- 1. VARIABLES & SYSTÈME DE THÈME --- */
+:root {
+    /* PAR DÉFAUT : THÈME SOMBRE */
+    --bg-main: #020617;
+    --bg-card: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --glass-bg: rgba(15, 23, 42, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+
+    /* Couleurs fixes */
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --accent: #ef4444;
+    --accent-hover: #dc2626;
+    
+    /* Animation */
+    --transition-speed: 0.3s;
+    --transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-html,
+/* OPTIONNEL : THÈME CLAIR (activé via la classe .lightmode) */
+body.lightmode {
+    --bg-main: #ffffff;
+    --bg-card: #f8fafc;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* --- 2. RESET & BASES --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
 body {
-	height: auto;
-	margin: 0;
-	font-family: Arial, Helvetica, sans-serif;
-	background-color: #fff;
+    font-family: 'Outfit', 'Segoe UI', Tahoma, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    line-height: 1.6;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    overflow-x: hidden;
 }
 
-/* logo */
-/* Structure générale du logo */
+/* Transitions fluides lors du clic */
+body.is-transitioning, body.is-transitioning * {
+    transition: background-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease, 
+                border-color var(--transition-speed) ease, 
+                transform var(--transition-speed) ease !important;
+}
+
+a { text-decoration: none; color: inherit; }
+img { user-select: none; -webkit-user-drag: none; max-width: 100%; pointer-events: none; }
+
+/* --- 3. LOGO & HEADER --- */
 .div-logo {
-	background-color: white;
-	text-align: center;
-}
-
-.darkmode .div-logo {
-	background-color: hsl(217, 27%, 12%);
-}
-
-.logo {
-	text-decoration: none;
-	color: red;
-	font-size: 40px;
-	font-weight: bold;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    padding: 3rem 1rem;
+    text-align: center;
+    background: radial-gradient(circle at center, var(--bg-card) 0%, var(--bg-main) 100%);
 }
 
 .logo-icon {
-	width: 80px;
+    width: 80px;
+    filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.4));
+    transition: var(--transition);
 }
 
 .title-logo {
-	background-color: red;
-	color: white;
-	padding: 4px 8px;
-	border-radius: 5px;
-	text-align: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--text-main), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-/* Menu de navigation */
-.container {
-	margin: 0 auto;
-	z-index: 99;
+/* --- 4. NAVIGATION --- */
+.navbar {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.mobile-nav {
-	background: #555;
-	color: #fff;
-	display: none;
-	justify-content: space-between;
-	align-items: center;
-	height: 35px;
-	padding: 20px;
-	font-size: 20px;
+.nav-link {
+    color: var(--text-main) !important;
+    font-weight: 600;
+    padding: 0.6rem 1.25rem !important;
+    border-radius: 10px;
+    transition: var(--transition);
 }
 
-.mobile-nav .nav-btn {
-	cursor: pointer;
-}
+.nav-link:hover { background: rgba(59, 130, 246, 0.1); color: var(--primary) !important; }
 
-.nav {
-	background: white;
-	display: flex;
-	justify-content: center;
-	z-index: 50;
-	position: relative;
-	border-bottom: 1px solid red;
-}
+/* --- 5. FORMULAIRE DE CONTACT --- */
+.main { max-width: 900px; margin: 4rem auto; padding: 0 1.5rem; text-align: center; }
 
-.relative {
-	position: relative;
-	top: 0;
-	width: 100%;
-}
-
-.sticky {
-	position: sticky;
-	top: 0;
-	width: 100%;
-}
-
-ul {
-	list-style: none;
-	display: flex;
-	background: black;
-	margin: 0;
-	padding: 0;
-}
-
-ul li .nav-link,
-ul li {
-	cursor: pointer;
-	font-size: 20px;
-	text-decoration: none;
-}
-
-ul li {
-	display: block;
-}
-
-ul li .nav-link {
-	padding: 15px 25px;
-	background: white;
-	color: black;
-	display: block;
-	transition: all 0.3s ease-in-out;
-}
-
-li .nav-link:hover {
-	background-color: red;
-	color: white;
-	border-radius: 12px;
-}
-
-.darkmode li .nav-link:hover {
-	background-color: red;
-	color: white;
-	border-radius: 12px;
-}
-
-/* Menu dropdown */
-ul li ul {
-	background: #555;
-	padding-left: 5px;
-	position: absolute;
-	width: 10em;
-	display: none;
-	height: 0;
-	overflow: hidden;
-	transition: transform 0.4s ease, height 0.4s ease;
-}
-
-li:hover>ul,
-li:active>ul {
-	display: block;
-	height: auto;
-}
-
-.dropdown {
-	position: relative;
-}
-
-.dropdown>.nav-link {
-	background: url(./img/arrow.svg) no-repeat right center;
-	background-size: 15px;
-	color: black;
-	padding-right: 20px;
-}
-
-.nav-link-gestimag {
-	display: inline-block;
-	background-color: #007BFF;
-	color: white;
-	padding: 16px 32px;
-	text-decoration: none;
-	font-size: 18px;
-	font-weight: 600;
-	border-radius: 30px;
-	/* Plus arrondi */
-	transition: all 0.3s ease-in-out;
-	box-shadow: 0 8px 25px rgba(0, 123, 255, 0.2);
-	/* Ombre plus subtile et large */
-	text-transform: uppercase;
-	/* Texte en majuscules */
-	letter-spacing: 1px;
-	/* Espacement entre les lettres */
-	position: relative;
-}
-
-.nav-link-gestimag::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: linear-gradient(45deg, #00b4ff, #006bb3);
-	/* Dégradé d'arrière-plan */
-	border-radius: 30px;
-	opacity: 0;
-	transition: opacity 0.4s ease-in-out;
-	z-index: -1;
-	/* Placer derrière le texte */
-}
-
-.nav-link-gestimag:hover {
-	background-color: #0056b3;
-	transform: translateY(-5px);
-	box-shadow: 0 12px 30px rgba(0, 123, 255, 0.4);
-	/* Ombre plus grande sur hover */
-}
-
-.nav-link-gestimag:hover::before {
-	opacity: 1;
-}
-
-.nav-link-gestimag:active {
-	transform: translateY(2px);
-	/* Légère descente sur active */
-	box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
-	/* Ombre plus douce sur active */
-}
-
-/* Menu mobile */
-@media screen and (max-width: 768px) {
-	.mobile-nav {
-		display: flex;
-		margin-bottom: 0;
-	}
-
-	ul.nav {
-		visibility: hidden;
-		transform: translateY(-120%);
-		opacity: 0;
-		position: absolute;
-		/* Le menu est absolument positionné */
-		top: 0;
-		left: 0;
-		width: 100%;
-		transition: 0.5s ease-in-out;
-	}
-
-	ul.nav.toggle {
-		visibility: visible;
-		transform: translateY(0);
-		opacity: 1;
-	}
-
-	ul {
-		flex-direction: column;
-		margin: 0;
-		/* Enlever la marge par défaut */
-		padding: 0;
-		/* Enlever le padding par défaut */
-	}
-
-	ul li {
-		margin: 0;
-		/* Enlever la marge par défaut sur les items du menu */
-		border: none;
-	}
-
-	ul li ul {
-		position: relative;
-		width: 90%;
-		padding: 0 5%;
-		transform: translateX(-100%);
-		display: block;
-		visibility: hidden;
-		height: 0;
-	}
-
-	ul li ul li ul {
-		position: initial;
-		background: #555;
-		width: 96%;
-		padding: 0 2%;
-	}
-
-	li.active>ul {
-		transform: translateX(0);
-		visibility: visible;
-		height: 100%;
-	}
-
-	li .nav-link:hover {
-		border-radius: 12px;
-	}
-
-	.main {
-		margin-top: 0;
-		/* Supprimer la marge du haut */
-	}
-}
-
-/* bouton-retour */
-#scroll_to_top {
-	/* position: fixed;
-	width: 50px;
-	height: 25px;
-	bottom: 125px;
-	right: 30px; */
-	display: none;
-}
-
-/* #scroll_to_top img {
-	width: 50px;
-	border-radius: 50px;
-  } */
-
-/* main */
-.main {
-	width: 50%;
-	position: relative;
-	top: 50px;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-}
-
-.darkmode .main {
-	color: white;
-}
-
-section {
-	/* margin-bottom: 50px; */
-	margin-bottom: 25vh;
-}
-
-/* animation-info */
-.marquee {
-	overflow: hidden;
-}
-
-.marquee>.info {
-	color: grey;
-	display: inline-block;
-	white-space: nowrap;
-	animation: defilement-rtl 30s infinite linear;
-	/* cursor: pointer; */
-	padding: 10px 2em 10px 100%;
-}
-
-/* .marquee:hover>.info {
-	animation-play-state: paused;
-} */
-
-@keyframes defilement-rtl {
-	0% {
-		-webkit-transform: translate(0);
-		transform: translate(0);
-	}
-
-	100% {
-		-webkit-transform: translate(-100%);
-		transform: translate(-100%);
-	}
-}
-
-.marquee>.info {
-	font-size: 1.5em;
-}
-
-/* .informations {
-	text-decoration: none;
-	color: yellow;
-}
-
-.informations:hover {
-	color: rgb(255, 255, 150);
-}
-
-.informations:active {
-	color: rgb(255, 136, 0);
-} */
-
-#minuteur {
-	color: red;
-	display: inline;
-}
-
-/* footer */
-footer {
-	display: flex;
-	/* justify-content: center; */
-	padding: 20px 5px;
-	/* background-color: black; */
-	background: linear-gradient(45deg, white, #ffa3a3, white);
-	color: black;
-	justify-content: space-evenly;
-	align-items: center;
-	margin-top: 100px;
-	box-shadow: #ff0000 0 0 10px;
-}
-
-/* accueil */
-* {
-	text-decoration: none;
-}
-
-/* formulaire de contact */
 fieldset {
-	background-color: white;
-	border-color: transparent;
-	/* border-top-right-radius: 20px;
-	border-top-left-radius: 20px; */
-	border-radius: 20px;
-	transition: all 0.5s;
-	box-shadow: black 0 0 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: var(--shadow);
 }
-
-/* fieldset:hover {
-	background-color: darkorange;
-} */
 
 legend {
-	font-size: 50px;
-	margin: auto;
-	margin-bottom: 4%;
-	font-weight: bold;
-	background-color: red;
-	color: white;
-	border-radius: 12px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    padding: 0.5rem 2rem;
+    background-color: var(--accent);
+    color: #fff;
+    border-radius: 50px;
+    margin: 0 auto 2rem auto;
 }
 
-.contener-contacts {
-	width: 80%;
-	display: inline-block;
+.contact, .contact-message {
+    width: 100%;
+    background: var(--bg-main);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
 }
 
-/* .input, textarea {
-	border-radius: 10px;
-} */
-
-.blc-contact {
-	margin-bottom: 4%;
+.btn-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
 }
 
-.contact {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-	/* width: 100%; */
-	/* height: calc(2rem + 4px); */
-	/* border: 1px solid rgb(187, 187, 187); */
-	margin-bottom: 10px;
-	height: 45px;
-	display: block;
-	width: 100%;
-	border-radius: 30px;
-	border: none;
-	outline: none;
-	background-color: #f7f7f7;
-	font-size: 16px;
-	padding: 0 15px;
-	transition: all 0.3s ease;
-	color: #646f87;
-	margin-top: 10px;
-	box-shadow: black 0 0 1px;
+/* --- 6. FOOTER & SWITCH --- */
+footer.footer-glass {
+    margin-top: 5rem;
+    padding: 4rem 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
 }
 
-.contact-message {
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-	/* width: 100%; */
-	/* height: calc(2rem + 4px); */
-	/* height: 10rem; */
-	height: 240px;
-	display: block;
-	width: 100%;
-	border-radius: 30px;
-	border: none;
-	outline: none;
-	background-color: #f7f7f7;
-	font-size: 16px;
-	padding: 0 15px;
-	padding-top: 15px;
-	transition: all 0.3s ease;
-	color: #646f87;
-	resize: none;
-	margin-top: 10px;
-	box-shadow: black 0 0 1px;
+.switch-ui {
+    width: 60px;
+    height: 30px;
+    background: #1e293b; /* Couleur sombre par défaut */
+    border-radius: 30px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 5px;
+    transition: background-color var(--transition-speed) ease;
 }
 
-.blc-btn {
-	display: grid !important;
+body.lightmode .switch-ui { background: #e2e8f0; }
+
+/* LOGIQUE DES ICÔNES (Sombre par défaut) */
+.switch-ui i { font-size: 1rem; z-index: 2; }
+
+/* Par défaut (Sombre) : On montre la lune, on cache le soleil */
+.sun-icon { color: #f59e0b; display: none; }
+.moon-icon { color: var(--primary); display: block; }
+
+/* Mode Clair : On montre le soleil, on cache la lune */
+body.lightmode .sun-icon { display: block; }
+body.lightmode .moon-icon { display: none; }
+
+.switch-ui::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    width: 26px;
+    height: 26px;
+    background: white;
+    border-radius: 50%;
+    /* Position par défaut à droite (Sombre) */
+    transform: translateX(30px);
+    transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1;
 }
 
-.btn {
-	border-radius: 20px;
-	border: none;
-	padding: 10px 4px;
-	font-weight: 500;
-	color: white;
-	background-color: red;
-	margin-bottom: 20px;
+/* En mode clair, on ramène le cercle à gauche */
+body.lightmode .switch-ui::after { transform: translateX(0); }
+
+/* --- 7. RESPONSIVE --- */
+@media (max-width: 991px) {
+    .main { width: 95%; }
 }
 
-.btn:hover {
-	background-color: rgb(255, 55, 55);
-	cursor: pointer;
+/* --- MODAL TERMS --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: none; /* Caché par défaut */
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    padding: 20px;
 }
 
-/* responsive */
-@media screen and (max-width: 1000px) {
-	.div-logo {
-		text-align: center;
-		margin-top: 0;
-	}
-
-	.main {
-		width: 95%;
-	}
-
-	.contener-contacts {
-		width: 100%;
-		display: inline-block;
-	}
-
-	#scroll_to_top {
-		display: none;
-		position: fixed;
-		width: 50px;
-		height: 25px;
-		bottom: 125px;
-		right: 30px;
-	}
-
-	#scroll_to_top img {
-		width: 50px;
-		border-radius: 50px;
-	}
-
-	footer {
-		display: flex;
-		text-align: center;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
-	}
-
-	.footer_block::after {
-		content: '';
-		display: block;
-		width: 60%;
-		height: 1px;
-		border-top: 1px solid white;
-		margin: 1rem auto;
-	}
+.modal-overlay.active {
+    display: flex;
 }
 
-.change {
-	cursor: pointer;
-	border: 1px solid #555;
-	border-radius: 20%;
-	width: 20px;
-	text-align: center;
-	padding: 5px;
-	margin-left: 8px;
+.modal-content {
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    padding: 30px !important;
 }
 
-.dark {
-	background-color: hsl(215, 27%, 8%);
-	color: black;
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-.light {
-	background-color: white;
+.modal-header h2 {
+    font-size: 1.5rem;
+    color: var(--accent);
 }
 
-.switch {
-	position: relative;
-	display: block;
-	cursor: pointer;
-	user-select: none;
-	margin-right: 0.5rem;
-	color: black;
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
 }
 
-.switch-light,
-.switch-dark {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform-origin: center;
-	transform: translate(-50%, -50%);
-	transition: all 0.3s ease-in;
+.modal-body {
+    overflow-y: auto;
+    text-align: left;
+    padding-right: 10px;
 }
 
-.switch-light {
-	font-size: 1.3rem;
-	visibility: visible;
-	color: var(--black-300);
+/* Custom Scrollbar pour le modal */
+.modal-body::-webkit-scrollbar { width: 5px; }
+.modal-body::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+
+.modal-body h3 {
+    font-size: 1rem;
+    color: var(--text-main);
+    margin: 15px 0 5px;
 }
 
-.darkmode .switch-light {
-	font-size: 0rem;
-	visibility: hidden;
+.modal-body p {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.6;
 }
 
-.switch-dark {
-	font-size: 0rem;
-	visibility: hidden;
-	color: var(--white-100);
+.modal-footer {
+    margin-top: 20px;
 }
 
-.darkmode .switch-dark {
-	font-size: 1.3rem;
-	visibility: visible;
+.box-button {
+  width: 100%;
+  height: 58px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: var(--transition);
+  margin-top: 20px;
 }
 
-body.darkmode {
-	background-color: hsl(215, 27%, 8%);
+.box-button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px var(--accent-glow);
 }
 
-.darkmode .nav {
-	background: hsl(217, 27%, 12%);
+/* --- AMBIANCE SOLAIRE (Mode Clair) --- */
+body.lightmode .sun {
+    display: block;
 }
 
-.darkmode ul li a {
-	background: hsl(217, 27%, 12%);
-	color: white;
+/* Le corps du soleil */
+.sun {
+    position: fixed;
+    top: -80px;
+    left: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, 
+        #ffffff 0%, 
+        #fff9c4 20%, 
+        #ffeb3b 50%, 
+        transparent 70%);
+    border-radius: 50%;
+    filter: blur(20px);
+    z-index: -1;
+    display: none;
+    animation: sunGlow 15s infinite alternate ease-in-out;
 }
 
-.darkmode footer {
-	background: linear-gradient(45deg, black, #f00, black);
-	color: white;
+/* Les rayons de soleil (Lens Flare) */
+body.lightmode .sun::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200vw;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.4) 0%, 
+        rgba(255, 235, 59, 0.1) 50%, 
+        transparent 100%);
+    transform: rotate(35deg) translateY(-50%);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+    pointer-events: none;
 }
 
-.darkmode .switch {
-	color: white;
+/* Cercles de réfraction (petits reflets dans l'objectif) */
+.lens-flare {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+    display: none;
 }
 
-.darkmode fieldset {
-	background-color: var(--night-300);
-	border-color: transparent;
-	border-radius: 20px;
-	transition: all 0.5s;
-	box-shadow: white 0 0 10px;
+body.lightmode .lens-flare {
+    display: block;
+    background: 
+        radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 10%),
+        radial-gradient(circle at 45% 55%, rgba(255, 235, 59, 0.05) 0%, transparent 15%),
+        radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 8%);
 }
 
-.darkmode .contener-contacts form label {
-	color: white;
+@keyframes sunGlow {
+    from { transform: scale(1); opacity: 0.7; }
+    to { transform: scale(1.1); opacity: 1; }
+}
+
+/* Animation Nuit : Scintillement */
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Animation Jour : Flottement de poussière solaire */
+@keyframes floatSolar {
+    0% { transform: translate(0, 0); opacity: 0; }
+    20% { opacity: 0.5; }
+    80% { opacity: 0.5; }
+    100% { transform: translate(40px, -60px); opacity: 0; }
+}
+
+/* Conteneur pour s'assurer que rien ne dépasse */
+#star-field {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
 }

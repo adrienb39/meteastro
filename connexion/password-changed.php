@@ -41,8 +41,6 @@ if ($_SESSION['info'] == false) {
         <div class="planet"></div>
         <div class="asteroid"></div>
 
-        <?php include "about.php"; ?>
-
         <script src="login.js"></script>
 </body>
 

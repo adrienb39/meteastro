@@ -1,115 +1,158 @@
 <?php
 require_once "../config/controllerUserData.php";
-?>
 
+/**
+ * Initialisation du thème : 
+ * Le site est sombre par défaut. On n'ajoute 'lightmode' que si 
+ * le cookie est explicitement défini sur 'light'.
+ */
+$themeChoice = $_COOKIE['meteastro_theme'] ?? 'dark';
+$bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
+?>
 <!DOCTYPE html>
-<html lang="fr-FR">
+<html lang="fr-FR" data-bs-theme="<?php echo ($themeChoice === 'light') ? 'light' : 'dark'; ?>">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscription | Meteastro Expedition</title>
+    
+    <meta name="description" content="Rejoignez la station Meteastro. Créez votre compte pour accéder aux données astronomiques et météorologiques.">
+    <link rel="icon" type="image/png" href="/ressources/logo.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="connexion.css" />
     <link rel="stylesheet" href="information/information.css" />
-    <title>Meteastro : Astronomie / meteorologie</title>
 </head>
 
-<body>
-    <div class="star-field"></div>
-    <div class="glowing-stars"></div>
-    <?php if (isset($_SESSION['email']) && isset($_SESSION['password'])) { ?>
-        <div class="container">
-            <div class="forms-container">
-                <div class="signin-signup">
-                    <form class="box sign-in-form" action="" method="post" name="login" novalidate>
-                        <h2 class="box-title title">INSCRIPTION</h2>
-                        <div class="input-field-session">Vous êtes déjà connecté ! Vous voulez vous déconnecter ?
+<body class="<?php echo $bodyClass; ?>">
+    <div class="star-field" aria-hidden="true"></div>
+    <div class="glowing-stars" aria-hidden="true"></div>
+    <div class="planet" aria-hidden="true"></div>
+    <div class="asteroid" aria-hidden="true"></div>
+
+    <main class="container">
+        <div class="forms-container">
+            <div class="signin-signup">
+
+                <?php if (isset($_SESSION['email'], $_SESSION['password'])): ?>
+                    <section class="box glass-card animate-in">
+                        <div class="icon-header">
+                            <i class="fa-solid fa-user-astronaut"></i>
                         </div>
-                        <a class="box-button btn-session solid" href="logout.php">Déconnexion</a>
-                    </form>
-                </div>
-            </div>
-        </div>
-    <?php } else { ?>
-        <div class="container">
-            <div class="forms-container">
-                <div class="signin-signup">
-                    <form class="box sign-in-form" action="signup.php" method="post" name="signup" novalidate>
-                        <h2 class="box-title title">INSCRIPTION</h2>
-                        <div class="input-field">
-                            <i class="fas fa-user"></i>
-                            <input type="text" class="box-input" name="name" placeholder="Nom complet" required
-                                value="<?php echo htmlspecialchars($name); ?>">
+                        <h2 class="title">ACCÈS REFUSÉ</h2>
+                        <p class="status-text">
+                            Votre cockpit est déjà actif. Vous ne pouvez pas créer de nouveau compte en étant connecté.
+                        </p>
+                        <div class="action-group">
+                            <a href="/index.php" class="box-button secondary">RETOUR AU BORD</a>
+                            <a href="logout.php" class="box-button logout-btn">DÉCONNEXION</a>
                         </div>
-                        <div class="input-field">
-                            <i class="fas fa-envelope"></i>
-                            <input type="text" class="box-input" name="email" placeholder="Email" required
-                                value="<?php echo htmlspecialchars($email); ?>">
+                    </section>
+
+                <?php else: ?>
+                    <form action="signup.php" method="POST" class="box glass-card animate-in" autocomplete="off" novalidate>
+                        <header>
+                            <h2 class="title">REJOINDRE</h2>
+                            <p class="subtitle">Créez votre badge d'explorateur</p>
+                        </header>
+
+                        <?php if (!empty($errors)): ?>
+                            <div class="error-alert" role="alert">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <div>
+                                    <?php foreach ($errors as $error): ?>
+                                        <p><?php echo htmlspecialchars($error); ?></p>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="input-group">
+                            <div class="input-field">
+                                <i class="fa-solid fa-user" aria-hidden="true"></i>
+                                <input type="text" name="name" placeholder="Nom complet" 
+                                       value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
+                            </div>
+
+                            <div class="input-field">
+                                <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                                <input type="email" name="email" placeholder="Email" 
+                                       value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
+                            </div>
+
+                            <div class="input-field">
+                                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                                <input type="password" name="password" placeholder="Mot de passe" required>
+                            </div>
+
+                            <div class="input-field">
+                                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                                <input type="password" name="cpassword" placeholder="Confirmer mot de passe" required>
+                            </div>
                         </div>
-                        <div class="input-field">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" class="box-input" name="password" placeholder="Mot de passe" required />
+
+                        <div class="consent-container">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" name="consent" id="consent" required>
+                                <span class="checkmark"></span>
+                                <span class="label-text">
+    J'accepte les <a href="#" id="openTerms">Termes et Conditions</a>
+</span>
+                            </label>
                         </div>
-                        <div class="input-field">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" class="box-input" name="cpassword"
-                                placeholder="Confirmation de votre mot de passe" required />
-                        </div>
-                        <div>
-                            <input type="checkbox" name="consent" id="consent" required />
-                            <label for="consent">J'accepte les <a style="text-decoration: none; color: red;"
-                                    href="terms.php" target="_blank">termes et conditions</a>.</label>
-                        </div>
-                        <input type="submit" name="signup" value="S'inscrire" class="box-button btn" />
-                        <div style="display: block ruby;">
-                            <h3>Déjà inscrit ? </h3>
-                            <a style="text-decoration: none; color: red;" class="btn transparent" href="login.php">
-                                CONNEXION
+
+                        <button type="submit" name="signup" class="box-button btn-glow">
+                            CRÉER MON COMPTE <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                        </button>
+
+                        <footer class="form-footer">
+                            <p>Déjà membre de l'équipage ?</p>
+                            <a href="login.php" class="signup-link">CONNEXION AU COCKPIT</a>
+                        </footer>
+
+                        <div class="home-return">
+                            <a href="/index.php">
+                                <i class="fa-solid fa-house"></i> Retour Terre (Accueil)
                             </a>
                         </div>
-                        <?php
-                        if (count($errors) == 1) {
-                            ?>
-                            <div style="color: red; text-align: center;">
-                                <?php
-                                foreach ($errors as $showerror) {
-                                    echo htmlspecialchars($showerror);
-                                    echo PHP_EOL;
-                                }
-                                ?>
-                            </div>
-                            <?php
-                        } elseif (count($errors) > 1) {
-                            ?>
-                            <div style="color: red; text-align: center;">
-                                <ul>
-                                    <?php
-                                    foreach ($errors as $showerror) {
-                                        ?>
-                                        <li><?php echo htmlspecialchars($showerror); ?></li>
-                                        <?php
-                                    }
-                                    ?>
-                                </ul>
-                            </div>
-                            <?php
-                        }
-                        ?>
-                        <p class="social-text">Revenir sur la page d'accueil du Site Web : <a
-                                style="text-decoration: none; color: red;" href="/index.php">Accueil du
-                                Site Web</a></p>
                     </form>
-                </div>
+                <?php endif; ?>
+
             </div>
         </div>
-    <?php } ?>
-    <div class="planet"></div>
-    <div class="asteroid"></div>
+    </main>
 
-    <?php include "about.php"; ?>
+    <div id="termsModal" class="modal-overlay">
+    <div class="modal-content glass-card animate-in">
+        <div class="modal-header">
+            <h2><i class="fa-solid fa-file-contract"></i> Termes et Conditions</h2>
+            <button id="closeTerms" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <h3>1. Acceptation des termes</h3>
+            <p>En accédant à ce site, vous acceptez d'être lié par ces termes et conditions et toutes les lois et réglementations applicables.</p>
+            
+            <h3>2. Utilisation du site</h3>
+            <p>Vous pouvez utiliser notre site uniquement à des fins légales et d'une manière qui ne porte pas atteinte aux droits des autres utilisateurs.</p>
+            
+            <h3>3. Propriété intellectuelle</h3>
+            <p>Tous les contenus présents sur ce site (textes, graphiques, logos) sont la propriété de Meteastro.</p>
+            
+            <h3>4. Limitation de responsabilité</h3>
+            <p>Meteastro ne peut être tenu responsable des dommages résultant de l'utilisation de ce site.</p>
+            
+            <h3>5. Modifications</h3>
+            <p>Meteastro se réserve le droit de modifier ces termes à tout moment.</p>
+        </div>
+        <div class="modal-footer">
+            <button id="acceptTermsBtn" class="box-button btn-glow">J'AI COMPRIS</button>
+        </div>
+    </div>
+</div>
 
     <script src="login.js"></script>
-
 </body>
-
 </html>

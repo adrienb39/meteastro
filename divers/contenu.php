@@ -1,449 +1,313 @@
 ﻿<?php
-session_start();
-error_reporting(0);
+// On suppose que la session est déjà démarrée dans le fichier parent
+require_once __DIR__ . "/../config/connexion_bdd.php";
 
-// Si le bouton d'insertion de données astronomiques est cliqué
+$message = "";
+
+/**
+ * Fonction unique pour traiter l'insertion de contenu
+ */
+function traiterInsertion($db, $table)
+{
+	if (!isset($_FILES['uploadfile']) || $_FILES['uploadfile']['error'] !== UPLOAD_ERR_OK) {
+		return "Erreur lors du téléchargement de l'image.";
+	}
+
+	$title = htmlspecialchars($_POST['title']);
+	$title_contenu = htmlspecialchars($_POST['title_contenu']);
+	$contenu = $_POST['contenu'];
+	$verified = 'n';
+	$id_users = $_SESSION['user_id'] ?? 0;
+
+	$filename = time() . "_" . basename($_FILES["uploadfile"]["name"]);
+	$folder = __DIR__ . "/../uploads/" . $filename;
+
+	if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"], $folder)) {
+		try {
+			$sql = "INSERT INTO $table (title, title_contenu, contenu, filename, verified, id_users) 
+                    VALUES (:title, :title_c, :contenu, :filename, :verified, :id_u)";
+
+			$stmt = $db->prepare($sql);
+			$stmt->execute([
+				':title' => $title,
+				':title_c' => $title_contenu,
+				':contenu' => $contenu,
+				':filename' => $filename,
+				':verified' => $verified,
+				':id_u' => $id_users
+			]);
+
+			header("Location: index.php?msg=Succès !");
+			exit();
+		} catch (PDOException $e) {
+			return "Erreur BDD : " . $e->getMessage();
+		}
+	}
+	return "Échec du téléchargement.";
+}
+
 if (isset($_POST['insert-astronomie'])) {
-	// Récupérer les valeurs du formulaire
-	$title = $_POST['title'];
-	$title_contenu = $_POST['title_contenu'];
-	$contenu = $_POST['contenu'];
-	$verified = $_POST['verified'];
-	$id_users = $_SESSION['user_id']; // Assurez-vous que cette variable est définie correctement
-
-	// Gestion du téléchargement d'image
-	$filename = $_FILES["uploadfile"]["name"];
-	$tempname = $_FILES["uploadfile"]["tmp_name"];
-	$folder = "./uploads/" . $filename;
-
-	// Déplacer l'image téléchargée dans le dossier : upload
-	if (move_uploaded_file($tempname, $folder)) {
-		echo "<h3>Image téléchargée avec succès !</h3>";
-	} else {
-		echo "<h3>Échec du téléchargement de l'image !</h3>";
-	}
-
-	// Requête SQL pour insérer des données dans la table astronomie, y compris le nom de l'image
-	$sqlAstronomie = "INSERT INTO astronomie (title, title_contenu, contenu, filename, verified, id_users) VALUES ('$title', '$title_contenu', '$contenu', '$filename', '$verified', '$id_users')";
-	$result = mysqli_query($mysqli, $sqlAstronomie);
-	if ($result) {
-		header("Location: ../index.php?msg=Donnée enregistrée avec succes");
-	} else {
-
-	}
+	$message = traiterInsertion($db, 'astronomie');
+} elseif (isset($_POST['insert-meteorologie'])) {
+	$message = traiterInsertion($db, 'meteorologie');
 }
 ?>
-<?php
-session_start();
-error_reporting(0);
 
-// Si le bouton d'insertion de données météorologiques est cliqué
-if (isset($_POST['insert-meteorologie'])) {
-	// Récupérer les valeurs du formulaire
-	$title = $_POST['title'];
-	$title_contenu = $_POST['title_contenu'];
-	$contenu = $_POST['contenu'];
-	$verified = $_POST['verified'];
-	$id_users = $_SESSION['user_id']; // Assurez-vous que cette variable est définie correctement
+<div id="popup_overlay" class="modal-overlay">
+	<div id="popup_box" class="modal-content-wrapper">
+		<div class="content-card glass-modal">
 
-	// Gestion du téléchargement d'image
-	$filename = $_FILES["uploadfile"]["name"];
-	$tempname = $_FILES["uploadfile"]["tmp_name"];
-	$folder = "./uploads/" . $filename;
+			<button type="button" class="close-modal-btn" id="popup_close" aria-label="Fermer">
+				<i class="fas fa-times"></i>
+			</button>
 
-	// Déplacer l'image téléchargée dans le dossier : upload
-	if (move_uploaded_file($tempname, $folder)) {
-		echo "<h3>Image téléchargée avec succès !</h3>";
-	} else {
-		echo "<h3>Échec du téléchargement de l'image !</h3>";
+			<?php if ($message): ?>
+				<div class="alert alert-danger"><?= $message ?></div>
+			<?php endif; ?>
+
+			<input type="radio" name="nav-tab" id="tab-astro" checked hidden>
+			<input type="radio" name="nav-tab" id="tab-meteo" hidden>
+
+			<div class="tab-nav">
+				<label for="tab-astro"><i class="fas fa-user-astronaut me-2"></i>Astronomie</label>
+				<label for="tab-meteo"><i class="fas fa-cloud-sun me-2"></i>Météorologie</label>
+				<div class="tab-slider"></div>
+			</div>
+
+			<div class="form-section form-astro">
+				<h3 class="modal-title">🚀 Nouvelle Publication Stellaire</h3>
+				<form action="" method="post" enctype="multipart/form-data">
+					<div class="input-group-custom">
+						<label class="label-glass">Image de couverture</label>
+						<input type="file" name="uploadfile" class="input-glass" required>
+					</div>
+
+					<input type="text" name="title" placeholder="Catégorie (ex: Galaxies)" class="input-glass" required>
+					<input type="text" name="title_contenu" placeholder="Titre de l'article" class="input-glass"
+						required>
+
+					<div class="editor-container">
+						<textarea id="contenu-astronomie" name="contenu" class="summernote"></textarea>
+					</div>
+
+					<button type="submit" name="insert-astronomie" class="btn-submit-astro">
+						<i class="fas fa-paper-plane me-2"></i>Lancer la publication
+					</button>
+				</form>
+			</div>
+
+			<div class="form-section form-meteo">
+				<h3 class="modal-title">☁️ Nouveau Rapport Climatique</h3>
+				<form action="" method="post" enctype="multipart/form-data">
+					<div class="input-group-custom">
+						<label class="label-glass">Image de couverture</label>
+						<input type="file" name="uploadfile" class="input-glass" required>
+					</div>
+
+					<input type="text" name="title" placeholder="Phénomène (ex: Orages)" class="input-glass" required>
+					<input type="text" name="title_contenu" placeholder="Titre de l'article" class="input-glass"
+						required>
+
+					<div class="editor-container">
+						<textarea id="contenu-meteorologie" name="contenu" class="summernote"></textarea>
+					</div>
+
+					<button type="submit" name="insert-meteorologie" class="btn-submit-meteo">
+						<i class="fas fa-cloud-upload-alt me-2"></i>Envoyer le rapport
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+	/* --- FOND ET POSITIONNEMENT DU MODAL --- */
+	.modal-overlay {
+		position: fixed;
+		inset: 0;
+		background: rgba(2, 6, 23, 0.85);
+		backdrop-filter: blur(12px);
+		z-index: 9999;
+		display: none;
+		/* Caché par défaut */
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		opacity: 0;
+		/* Ajouté pour la transition */
+		transition: opacity 0.3s ease;
 	}
 
-	// Requête SQL pour insérer des données dans la table meteorologie, y compris le nom de l'image
-	$sqlMeteorologie = "INSERT INTO meteorologie (title, title_contenu, contenu, filename, verified, id_users) VALUES ('$title', '$title_contenu', '$contenu', '$filename', '$verified', '$id_users')";
-	$result = mysqli_query($mysqli, $sqlMeteorologie);
-	if ($result) {
-		header("Location: ../index.php?msg=Donnée enregistrée avec succes");
-	} else {
-
+	/* Quand le JS ajoute .active */
+	.modal-overlay.active {
+		opacity: 1;
 	}
-}
-?>
-<!DOCTYPE html>
-<html lang="fr-FR">
 
-<head>
-	<meta charset="UTF-8" />
-	<link rel="stylesheet" href="" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<style>
-		.box {
-			border: 1px solid #c4c4c4;
-			padding: 30px 25px 10px 25px;
-			background: white;
-			margin: 50px auto;
-			width: 360px;
-			text-align: center;
+	.modal-content-wrapper {
+		width: 100%;
+		max-width: 850px;
+		position: relative;
+		transform: translateY(30px);
+		opacity: 0;
+		transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	.modal-overlay.active .modal-content-wrapper {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	/* --- DESIGN DE LA CARTE --- */
+	.glass-modal {
+		background: rgba(15, 23, 42, 0.8);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 28px;
+		padding: 40px;
+		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+		max-height: 90vh;
+		overflow-y: auto;
+	}
+
+	.close-modal-btn {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		background: rgba(255, 255, 255, 0.1);
+		border: none;
+		color: white;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		cursor: pointer;
+		transition: 0.3s;
+		z-index: 10;
+	}
+
+	.close-modal-btn:hover {
+		background: #ef4444;
+		transform: rotate(90deg);
+	}
+
+	.modal-title {
+		color: white;
+		font-weight: 700;
+		margin-bottom: 25px;
+		text-align: center;
+	}
+
+	/* --- TABS (ONGLETS) --- */
+	.tab-nav {
+		display: flex;
+		background: rgba(0, 0, 0, 0.4);
+		border-radius: 50px;
+		padding: 5px;
+		margin-bottom: 35px;
+		position: relative;
+	}
+
+	.tab-nav label {
+		flex: 1;
+		text-align: center;
+		padding: 14px;
+		cursor: pointer;
+		z-index: 2;
+		transition: 0.3s;
+		color: rgba(255, 255, 255, 0.6);
+		font-weight: 600;
+	}
+
+	.tab-slider {
+		position: absolute;
+		width: calc(50% - 5px);
+		height: calc(100% - 10px);
+		background: #3b82f6;
+		top: 5px;
+		left: 5px;
+		border-radius: 40px;
+		transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		z-index: 1;
+	}
+
+	#tab-meteo:checked~.tab-nav .tab-slider {
+		left: 50%;
+		background: #ef4444;
+	}
+
+	#tab-astro:checked~.tab-nav label[for="tab-astro"],
+	#tab-meteo:checked~.tab-nav label[for="tab-meteo"] {
+		color: white;
+	}
+
+	/* --- ÉLÉMENTS FORMULAIRE --- */
+	.input-glass {
+		width: 100%;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 12px;
+		padding: 14px;
+		color: white;
+		margin-bottom: 20px;
+	}
+
+	.input-glass:focus {
+		border-color: #3b82f6;
+		outline: none;
+		background: rgba(255, 255, 255, 0.1);
+	}
+
+	.label-glass {
+		display: block;
+		color: #94a3b8;
+		font-size: 0.85rem;
+		margin-bottom: 8px;
+	}
+
+	.btn-submit-astro,
+	.btn-submit-meteo {
+		width: 100%;
+		padding: 16px;
+		border-radius: 14px;
+		border: none;
+		color: white;
+		font-weight: 700;
+		margin-top: 20px;
+		transition: 0.3s;
+	}
+
+	.btn-submit-astro {
+		background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+	}
+
+	.btn-submit-meteo {
+		background: linear-gradient(135deg, #ef4444, #b91c1c);
+	}
+
+	.btn-submit-astro:hover,
+	.btn-submit-meteo:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+	}
+
+	/* --- LOGIQUE AFFICHAGE --- */
+	.form-section {
+		display: none;
+		animation: fadeInModal 0.4s ease;
+	}
+
+	#tab-astro:checked~.form-astro,
+	#tab-meteo:checked~.form-meteo {
+		display: block;
+	}
+
+	@keyframes fadeInModal {
+		from {
+			opacity: 0;
+			transform: scale(0.98);
 		}
 
-		.logo {
-			width: 180px;
-			margin-bottom: -10px;
-			margin-top: -60px;
+		to {
+			opacity: 1;
+			transform: scale(1);
 		}
-
-		h1.box-logo a {
-			text-decoration: none;
-		}
-
-		h1.box-title {
-			color: #AEAEAE;
-			background: #f8f8f8;
-			font-weight: 300;
-			padding: 15px 25px;
-			line-height: 30px;
-			font-size: 25px;
-			text-align: center;
-			margin: -27px -26px 26px;
-		}
-
-		.box-button {
-			border-radius: 5px;
-			background: #d2483c;
-			text-align: center;
-			cursor: pointer;
-			font-size: 19px;
-			width: 100%;
-			height: 51px;
-			padding: 0;
-			color: #fff;
-			border: 0;
-			outline: 0;
-		}
-
-		.box-register {
-			text-align: center;
-			margin-bottom: 0px;
-		}
-
-		.box-register a {
-			text-decoration: none;
-			font-size: 12px;
-			color: #666;
-		}
-
-		.box-input {
-			font-size: 14px;
-			background: #fff;
-			border: 1px solid #ddd;
-			margin-bottom: 25px;
-			padding-left: 10px;
-			border-radius: 5px;
-			width: 347px;
-			height: 50px;
-		}
-
-		.box-input:focus {
-			outline: none;
-			border-color: #5c7186;
-		}
-
-		.sucess {
-			text-align: center;
-			color: white;
-		}
-
-		.sucess a {
-			text-decoration: none;
-			color: #58aef7;
-		}
-
-		p.errorMessage {
-			background-color: #e66262;
-			border: #AA4502 1px solid;
-			padding: 5px 10px;
-			color: #FFFFFF;
-			border-radius: 3px;
-		}
-
-		/* popup */
-		/* #popup_open {
-			margin: 0;
-			cursor: pointer;
-			text-align: center;
-			color: black;
-			font-weight: bold;
-			background: none;
-			border: none;
-			font-size: 16px;
-		} */
-
-		/* #popup_open:hover {
-			color: red;
-		} */
-
-		#popup_box form .submit-contenu {
-			margin: 10px 0;
-			padding: 4px 20px;
-			width: 70%;
-			border: 2px solid grey;
-			border-radius: 12px;
-		}
-
-		#popup_box form input[type='submit'] {
-			background: red;
-		}
-
-		#popup_box form input[type='submit']:hover {
-			cursor: pointer;
-			color: #fff;
-			font-weight: bold;
-			background: #E75757;
-		}
-
-		#popup_overlay {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 999;
-        }
-
-		#popup_box {
-			position: fixed;
-			top: -2000px;
-			left: 25%;
-			right: 25%;
-			background-color: #fff;
-			padding: 0;
-			border-radius: 0 0 20px 20px;
-			box-shadow: 0 1px 5px #333;
-			z-index: 99999;
-			max-width: 761px;
-			margin: 0 auto;
-			max-height: 90%;
-			overflow-y: auto;
-			overflow-x: hidden;
-		}
-
-		#popup_close {
-			position: absolute;
-			width: 24px;
-			height: 24px;
-			top: 10px;
-			right: 10px;
-			cursor: pointer;
-			border-radius: 50%;
-			background: #fff;
-			text-align: center;
-			line-height: 22px;
-		}
-
-		#popup_box h1 {
-			color: #000;
-			margin: 0;
-			padding: 10px 20px;
-			text-align: center;
-			background: #E75757;
-			border: 1px solid transparent;
-			border-radius: 12px;
-		}
-
-		#popup_box form {
-			padding: 10px 15%;
-			display: flex;
-			justify-content: center;
-			flex-direction: column;
-			align-items: center;
-		}
-
-		#popup_box form label {
-			display: inline-block;
-			text-align: right;
-			padding-right: 10px;
-			width: 25%;
-		}
-
-		#popup_box form input {
-			display: inline-block;
-		}
-
-		input.ajout-contenu {
-			padding: 4px 20px;
-			margin: 10px 10%;
-			width: 100%;
-			border: 2px solid gray;
-			border-radius: 10px;
-		}
-
-		textarea.ajout-contenu-text {
-			padding: 4px 20px;
-			margin: 10px 10%;
-			width: 100%;
-			height: 10rem;
-			border: 2px solid gray;
-			border-radius: 10px;
-		}
-
-		/* phone */
-		@media screen and (max-width: 640px) {
-			#popup_box {
-				width: 98%;
-				left: 1%;
-				right: 1%;
-			}
-		}
-
-		.login {
-			max-width: 700px;
-			width: 100%;
-			margin: 40px auto;
-		}
-
-		.login nav {
-			position: relative;
-			width: 100%;
-			height: 50px;
-			display: flex;
-			align-items: center;
-		}
-
-		.login nav label {
-			display: block;
-			height: 100%;
-			width: 100%;
-			text-align: center;
-			line-height: 50px;
-			cursor: pointer;
-			position: relative;
-			z-index: 1;
-			color: red;
-			font-size: 17px;
-			border-radius: 12px;
-			margin: 0 5px;
-			transition: all 0.3s ease;
-		}
-
-		.login nav label:hover {
-			background: red;
-			color: white;
-		}
-
-		#astronomie2:checked~nav label.astronomie2,
-		#meteorologie2:checked~nav label.meteorologie2 {
-			color: #fff;
-		}
-
-		nav label i {
-			padding-right: 7px;
-		}
-
-		nav .slider {
-			position: absolute;
-			height: 100%;
-			width: 50%;
-			left: 0;
-			bottom: 0;
-			z-index: 0;
-			border-radius: 12px;
-			background: red;
-			transition: all 0.3s ease;
-		}
-
-		input[type="radio"] {
-			display: none;
-		}
-
-		#meteorologie2:checked~nav .slider {
-			left: 50%;
-		}
-
-		section .content-login {
-			display: none;
-			background: #fff;
-		}
-
-		#astronomie2:checked~section .content-login-1,
-		#meteorologie2:checked~section .content-login-2 {
-			display: block;
-		}
-
-		/* responsive */
-		@media screen and (max-width: 800px) {
-			.login {
-				margin-left: -4px;
-				padding: 4px;
-			}
-		}
-	</style>
-</head>
-
-<body>
-<?php if (isset($_SESSION['email']) && isset($_SESSION['password'])) { ?>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<button class="btn btn-close-white btn-outline-danger fs-5 mb-5" id="popup_open">ACCÈS À L'AJOUT DU CONTENU</button>
-	<div id="popup_overlay" style="display: none;"></div>
-	<div id="popup_box" style="top: -2000px;">
-		<a id="popup_close">X</a>
-		<div class="login">
-			<input type="radio" name="slider-login" checked id="astronomie2">
-			<input type="radio" name="slider-login" id="meteorologie2">
-			<nav>
-				<label for="astronomie2" class="astronomie2">ASTRONOMIE</label>
-				<label for="meteorologie2" class="meteorologie2">METEOROLOGIE</label>
-				<div class="slider"></div>
-			</nav>
-			<section>
-				<div class="content-login content-login-1">
-					<h1>Ajout du contenu pour l'Astronomie</h1>
-					<div class="container">
-						<div class="form-group">
-							<form action="" method="post" enctype="multipart/form-data">
-								<input class="ajout-contenu" type="file" name="uploadfile" value="" />
-								<input type="text" class="ajout-contenu" name="title" placeholder="Titre">
-								<input type="text" class="ajout-contenu" name="title_contenu"
-									placeholder="Titre du contenu">
-								<textarea class="form-control" id="contenu-astronomie" name="contenu"
-									style="height: 300px;"></textarea>
-								<input style="display: none;" type="text" class="ajout-contenu" name="verified"
-									value="n">
-								<?php $users = $_SESSION['username']; ?>
-								<input style="display: none;" type="text" name="users"
-									value="<?php echo $_SESSION['username']; ?>" />
-								<input type="submit" class="submit-contenu" name="insert-astronomie" value="Insérer">
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="content-login content-login-2">
-					<h1>Ajout du contenu pour la Meteorologie</h1>
-					<div class="container">
-						<div class="form-group">
-							<form action="" method="post" enctype="multipart/form-data">
-								<input class="ajout-contenu" type="file" name="uploadfile" value="" />
-								<input type="text" class="ajout-contenu" name="title" placeholder="Titre">
-								<input type="text" class="ajout-contenu" name="title_contenu"
-									placeholder="Titre du contenu">
-								<textarea class="form-control" id="contenu-meteorologie" name="contenu"
-									style="height: 300px;"></textarea>
-								<input style="display: none;" type="text" class="ajout-contenu" name="verified"
-									value="n">
-								<?php $users = $_SESSION['username']; ?>
-								<input style="display: none;" type="text" name="users"
-									value="<?php echo $_SESSION['username']; ?>" />
-								<input type="submit" class="submit-contenu" name="insert-meteorologie" value="Insérer">
-							</form>
-						</div>
-					</div>
-				</div>
-		</section>
-	</div>
-	</div>
-	<script src="divers/popup.js"></script>
-	<?php } else {
-		header('Location: connexion/login.php');
-	} ?>
-</body>
-
-</html>
+	}
+</style>

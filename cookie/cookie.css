@@ -1,200 +1,188 @@
-/* --- Variables Globales Meteastro --- */
+/* --- 1. CONFIGURATION DU THÈME (Sombre par défaut) --- */
 :root {
-  --glass-bg: rgba(15, 23, 42, 0.9);           /* Fond bleu très sombre transparent */
-  --glass-border: rgba(255, 255, 255, 0.1);    /* Bordure fine blanche translucide */
-  --glass-blur: blur(15px);                    /* Intensité du flou */
-  
-  --accent-blue: #3b82f6;                      /* Couleur primaire */
-  --accent-green: #10b981;                     /* Bouton Enregistrer */
-  --accent-red: #ef4444;                       /* Bouton Refuser */
-  
-  --text-primary: #f8fafc;
-  --text-muted: #94a3b8;
-  
-  --anim-speed: 0.6s;
+    --ck-bg: #0f172a;               /* Fond bleu nuit */
+    --ck-glass-bg: rgba(15, 23, 42, 0.95);
+    --ck-border: rgba(255, 255, 255, 0.1);
+    --ck-accent: #3b82f6;           /* Bleu primaire */
+    --ck-success: #10b981;          /* Vert enregistrement */
+    --ck-danger: #ef4444;           /* Rouge refus */
+    --ck-text: #f8fafc;
+    --ck-text-muted: #94a3b8;
+    --ck-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    --ck-radius: 24px;
 }
 
-/* --- Wrapper de Positionnement --- */
+/* --- 2. BANNIÈRE (BAS DE PAGE) --- */
 .cookie-wrapper {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 9999;
-  padding: 20px;
-  pointer-events: none; /* Ne bloque pas le clic sur le site autour du bandeau */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10000; /* Priorité maximale */
+    padding: 20px;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
 }
 
-/* --- La Bannière --- */
 .cookie-banner {
-  pointer-events: auto; /* Réactive le clic sur le bandeau lui-même */
-  margin: 0 auto;
-  width: 100%;
-  max-width: 600px;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 25px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-  color: var(--text-primary);
-  animation: slideInUp var(--anim-speed) cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: auto;
+    width: 100%;
+    max-width: 650px;
+    background: var(--ck-glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--ck-border);
+    border-radius: var(--ck-radius);
+    padding: 25px;
+    box-shadow: var(--ck-shadow);
+    color: var(--ck-text);
+    animation: ckSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cookie-banner header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
 }
 
-.cookie-banner header h2 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.5px;
+.cookie-icon { font-size: 1.5rem; }
+
+.cookie-banner h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--ck-text);
 }
 
 .cookie-content p {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: var(--text-muted);
-  margin-bottom: 20px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--ck-text-muted);
+    margin-bottom: 20px;
 }
 
-/* --- Boutons --- */
-.cookie-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.cookie-link {
+    color: var(--ck-accent);
+    text-decoration: underline;
+    transition: opacity 0.2s;
+}
+
+.cookie-link:hover { opacity: 0.8; }
+
+/* --- 3. MODAL (RÉGLAGES) --- */
+.cookie-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.9); /* Fond ultra sombre */
+    backdrop-filter: blur(8px);
+    z-index: 10001; /* Au-dessus de la bannière */
+    display: none; /* Géré par JS (flex lors de l'ouverture) */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.cookie-modal-content {
+    background: var(--ck-bg);
+    border: 1px solid var(--ck-border);
+    border-radius: var(--ck-radius);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: var(--ck-shadow);
+    animation: ckFadeScale 0.4s ease-out;
+}
+
+.btn-close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--ck-text-muted);
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-header { margin-bottom: 25px; }
+.modal-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; }
+.modal-subtitle { font-size: 0.9rem; color: var(--ck-text-muted); }
+
+/* Liste des réglages */
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+}
+
+.setting-info { display: flex; flex-direction: column; }
+.setting-name { font-weight: 600; font-size: 1rem; }
+.setting-desc { font-size: 0.8rem; color: var(--ck-text-muted); }
+
+/* --- 4. BOUTONS --- */
+.cookie-actions, .modal-footer {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .cookie-btn {
-  flex: 1;
-  min-width: 120px;
-  padding: 12px 18px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 15px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
 }
 
-.cookie-btn.accept {
-  background: var(--accent-blue);
-  color: white;
-}
+.btn-accept, .btn-save { background: var(--ck-accent); color: white; }
+.btn-accept:hover, .btn-save:hover { background: #2563eb; transform: translateY(-2px); }
 
-.cookie-btn.accept:hover {
-  background: #2563eb;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-  transform: translateY(-2px);
-}
+.btn-reject { background: rgba(255, 255, 255, 0.05); color: var(--ck-text-muted); border: 1px solid var(--ck-border); }
+.btn-reject:hover { border-color: var(--ck-danger); color: var(--ck-danger); }
 
-.cookie-btn.reject {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-muted);
-  border: 1px solid var(--glass-border);
-}
+.btn-manage { background: rgba(255, 255, 255, 0.1); color: white; }
 
-.cookie-btn.reject:hover {
-  border-color: var(--accent-red);
-  color: var(--accent-red);
-}
-
-.cookie-btn.manage {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  border: 1px solid var(--glass-border);
-}
-
-/* --- Modal de réglages --- */
-.modal {
-  display: none; /* Géré par le JS */
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(8px);
-  z-index: 10000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.modal-content {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 28px;
-  padding: 30px;
-  width: 100%;
-  max-width: 480px;
-  position: relative;
-  color: white;
-}
-
-.close-modal {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.cookie-settings label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 16px;
-  border-radius: 16px;
-  margin-bottom: 12px;
-  border: 1px solid transparent;
-  transition: 0.3s;
-}
-
-.cookie-settings label:hover {
-  border-color: var(--glass-border);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.cookie-btn.save {
-  width: 100%;
-  background: var(--accent-green);
-  color: white;
-  margin-top: 20px;
-}
-
-/* --- Styles spécifiques aux switchs (Bootstrap) --- */
+/* --- 5. SWITCHES (Bootstrap Overrides) --- */
 .form-check-input {
-  cursor: pointer;
-  width: 2.5em !important;
-  height: 1.25em !important;
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid var(--glass-border) !important;
+    width: 2.8em !important;
+    height: 1.5em !important;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid var(--ck-border) !important;
 }
 
 .form-check-input:checked {
-  background-color: var(--accent-blue) !important;
-  border-color: var(--accent-blue) !important;
+    background-color: var(--ck-accent) !important;
+    border-color: var(--ck-accent) !important;
 }
 
-/* --- Animations --- */
-@keyframes slideInUp {
-  from { transform: translateY(100%) scale(0.95); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
+/* --- 6. ANIMATIONS --- */
+@keyframes ckSlideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
-/* --- Mobile --- */
+@keyframes ckFadeScale {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* --- 7. RESPONSIVE --- */
 @media (max-width: 576px) {
-  .cookie-actions { flex-direction: column; }
-  .cookie-btn { width: 100%; }
-  .cookie-banner { padding: 20px; }
+    .cookie-banner { padding: 20px; }
+    .cookie-actions { flex-direction: column; }
+    .cookie-btn { width: 100%; }
 }

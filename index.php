@@ -19,7 +19,7 @@ function getLatestNews($db, $table) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meteastro | Dashboard Spatial</title>
+    <title>Meteastro | Astronomie & Météorologie</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
@@ -140,16 +140,18 @@ function getLatestNews($db, $table) {
 <body>
 
     <div id="star-field"></div>
+    <div class="sun"></div>
+    <div class="lens-flare"></div>
 
     <?php include "import_dans_le_php/menu.php"; ?>
 
     <div class="container py-5">
         
-        <div class="text-center mb-5">
+        <!-- <div class="text-center mb-5">
             <span class="badge rounded-pill px-4 py-2" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa;">
                 ⚡ Gestimag v1.0-rc1 disponible (2024)
             </span>
-        </div>
+        </div> -->
 
         <div class="row g-4 mb-5">
             <div class="col-lg-6">
@@ -251,22 +253,67 @@ function getLatestNews($db, $table) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Générateur d'étoiles
-        const field = document.getElementById('star-field');
-        for (let i = 0; i < 150; i++) {
-            const star = document.createElement('div');
-            const size = Math.random() * 2 + 'px';
-            star.style.position = 'absolute';
-            star.style.width = size;
-            star.style.height = size;
-            star.style.backgroundColor = 'white';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.borderRadius = '50%';
-            star.style.opacity = Math.random();
-            star.style.animation = `twinkle ${Math.random() * 3 + 2}s infinite ease-in-out`;
-            field.appendChild(star);
+        /**
+ * Générateur d'ambiance Meteastro
+ * Gère les étoiles (nuit) et les particules solaires (jour)
+ */
+function initSpaceAmbience() {
+    const field = document.getElementById('star-field');
+    if (!field) return;
+
+    // Nettoyage si le script est relancé
+    field.innerHTML = '';
+
+    // Détection du mode via la classe sur le body
+    const isLightMode = document.body.classList.contains('lightmode');
+    
+    // Configuration selon le mode
+    const config = {
+        count: isLightMode ? 80 : 150, // Moins de particules le jour pour la clarté
+        color: isLightMode ? '#FFD700' : '#FFFFFF', // Or le jour, blanc la nuit
+        blur: isLightMode ? '1px' : '0px' // Effet de halo pour la poussière solaire
+    };
+
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < config.count; i++) {
+        const particle = document.createElement('div');
+        const size = (Math.random() * (isLightMode ? 4 : 2) + 1) + 'px';
+        
+        // Styles de base
+        Object.assign(particle.style, {
+            position: 'absolute',
+            width: size,
+            height: size,
+            backgroundColor: config.color,
+            left: Math.random() * 100 + '%',
+            top: Math.random() * 100 + '%',
+            borderRadius: '50%',
+            opacity: Math.random() * (isLightMode ? 0.5 : 1),
+            filter: `blur(${config.blur})`,
+            pointerEvents: 'none'
+        });
+
+        // Animation spécifique
+        if (isLightMode) {
+            // Poussière qui flotte doucement
+            particle.style.animation = `floatSolar ${Math.random() * 15 + 10}s infinite ease-in-out`;
+        } else {
+            // Étoiles qui scintillent
+            particle.style.animation = `twinkle ${Math.random() * 3 + 2}s infinite ease-in-out`;
         }
+
+        // Décalage aléatoire pour éviter l'effet "bloc"
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        
+        fragment.appendChild(particle);
+    }
+
+    field.appendChild(fragment);
+}
+
+// Lancement au chargement
+document.addEventListener('DOMContentLoaded', initSpaceAmbience);
     </script>
 </body>
 </html>
