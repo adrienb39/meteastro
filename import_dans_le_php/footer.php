@@ -29,14 +29,14 @@
                     </div>
                     <p class="text-muted small mb-0">
                         <i class='bx bx-code-alt me-2'></i>Créé par <strong>Adrien Bruyère</strong><br>
-                        <i class='bx bx-copyright me-2'></i>Tous droits réservés © 2026
+                        <i class='bx bx-copyright me-2'></i>Tous droits réservés © <?= date('Y') ?>
                     </p>
                 </div>
 
                 <div class="col-md-4 text-center">
                     <div class="stats-card p-3 rounded-4">
                         <p class="small text-muted mb-2">
-                            <i class='bx bx-history me-1'></i> Version 2.0.1 (Lundi 5 Janvier 2026)<br>
+                            <i class='bx bx-history me-1'></i> Version 2.0.2 (Mardi 6 Janvier 2026)<br>
                             <i class='bx bx-calendar me-1'></i> Lancé le 8 Avril 2022
                         </p>
                         <div class="visitor-counter py-1 px-3 bg-primary bg-opacity-10 rounded-pill d-inline-block">
