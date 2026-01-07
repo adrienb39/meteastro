@@ -1,45 +1,36 @@
 <?php
 require_once '../../config/connexion_bdd.php';
+$db = createPdoConnection();
 
-$dbType = 'pdo';
+/**
+ * Récupère un article spécifique avec les informations de l'auteur
+ */
+function getArticle($db, $id)
+{
+    $sql = 'SELECT a.*, u.name 
+            FROM astronomie a 
+            JOIN usertable u ON a.id_users = u.id_users 
+            WHERE a.id = :id';
 
-if ($dbType === 'pdo') {
-    $db = createPdoConnection();
-} else {
-    $mysqli = createMysqliConnection();
+    try {
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        $article = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$article) {
+            header('Location: index.php'); // Redirection si l'article n'existe pas
+            exit();
+        }
+        return $article;
+    } catch (PDOException $e) {
+        die("Erreur de connexion spatiale.");
+    }
 }
 
-function getArticle($db, $id) {
-    $sql = 'SELECT * FROM astronomie, usertable WHERE astronomie.id_users = usertable.id_users AND astronomie.id = :id';
-    
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT); // Lier le paramètre
-
-    if (!$stmt->execute()) {
-        die('Erreur lors de l\'exécution de la requête.');
-    }
-
-    if ($stmt->rowCount() === 1) {
-        return $stmt->fetch(PDO::FETCH_ASSOC); // Retourne l'article trouvé
-    } else {
-        die('Cet article n\'existe pas !');
-    }
-}
-
-// Vérification de l'ID dans l'URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $id = htmlspecialchars($_GET['id']);
-    $article = getArticle($db, $id);
-    
-    // Assignation des variables à partir de l'article récupéré
-    $title = $article['title'];
-    $filename = $article['filename'];
-    $title_contenu = $article['title_contenu'];
-    $contenu = $article['contenu'];
-    $date_astronomie = $article['date_astronomie'];
-    $name = $article['name'];
+    $article = getArticle($db, (int) $_GET['id']);
 } else {
-    die('Erreur : ID manquant.');
+    die('Erreur : Coordonnées de l\'article manquantes.');
 }
 ?>
 <!DOCTYPE html>
@@ -47,126 +38,204 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meteastro : Astronomie / meteorologie</title>
+    <title><?= htmlspecialchars($article['title_contenu']) ?> | Meteastro</title>
 
-    <link rel="icon" type="image/png" sizes="16x16" href="/ressources/logo.png">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="theme-color" content="#ffffff">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" href="/divers/divers.css">
     <link rel="stylesheet" href="../../CSS/style.css">
     <style>
-        .card {
-            overflow: hidden;
-            box-shadow: 0px 2px 20px var(--clr-gray-light);
-            background: white;
-            border-radius: 0.5rem;
-            position: relative;
+        :root {
+            --space-dark: #05070a;
+            --nebula-purple: #6d28d9;
+            --star-cyan: #00d4ff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background: var(--space-dark);
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at 50% 50%, #161b22 0%, #05070a 100%);
+            overflow-x: hidden;
+        }
+
+        /* Animation de fond d'étoiles */
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            margin: 1rem;
-            transition: 250ms all ease-in-out;
-            cursor: pointer;
-            color: black;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            z-index: -1;
+            opacity: 0.3;
         }
 
-        .darkmode .card {
+        .container-article {
+            max-width: 900px;
+            margin: 120px auto 50px;
+            padding: 0 20px;
+            animation: slideIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .article-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
             overflow: hidden;
-            box-shadow: white 0 0 10px;
-            background: var(--night-300);
-            border-radius: 0.5rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-banner {
             position: relative;
+            height: 450px;
             width: 100%;
-            margin: 1rem;
-            transition: 250ms all ease-in-out;
-            cursor: pointer;
-            color: white;
+            overflow: hidden;
         }
 
-        .card-body {
-            margin: 15rem 1rem 1rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+            transition: transform 10s linear;
         }
 
-        .card:hover {
-            transform: none;
-            cursor: auto;
+        .article-card:hover .hero-img {
+            transform: scale(1.1);
         }
 
-        .card-body-contenu {
-            margin: 5rem 1rem 1rem 1rem;
-        }
-
-        .banner-img {
+        .category-badge {
             position: absolute;
-            object-fit: contain;
-            height: 14rem;
-            width: 100%;
+            top: 20px;
+            left: 20px;
+            background: var(--star-cyan);
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 0.8rem;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
         }
 
-        .card-profile {
-            margin-top: initial;
+        .article-header {
+            padding: 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .article-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            color: var(--star-cyan);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .article-meta i {
+            margin-right: 8px;
+        }
+
+        .article-content {
+            padding: 40px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #ccd6f6;
+        }
+
+        .article-content p {
+            margin-bottom: 20px;
+        }
+
+        /* Bouton retour animé */
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            color: var(--star-cyan);
+            transform: translateX(-5px);
         }
     </style>
 </head>
 
 <body>
-    <?php
-    include "../../import_dans_le_php/menu.php";
-    ?>
-    <!-- Contenu de la page principale pour l'Astronomie -->
-    <div class="cards">
-        <div class="card">
-            <div class="card-banner">
-                <p class="category-tag popular">
-                    <?php echo $title ?>
-                </p>
-                <img class="banner-img" src="../../uploads/<?php echo $filename; ?>" alt="">
+    <div class="stars-bg"></div>
+
+    <?php include "../../import_dans_le_php/menu.php"; ?>
+
+    <main class="container-article">
+        <a href="astronomie.php" class="btn-back">
+            <i class="fas fa-chevron-left"></i> RETOUR AU COSMOS
+        </a>
+
+        <article class="article-card">
+            <div class="hero-banner">
+                <span class="category-badge"><?= htmlspecialchars($article['title']) ?></span>
+                <img class="hero-img" src="../../uploads/<?= htmlspecialchars($article['filename']); ?>" alt="">
             </div>
-            <div class="card-body">
-                <!-- <p class="blog-hashtag">#webdevelopment #frontend</p> -->
-                <h2 class="blog-title">
-                    <?php echo $title_contenu ?>
-                </h2>
-                <div class="card-profile">
-                    <!-- <img class="profile-img"
-                            src='https://images.unsplash.com/photo-1554780336-390462301acf?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ'
-                            alt=''> -->
-                    <div class="card-profile-info">
-                        <h3 class="profile-name">
-                            Date :
-                            <?php echo date("d/m/Y H:i:s", strtotime($date_astronomie)) ?>
-                        </h3>
-                        <h3 class="profile-name">
-                            Auteur :
-                            <?php echo $name ?>
-                        </h3>
-                        <!-- <p class="profile-followers">1.2k followers</p> -->
+
+            <header class="article-header">
+                <h1 class="article-title"><?= htmlspecialchars($article['title_contenu']) ?></h1>
+
+                <div class="article-meta">
+                    <div class="meta-item">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        <?= date("d M Y", strtotime($article['date_astronomie'])) ?>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                        AUTEUR : <?= htmlspecialchars($article['name']) ?>
                     </div>
                 </div>
-            </div>
-            <hr>
-            <div class="card-body-contenu">
-                <p class="blog-description">
-                    <?php echo $contenu ?>
-                </p>
-            </div>
-        </div>
-    </div>
+            </header>
 
+            <section class="article-content">
+                <?= nl2br($article['contenu']) ?>
+            </section>
+        </article>
+    </main>
+
+    <?php include "../../cookie/cookie.php"; ?>
+    <?php include "../../import_dans_le_php/footer.php"; ?>
 
     <script src="script.js"></script>
-
-    <?php
-    include "../../cookie/cookie.php";
-    ?>
-    <?php
-    include "../../import_dans_le_php/footer.php";
-    ?>
-
     <script src="../app.js"></script>
 </body>
 
