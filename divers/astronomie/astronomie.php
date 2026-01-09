@@ -34,7 +34,7 @@ $posts = getAstroContent($db);
         href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../../CSS/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         :root {
             --deep-space: #05070a;
@@ -221,7 +221,7 @@ $posts = getAstroContent($db);
         <div id="stars3"></div>
     </div>
 
-    <?php include "../../import_dans_le_php/menu.php"; ?>
+    <?php include "../../__partials/menu.php"; ?>
 
     <header class="astro-hero">
         <h1 class="glow-text">Exploration <span>Astronomie</span></h1>
@@ -266,9 +266,9 @@ $posts = getAstroContent($db);
     </main>
 
     <?php include "../../cookie/cookie.php"; ?>
-    <?php include "../../import_dans_le_php/footer.php"; ?>
+    <?php include "../../__partials/footer.php"; ?>
 
-    <script src="../app.js"></script>
+    <script src="/js/divers.js"></script>
 </body>
 
 </html>

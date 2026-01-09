@@ -143,7 +143,7 @@ function getLatestNews($db, $table) {
     <div class="sun"></div>
     <div class="lens-flare"></div>
 
-    <?php include "import_dans_le_php/menu.php"; ?>
+    <?php include "__partials/menu.php"; ?>
 
     <div class="container py-5">
         
@@ -248,7 +248,7 @@ function getLatestNews($db, $table) {
     </div>
 
     <?php include "cookie/cookie.php"; ?>
-    <?php include "import_dans_le_php/footer.php"; ?>
+    <?php include "__partials/footer.php"; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

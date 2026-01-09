@@ -10,7 +10,7 @@
     <meta name="keywords" content="">
     <title>Meteastro : Astronomie / meteorologie</title>
 
-    <link rel="stylesheet" href="/CSS/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js">
     </script>
@@ -36,7 +36,7 @@
                 <div class="col-md-4 text-center">
                     <div class="stats-card p-3 rounded-4">
                         <p class="small text-muted mb-2">
-                            <i class='bx bx-history me-1'></i> Version 2.0.4 (Jeudi 8 Janvier 2026)<br>
+                            <i class='bx bx-history me-1'></i> Version 2.0.5 (Vendredi 9 Janvier 2026)<br>
                             <i class='bx bx-calendar me-1'></i> Lancé le 8 Avril 2022
                         </p>
                         <div class="visitor-counter py-1 px-3 bg-primary bg-opacity-10 rounded-pill d-inline-block">
@@ -104,7 +104,7 @@
         </div>
     </div>
 </div>
-    <script src="/import_dans_le_php/footer.js"></script>
+    <script src="/js/footer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>

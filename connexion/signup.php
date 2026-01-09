@@ -23,8 +23,7 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="connexion.css" />
-    <link rel="stylesheet" href="information/information.css" />
+    <link rel="stylesheet" href="/css/connexion.css" />
 </head>
 
 <body class="<?php echo $bodyClass; ?>">
@@ -153,6 +152,6 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
     </div>
 </div>
 
-    <script src="login.js"></script>
+    <script src="/js/login.js"></script>
 </body>
 </html>

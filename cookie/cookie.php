@@ -7,8 +7,8 @@
   <title>Meteastro : Astronomie / Météorologie</title>
   <meta name="description" content="Meteastro - Site dédié à l'astronomie et à la météorologie.">
   <meta name="author" content="Meteastro">
-  <link rel="stylesheet" href="/cookie/cookie.css">
-  <script src="/cookie/cookie.js" defer></script>
+  <link rel="stylesheet" href="/css/cookie.css">
+  <script src="/js/cookie.js" defer></script>
 </head>
 
 <body>

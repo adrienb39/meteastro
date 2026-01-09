@@ -32,7 +32,7 @@ $posts = getMeteorologieContent($db);
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../CSS/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         :root {
             --bg-main: #0a0f18;
@@ -246,7 +246,7 @@ $posts = getMeteorologieContent($db);
 
     <div class="weather-bg-overlay"></div>
 
-    <?php include "../../import_dans_le_php/menu.php"; ?>
+    <?php include "../../__partials/menu.php"; ?>
 
     <main class="main-content">
         <header class="page-header">
@@ -294,9 +294,9 @@ $posts = getMeteorologieContent($db);
     </main>
 
     <?php include "../../cookie/cookie.php"; ?>
-    <?php include "../../import_dans_le_php/footer.php"; ?>
+    <?php include "../../__partials/footer.php"; ?>
 
-    <script src="../app.js"></script>
+    <script src="/js/divers.js"></script>
 </body>
 
 </html>

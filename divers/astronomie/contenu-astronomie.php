@@ -46,8 +46,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="/divers/divers.css">
-    <link rel="stylesheet" href="../../CSS/style.css">
+    <link rel="stylesheet" href="/css/divers.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         :root {
             --space-dark: #05070a;
@@ -198,7 +198,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 <body>
     <div class="stars-bg"></div>
 
-    <?php include "../../import_dans_le_php/menu.php"; ?>
+    <?php include "../../__partials/menu.php"; ?>
 
     <main class="container-article">
         <a href="astronomie.php" class="btn-back">
@@ -233,10 +233,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     </main>
 
     <?php include "../../cookie/cookie.php"; ?>
-    <?php include "../../import_dans_le_php/footer.php"; ?>
+    <?php include "../../__partials/footer.php"; ?>
 
-    <script src="script.js"></script>
-    <script src="../app.js"></script>
+    <script src="/js/astronomie.js"></script>
+    <script src="/js/divers.js"></script>
 </body>
 
 </html>

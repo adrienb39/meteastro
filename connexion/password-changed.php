@@ -11,9 +11,9 @@ if ($_SESSION['info'] == false) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/ressources/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="connexion.css" />
-    <link rel="stylesheet" href="information/information.css" />
+    <link rel="stylesheet" href="/css/connexion.css" />
     <title>Meteastro : Astronomie / meteorologie</title>
 </head>
 
@@ -41,7 +41,7 @@ if ($_SESSION['info'] == false) {
         <div class="planet"></div>
         <div class="asteroid"></div>
 
-        <script src="login.js"></script>
+        <script src="/js/login.js"></script>
 </body>
 
 </html>

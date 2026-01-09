@@ -39,8 +39,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="/divers/divers.css">
-    <link rel="stylesheet" href="../../CSS/style.css">
+    <link rel="stylesheet" href="/css/divers.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         :root {
             --weather-blue: #0ea5e9;
@@ -196,7 +196,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     </style>
 
 <body>
-    <?php include "../../import_dans_le_php/menu.php"; ?>
+    <?php include "../../__partials/menu.php"; ?>
 
     <div class="article-container">
         <a href="javascript:history.back()" class="btn-return">
@@ -237,9 +237,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     </div>
 
     <?php include "../../cookie/cookie.php"; ?>
-    <?php include "../../import_dans_le_php/footer.php"; ?>
+    <?php include "../../__partials/footer.php"; ?>
 
-    <script src="../app.js"></script>
+    <script src="/js/meteorologie.js"></script>
+    <script src="/js/divers.js"></script>
 </body>
 
 </html>

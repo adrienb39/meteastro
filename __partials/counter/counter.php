@@ -15,10 +15,10 @@ function getHit()
 function addUniqueIP($ip = NULL)
 {
     $ip = ($ip != NULL) ? $ip : getIP();
-    $iplist = file_get_contents(__DIR__ . '/iplist.txt');
+    $iplist = file_get_contents(__DIR__ . './../../iplist.txt');
     $iplist = explode(",", $iplist);
     if (!in_array(trim($ip), $iplist)) {
-        $file = fopen(__DIR__ . "/iplist.txt", 'a+');
+        $file = fopen(__DIR__ . "./../../iplist.txt", 'a+');
         fwrite($file, "," . trim($ip));
         fclose($file);
     }
@@ -26,7 +26,7 @@ function addUniqueIP($ip = NULL)
 
 function getUniqueVisitor()
 {
-    $file = file_get_contents(__DIR__ . "/iplist.txt");
+    $file = file_get_contents(__DIR__ . "./../../iplist.txt");
     $file = explode(",", $file);
     return count($file);
 }
