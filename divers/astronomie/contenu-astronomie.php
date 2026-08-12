@@ -1,12 +1,14 @@
 <?php
+session_start();
 require_once '../../config/connexion_bdd.php';
 $db = createPdoConnection();
 
 /**
- * Récupère un article spécifique avec les informations de l'auteur
+ * Récupère un article spécifique avec les informations de l'auteur et la galerie
  */
 function getArticle($db, $id)
 {
+    // Sélection de toutes les colonnes de l'article (incluant gallery_images)
     $sql = 'SELECT a.*, u.name 
             FROM astronomie a 
             JOIN usertable u ON a.id_users = u.id_users 
@@ -18,7 +20,7 @@ function getArticle($db, $id)
         $article = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$article) {
-            header('Location: index.php'); // Redirection si l'article n'existe pas
+            header('Location: index.php');
             exit();
         }
         return $article;
@@ -31,6 +33,35 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $article = getArticle($db, (int) $_GET['id']);
 } else {
     die('Erreur : Coordonnées de l\'article manquantes.');
+}
+
+$hudFeed = $article['hud_feed_id'] ?? '';
+$isAurora = ($hudFeed === 'astro_nebula_animated');
+$isMatrixGrid = ($hudFeed === 'astro_constellations_animated');
+$isStarfield = ($hudFeed === 'astro_stars_animated');
+$isDeepSpace = ($hudFeed === 'astro_deep_space_static');
+$isSupernova = ($hudFeed === 'astro_supernova_static');
+$isBlueprint = ($hudFeed === 'astro_blueprint_static');
+
+// Préparation du style CSS dynamique pour le background
+$bgDynamicStyle = "";
+if (!empty($article['background_img'])) {
+    $bgUrl = "../../uploads/" . htmlspecialchars($article['background_img']);
+    $bgDynamicStyle = "
+        body {
+            background-image: url('$bgUrl') !important;
+            background-size: cover !important;
+            background-attachment: fixed !important;
+            background-position: center !important;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 7, 10, 0.7); 
+            z-index: -2;
+        }
+    ";
 }
 ?>
 <!DOCTYPE html>
@@ -53,8 +84,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             --space-dark: #05070a;
             --nebula-purple: #6d28d9;
             --star-cyan: #00d4ff;
-            --glass: rgba(255, 255, 255, 0.03);
+            --glass: rgba(15, 23, 42, 0.7);
             --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-blue: #00f2ff;
+            --neon-purple: #bc13fe;
         }
 
         body {
@@ -63,18 +96,20 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             font-family: 'Inter', sans-serif;
             background-image: radial-gradient(circle at 50% 50%, #161b22 0%, #05070a 100%);
             overflow-x: hidden;
+            margin: 0;
         }
 
-        /* Animation de fond d'étoiles */
+        <?= $bgDynamicStyle ?>
+
         .stars-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
             z-index: -1;
             opacity: 0.3;
+            pointer-events: none;
         }
 
         .container-article {
@@ -98,12 +133,12 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         .article-card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
         }
 
         .hero-banner {
@@ -117,7 +152,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.7);
+            filter: brightness(0.8);
             transition: transform 10s linear;
         }
 
@@ -136,7 +171,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             font-family: 'Orbitron', sans-serif;
             font-weight: bold;
             font-size: 0.8rem;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
         }
 
         .article-header {
@@ -150,7 +186,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             font-size: 2.5rem;
             color: #fff;
             margin-bottom: 20px;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
         .article-meta {
@@ -159,11 +194,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             gap: 30px;
             color: var(--star-cyan);
             font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .article-meta i {
-            margin-right: 8px;
         }
 
         .article-content {
@@ -173,11 +203,51 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             color: #ccd6f6;
         }
 
-        .article-content p {
-            margin-bottom: 20px;
+        /* Styles de la Galerie */
+        .article-gallery {
+            padding: 0 40px 40px;
+            border-top: 1px solid var(--glass-border);
         }
 
-        /* Bouton retour animé */
+        .gallery-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--star-cyan);
+            margin: 30px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-item {
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            border: 1px solid var(--glass-border);
+            transition: 0.3s ease;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--star-cyan);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
         .btn-back {
             display: inline-block;
             margin-bottom: 20px;
@@ -192,10 +262,128 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             color: var(--star-cyan);
             transform: translateX(-5px);
         }
+
+        .feed-animated-simulation {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .feed-animated-simulation.aurora {
+            opacity: 0.35;
+            background: radial-gradient(circle at 30% 30%, var(--neon-purple), transparent 65%),
+                        radial-gradient(circle at 70% 70%, var(--neon-blue), transparent 65%);
+            background-size: 200% 200%;
+            animation: hudAurora 10s ease infinite;
+        }
+
+        @keyframes hudAurora {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .feed-animated-simulation.matrix-grid {
+            opacity: 0.25; /* Légèrement réduit pour ne pas agresser les yeux derrière le texte */
+            background-image: linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px; /* Ajusté à 20px pour un rendu plus aéré sur grand écran */
+            animation: hudMatrixGrid 8s linear infinite;
+        }
+
+        @keyframes hudMatrixGrid {
+            from { background-position: 0 0; }
+            to { background-position: 0 100px; }
+        }
+
+        .feed-animated-simulation.starfield {
+            opacity: 0.4; /* Ajustement de l'opacité globale pour le fond */
+            background: radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 40px),
+                        radial-gradient(white, rgba(255, 255, 255, .15) 1px, transparent 30px);
+            background-size: 80px 80px;
+            background-position: 0 0, 40px 40px;
+            animation: hudStarfield 12s linear infinite;
+        }
+
+        @keyframes hudStarfield {
+            from { background-position: 0 0, 40px 40px; }
+            to { background-position: 80px 80px, 120px 120px; }
+        }
+
+        .feed-static-simulation.deep-space {
+            opacity: 0.8;
+            background: radial-gradient(circle at 80% 20%, rgba(0, 242, 255, 0.15), transparent 50%),
+                        radial-gradient(circle at 20% 80%, rgba(188, 19, 254, 0.15), transparent 50%),
+                        #070a13;
+        }
+
+        .feed-static-simulation.supernova-static {
+            opacity: 0.6; /* Évite que l'éclat ambré central ne fatigue la lecture */
+            background: radial-gradient(circle at 50% 50%, rgba(255, 204, 0, 0.2), transparent 70%),
+                        radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+                        #050811;
+            background-size: 100% 100%, 15px 15px;
+        }
+
+        .feed-static-simulation.hud-blueprint {
+            opacity: 0.4; /* Ajusté pour garder le texte du blog lisible au premier plan */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 15px 15px;
+            background-position: center;
+            border: 1px solid rgba(0, 242, 255, 0.1);
+        }
+
+        .article-card.aurora-active {
+            border: 1px solid rgba(109, 40, 217, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(109, 40, 217, 0.15);
+        }
+
+        .article-card.matrix-active {
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 212, 255, 0.15);
+        }
+
+        .article-card.starfield-active {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 255, 255, 0.08);
+        }
+
+        .article-card.deep-space-active {
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(7, 10, 19, 0.5);
+        }
+
+        .article-card.supernova-active {
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 204, 0, 0.15);
+        }
+
+        .article-card.blueprint-active {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 242, 255, 0.05);
+        }
     </style>
 </head>
 
-<body>
+<body class="<?= $isAurora ? 'aurora-theme' : ($isMatrixGrid ? 'matrix-theme' : ($isStarfield ? 'starfield-theme' : ($isDeepSpace ? 'deep-space-theme' : ($isSupernova ? 'supernova-theme' : ($isBlueprint ? 'blueprint-theme' : ''))))) ?>">
+    <?php if ($isAurora): ?>
+        <div class="feed-animated-simulation aurora"></div>
+    <?php elseif ($isMatrixGrid): ?>
+        <div class="feed-animated-simulation matrix-grid"></div>
+    <?php elseif ($isStarfield): ?>
+        <div class="feed-animated-simulation starfield"></div>
+    <?php elseif ($isDeepSpace): ?>
+        <div class="feed-static-simulation deep-space"></div>
+    <?php elseif ($isSupernova): ?>
+        <div class="feed-static-simulation supernova-static"></div>
+    <?php elseif ($isBlueprint): ?>
+        <div class="feed-static-simulation hud-blueprint"></div>
+    <?php endif; ?>
     <div class="stars-bg"></div>
 
     <?php include "../../__partials/menu.php"; ?>
@@ -205,10 +393,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <i class="fas fa-chevron-left"></i> RETOUR AU COSMOS
         </a>
 
-        <article class="article-card">
+        <article class="article-card <?= $isAurora ? 'aurora-active' : ($isMatrixGrid ? 'matrix-active' : ($isStarfield ? 'starfield-active' : ($isDeepSpace ? 'deep-space-active' : ($isSupernova ? 'supernova-active' : ($isBlueprint ? 'blueprint-active' : ''))))) ?>">
             <div class="hero-banner">
                 <span class="category-badge"><?= htmlspecialchars($article['title']) ?></span>
-                <img class="hero-img" src="../../uploads/<?= htmlspecialchars($article['filename']); ?>" alt="">
+                <?php if ($article['show_images']): ?>
+                    <img class="hero-img" src="../../uploads/<?= htmlspecialchars($article['filename']); ?>"
+                        alt="Image de l'article">
+                <?php endif; ?>
             </div>
 
             <header class="article-header">
@@ -229,6 +420,28 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <section class="article-content">
                 <?= nl2br($article['contenu']) ?>
             </section>
+
+            <?php if (!empty($article['gallery_images'])): ?>
+                <section class="article-gallery">
+                    <h2 class="gallery-title"><i class="fa-solid fa-images"></i> GALERIE SPATIALE</h2>
+                    <div class="gallery-grid">
+                        <?php
+                        $images = explode(',', $article['gallery_images']);
+                        foreach ($images as $img):
+                            $img = trim($img);
+                            if (empty($img))
+                                continue;
+                            ?>
+                            <div class="gallery-item">
+                                <a href="../../uploads/<?= htmlspecialchars($img) ?>" target="_blank">
+                                    <img src="../../uploads/<?= htmlspecialchars($img) ?>" alt="Vue de la galerie"
+                                        loading="lazy">
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+            <?php endif; ?>
         </article>
     </main>
 

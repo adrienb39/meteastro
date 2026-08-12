@@ -1,22 +1,27 @@
 <?php
+session_start();
 require_once '../../config/connexion_bdd.php';
 $db = createPdoConnection();
 
 function getArticle($db, $id)
 {
-    // Utilisation d'un alias et d'une jointure propre
+    // Sélection incluant gallery_images pour la météo
     $sql = 'SELECT m.*, u.name FROM meteorologie m 
             JOIN usertable u ON m.id_users = u.id_users 
             WHERE m.id = :id';
 
-    $stmt = $db->prepare($sql);
-    $stmt->execute([':id' => $id]);
+    try {
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        $article = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($article = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (!$article) {
+            header("Location: index.php");
+            exit;
+        }
         return $article;
-    } else {
-        header("Location: index.php"); // Redirige si l'article n'existe pas
-        exit;
+    } catch (PDOException $e) {
+        die("Erreur de connexion aux capteurs météo.");
     }
 }
 
@@ -24,6 +29,27 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $article = getArticle($db, intval($_GET['id']));
 } else {
     die('Erreur : Coordonnées manquantes.');
+}
+
+// Préparation du background dynamique
+$bgDynamicStyle = "";
+if (!empty($article['background_img'])) {
+    $bgUrl = "../../uploads/" . htmlspecialchars($article['background_img']);
+    $bgDynamicStyle = "
+        body {
+            background-image: url('$bgUrl') !important;
+            background-size: cover !important;
+            background-attachment: fixed !important;
+            background-position: center !important;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.75); 
+            z-index: -2;
+        }
+    ";
 }
 ?>
 <!DOCTYPE html>
@@ -45,7 +71,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         :root {
             --weather-blue: #0ea5e9;
             --weather-dark: #0f172a;
-            --glass: rgba(255, 255, 255, 0.03);
+            --glass: rgba(30, 41, 59, 0.7);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
@@ -57,7 +83,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             color: #f8fafc;
             font-family: 'Plus Jakarta Sans', sans-serif;
             line-height: 1.6;
+            margin: 0;
         }
+
+        <?= $bgDynamicStyle ?>
 
         .article-container {
             max-width: 1000px;
@@ -80,15 +109,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         .glass-article {
             background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
             border-radius: 32px;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
         }
 
-        /* Banner & Visuals */
         .article-hero {
             position: relative;
             height: 400px;
@@ -100,6 +128,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             height: 100%;
             object-fit: cover;
             filter: brightness(0.8);
+            transition: transform 8s ease;
+        }
+
+        .glass-article:hover .hero-img {
+            transform: scale(1.05);
         }
 
         .category-floating {
@@ -113,11 +146,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             font-weight: 800;
             text-transform: uppercase;
             font-size: 0.75rem;
-            letter-spacing: 1px;
+            z-index: 2;
             box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
         }
 
-        /* Content Styling */
         .article-header {
             padding: 40px 50px 20px;
         }
@@ -126,9 +158,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             font-size: 2.8rem;
             font-weight: 800;
             margin-bottom: 25px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #fff;
         }
 
         .article-meta {
@@ -158,11 +188,56 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             color: #cbd5e1;
         }
 
-        .article-body p {
-            margin-bottom: 1.5rem;
+        /* --- SECTION GALERIE PHOTO --- */
+        .article-gallery {
+            padding: 20px 50px 50px;
+            border-top: 1px solid var(--glass-border);
         }
 
-        /* Back Button */
+        .gallery-label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--weather-blue);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-card {
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 16 / 10;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.6s;
+        }
+
+        .gallery-card:hover {
+            transform: scale(1.03);
+            border-color: var(--weather-blue);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-card:hover img {
+            filter: brightness(1.1);
+        }
+
         .btn-return {
             display: inline-flex;
             align-items: center;
@@ -176,24 +251,25 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         .btn-return:hover {
             transform: translateX(-5px);
-            filter: brightness(1.2);
         }
 
         @media (max-width: 768px) {
             .article-title {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
 
             .article-header,
-            .article-body {
+            .article-body,
+            .article-gallery {
                 padding: 30px 20px;
             }
 
-            .article-hero {
-                height: 250px;
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
+</head>
 
 <body>
     <?php include "../../__partials/menu.php"; ?>
@@ -208,7 +284,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <div class="category-floating">
                     <i class="fa-solid fa-cloud-bolt"></i> <?= htmlspecialchars($article['title']) ?>
                 </div>
-                <img class="hero-img" src="../../uploads/<?= htmlspecialchars($article['filename']); ?>" alt="">
+                <?php if ($article['show_images']): ?>
+                    <img class="hero-img" src="../../uploads/<?= htmlspecialchars($article['filename']); ?>"
+                        alt="Image de couverture">
+                <?php endif; ?>
             </div>
 
             <header class="article-header">
@@ -233,6 +312,30 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="article-body">
                 <?= nl2br($article['contenu']) ?>
             </div>
+
+            <?php if (!empty($article['gallery_images'])): ?>
+                <section class="article-gallery">
+                    <div class="gallery-label">
+                        <i class="fa-solid fa-camera-retro"></i> Captures du phénomène
+                    </div>
+                    <div class="gallery-grid">
+                        <?php
+                        $imgs = explode(',', $article['gallery_images']);
+                        foreach ($imgs as $img):
+                            $img = trim($img);
+                            if (empty($img))
+                                continue;
+                            ?>
+                            <div class="gallery-card">
+                                <a href="../../uploads/<?= htmlspecialchars($img) ?>" target="_blank">
+                                    <img src="../../uploads/<?= htmlspecialchars($img) ?>" alt="Observation météo"
+                                        loading="lazy">
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+            <?php endif; ?>
         </article>
     </div>
 

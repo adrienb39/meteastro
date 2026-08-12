@@ -1,0 +1,36 @@
+{
+  "name": "Meteastro",
+  "short_name": "Meteastro",
+  "description": "Application météo et astronomie moderne.",
+  "start_url": "/index.php",
+  "display": "standalone",
+  "background_color": "#040706",
+  "theme_color": "#007bff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "ressources/logo.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "ressources/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "ressources/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "ressources/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

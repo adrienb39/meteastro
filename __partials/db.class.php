@@ -29,4 +29,23 @@ class Db
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    /**
+     * Exécute une requête SQL
+     * @param string $query La requête SQL (avec des ? ou :params)
+     * @param array $params Les données à injecter
+     */
+    public function query2($query, $params = [])
+    {
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute($params);
+
+        // Si la requête commence par SELECT ou SHOW, on retourne les résultats
+        if (preg_match('/^\s*(SELECT|SHOW|DESCRIBE|EXPLAIN)\b/i', $query)) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        // Sinon (UPDATE, INSERT, DELETE), on retourne le statement ou le nombre de lignes
+        return $stmt;
+    }
 }
