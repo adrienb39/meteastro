@@ -50,7 +50,7 @@ class Astronomie
     private bool $verified;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'id_users', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'id_users', referencedColumnName: 'id_users')]
     private User $user;
 
     public function getId(): int
