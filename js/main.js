@@ -28,7 +28,7 @@ const elements = {
    ========================================================================== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
+    navigator.serviceWorker.register('/sw.php', { updateViaCache: 'none' })
       .then((registration) => {
         console.log('PWA : Service Worker enregistré avec succès.');
 

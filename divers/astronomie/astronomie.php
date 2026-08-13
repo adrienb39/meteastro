@@ -750,7 +750,6 @@ $astroEvents = json_decode($json, true);
         .glass-card:hover {
             transform: translateY(-12px);
             border-color: var(--neon-blue);
-            background: var(--glass-hover);
             box-shadow: 0 20px 50px rgba(0, 242, 255, 0.15);
         }
 
@@ -1995,25 +1994,53 @@ $astroEvents = json_decode($json, true);
             const modal = document.getElementById('apod-modal'); // Assurez-vous d'avoir l'ID dans votre HTML
             const modalImg = document.getElementById('modal-img');
 
-            fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
-                .then(r => r.json())
-                .then(data => {
-                    document.getElementById('apod-title').innerText = data.title;
+            // Vérification si la donnée du jour existe déjà en local
+            if (localStorage.getItem('apod_date') === new Date().toDateString() && localStorage.getItem('apod_data')) {
 
-                    if (data.media_type === 'image') {
-                        apodContainer.innerHTML = `<img src="${data.url}" alt="${data.title}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;">`;
+                // Chargement instantané depuis le stockage local (0 requête API)
+                const data = JSON.parse(localStorage.getItem('apod_data'));
 
-                        // Logique d'agrandissement au clic
-                        apodContainer.onclick = () => {
-                            modalImg.src = data.hdurl || data.url;
-                            modal.style.display = "flex";
-                            setTimeout(() => modal.style.opacity = "1", 10);
-                        };
-                    } else {
-                        apodContainer.innerHTML = `<iframe src="${data.url}" style="width:100%; height:100%; border:none;"></iframe>`;
-                    }
-                })
-                .catch(err => console.error("Erreur APOD:", err));
+                document.getElementById('apod-title').innerText = data.title;
+
+                if (data.media_type === 'image') {
+                    apodContainer.innerHTML = `<img src="${data.url}" alt="${data.title}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;">`;
+
+                    apodContainer.onclick = () => {
+                        modalImg.src = data.hdurl || data.url;
+                        modal.style.display = "flex";
+                        setTimeout(() => modal.style.opacity = "1", 10);
+                    };
+                } else {
+                    apodContainer.innerHTML = `<iframe src="${data.url}" style="width:100%; height:100%; border:none;"></iframe>`;
+                }
+
+            } else {
+
+                // Si pas en cache, appel à l'API NASA
+                fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
+                    .then(r => r.json())
+                    .then(data => {
+                        // Sauvegarde dans le localStorage
+                        localStorage.setItem('apod_data', JSON.stringify(data));
+                        localStorage.setItem('apod_date', new Date().toDateString());
+
+                        document.getElementById('apod-title').innerText = data.title;
+
+                        if (data.media_type === 'image') {
+                            apodContainer.innerHTML = `<img src="${data.url}" alt="${data.title}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;">`;
+
+                            // Logique d'agrandissement au clic
+                            apodContainer.onclick = () => {
+                                modalImg.src = data.hdurl || data.url;
+                                modal.style.display = "flex";
+                                setTimeout(() => modal.style.opacity = "1", 10);
+                            };
+                        } else {
+                            apodContainer.innerHTML = `<iframe src="${data.url}" style="width:100%; height:100%; border:none;"></iframe>`;
+                        }
+                    })
+                    .catch(err => console.error("Erreur APOD:", err));
+            }
 
             // Fermeture du modal (clic n'importe où sur le modal)
             if (modal) {
@@ -2028,8 +2055,8 @@ $astroEvents = json_decode($json, true);
                 try {
                     const response = await fetch('https://api.wheretheiss.at/v1/satellites/25544');
                     const data = await response.json();
-                    document.getElementById('iss-lat').innerText = data.latitude.toFixed(2) + "°";
-                    document.getElementById('iss-lon').innerText = data.longitude.toFixed(2) + "°";
+                    document.getElementById('iss-lat').innerText = data.latitude.toFixed(2);
+                    document.getElementById('iss-lon').innerText = data.longitude.toFixed(2);
                 } catch (err) {
                     console.error("Erreur ISS:", err);
                 }
@@ -2038,7 +2065,7 @@ $astroEvents = json_decode($json, true);
             fetchISS();
 
             // --- 5. HUMAINS DANS L'ESPACE ---
-            fetch('astros.json') // https://github.com/corquaid/international-space-station-APIs/blob/09787ed5687a70f7805ae16d6ea39aa5b943d6f4/JSON/people-in-space.json
+            fetch('https://corquaid.github.io/international-space-station-APIs/JSON/people-in-space.json')
                 .then(r => r.json())
                 .then(data => {
                     document.getElementById('humans-count').innerText = data.number;

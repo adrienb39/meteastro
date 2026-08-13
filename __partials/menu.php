@@ -1212,7 +1212,7 @@ function renderBootstrapMenu($items, $parentId = 0)
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Gestion de la version de l'application
-    const appVersion = "2.4.1.0"; // Calqué sur le CACHE_NAME du SW
+    const appVersion = "<?= $appVersion ?>"; // Calqué sur le CACHE_NAME du SW
     const versionField = document.getElementById('pwa-version');
     if (versionField) {
         versionField.textContent = `v${appVersion}`;

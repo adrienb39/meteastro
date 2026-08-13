@@ -727,8 +727,8 @@ function getLatestNews(PDO $db, string $table, int $limit = 5): array
                 <form id="contactForm" class="glass-card p-4 p-md-5">
                     <div class="row g-4 mb-4">
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold text-secondary text-uppercase">Identifiant</label>
-                            <input type="text" name="pseudo" class="form-control" placeholder="Pseudo" required>
+                            <label class="form-label small fw-bold text-secondary text-uppercase">Nom & Prénom</label>
+                            <input type="text" name="pseudo" class="form-control" placeholder="Nom Prénom" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-secondary text-uppercase">Coordonnées

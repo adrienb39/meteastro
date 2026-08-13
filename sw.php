@@ -1,4 +1,11 @@
-const CACHE_NAME = '2.4.1.0';
+<?php
+header('Content-Type: application/javascript');
+ 
+// Lecture de la version centralisée (siteVersion + appBuild)
+$version = require __DIR__ . '/__partials/version.php';
+$cacheName = $version['siteVersion'] . '.' . $version['appBuild'];
+?>
+const CACHE_NAME = '<?= $cacheName ?>';
 
 // Liste complète des ressources locales à mettre en cache initialement
 const ASSETS_TO_CACHE = [
