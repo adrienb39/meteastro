@@ -151,7 +151,7 @@ if (!empty($article['background_img'])) {
         .hero-img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             filter: brightness(0.8);
             transition: transform 10s linear;
         }
@@ -183,7 +183,6 @@ if (!empty($article['background_img'])) {
 
         .article-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
             color: #fff;
             margin-bottom: 20px;
         }

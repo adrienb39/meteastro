@@ -126,7 +126,7 @@ if (!empty($article['background_img'])) {
         .hero-img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             filter: brightness(0.8);
             transition: transform 8s ease;
         }
@@ -155,7 +155,6 @@ if (!empty($article['background_img'])) {
         }
 
         .article-title {
-            font-size: 2.8rem;
             font-weight: 800;
             margin-bottom: 25px;
             color: #fff;
@@ -254,10 +253,6 @@ if (!empty($article['background_img'])) {
         }
 
         @media (max-width: 768px) {
-            .article-title {
-                font-size: 2rem;
-            }
-
             .article-header,
             .article-body,
             .article-gallery {

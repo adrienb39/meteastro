@@ -1,4 +1,4 @@
-const CACHE_NAME = '2.4.0.36';
+const CACHE_NAME = '2.4.1.0';
 
 // Liste complète des ressources locales à mettre en cache initialement
 const ASSETS_TO_CACHE = [

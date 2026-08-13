@@ -222,7 +222,7 @@ $jsonPlaylist = json_encode($userPlaylist);
                 <div class="col-md-4 text-center">
                     <div class="stats-card p-3 rounded-4">
                         <p class="small text-muted mb-2">
-                            <i class='bx bx-history me-1'></i> Version 2.4.0 (Lundi 25 Mai 2026)<br>
+                            <i class='bx bx-history me-1'></i> Version 2.4.1 (Jeudi 13 Août 2026)<br>
                             <i class='bx bx-calendar me-1'></i> Lancé le 8 Avril 2022
                         </p>
                         <div class="visitor-counter py-1 px-3 bg-primary bg-opacity-10 rounded-pill d-inline-block">

@@ -297,7 +297,7 @@ $astroEvents = json_decode($json, true);
         .glow-text {
             font-family: 'Orbitron', sans-serif;
             font-size: 3.5rem;
-            letter-spacing: 5px;
+            letter-spacing: 0;
             text-transform: uppercase;
             margin-bottom: 10px;
         }
@@ -309,7 +309,7 @@ $astroEvents = json_decode($json, true);
 
         .glow-title {
             font-family: 'Orbitron', sans-serif;
-            letter-spacing: 15px;
+            letter-spacing: 0;
             color: #fff;
             text-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-purple);
             animation: titleFloat 4s ease-in-out infinite;
@@ -705,7 +705,7 @@ $astroEvents = json_decode($json, true);
         .glow-title {
             font-family: var(--font-astro);
             font-size: clamp(2rem, 8vw, 4rem);
-            letter-spacing: 12px;
+            letter-spacing: 0;
             text-transform: uppercase;
             color: #fff;
             text-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-purple);
@@ -913,7 +913,7 @@ $astroEvents = json_decode($json, true);
 
             .glow-title {
                 font-size: 2.2rem;
-                letter-spacing: 5px;
+                letter-spacing: 0;
             }
 
             .timer-unit {
@@ -990,7 +990,7 @@ $astroEvents = json_decode($json, true);
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 5px;
             margin-top: 30px;
         }
 
