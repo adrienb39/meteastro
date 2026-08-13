@@ -27,7 +27,7 @@ if (isset($_POST['signup'])) {
     }
 
     // Vérification de l'email
-    $email_check = "SELECT * FROM usertable WHERE email = :email";
+    $email_check = "SELECT * FROM users WHERE email = :email";
     $stmt = $db->prepare($email_check);
     $stmt->execute(['email' => $email]);
     if ($stmt->rowCount() > 0) {
@@ -39,7 +39,7 @@ if (isset($_POST['signup'])) {
         $code = rand(999999, 111111);
         $status = "notverified";
 
-        $insert_data = "INSERT INTO usertable (name, email, password, code, status)
+        $insert_data = "INSERT INTO users (name, email, password, code, status)
                         VALUES (:name, :email, :password, :code, :status)";
         $stmt = $db->prepare($insert_data);
         $data_check = $stmt->execute([
@@ -74,7 +74,7 @@ if (isset($_POST['signup'])) {
 if (isset($_POST['check'])) {
     $_SESSION['info'] = "";
     $otp_code = $_POST['otp'];
-    $check_code = "SELECT * FROM usertable WHERE code = :code";
+    $check_code = "SELECT * FROM users WHERE code = :code";
     $stmt = $db->prepare($check_code);
     $stmt->execute(['code' => $otp_code]);
     
@@ -85,7 +85,7 @@ if (isset($_POST['check'])) {
         $code = 0;
         $status = 'verified';
 
-        $update_otp = "UPDATE usertable SET code = :code, status = :status WHERE code = :fetch_code";
+        $update_otp = "UPDATE users SET code = :code, status = :status WHERE code = :fetch_code";
         $stmt = $db->prepare($update_otp);
         $update_res = $stmt->execute(['code' => $code, 'status' => $status, 'fetch_code' => $fetch_code]);
 
@@ -106,7 +106,7 @@ if (isset($_POST['check'])) {
 if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $check_email = "SELECT * FROM usertable WHERE email = :email";
+    $check_email = "SELECT * FROM users WHERE email = :email";
     $stmt = $db->prepare($check_email);
     $stmt->execute(['email' => $email]);
 
@@ -135,13 +135,13 @@ if (isset($_POST['login'])) {
 // Si l'utilisateur clique sur le bouton "continuer" dans le formulaire de mot de passe oublié
 if (isset($_POST['check-email'])) {
     $email = $_POST['email'];
-    $check_email = "SELECT * FROM usertable WHERE email = :email";
+    $check_email = "SELECT * FROM users WHERE email = :email";
     $stmt = $db->prepare($check_email);
     $stmt->execute(['email' => $email]);
 
     if ($stmt->rowCount() > 0) {
         $code = rand(999999, 111111);
-        $insert_code = "UPDATE usertable SET code = :code WHERE email = :email";
+        $insert_code = "UPDATE users SET code = :code WHERE email = :email";
         $stmt = $db->prepare($insert_code);
         $run_query = $stmt->execute(['code' => $code, 'email' => $email]);
 
@@ -170,7 +170,7 @@ if (isset($_POST['check-email'])) {
 if (isset($_POST['check-reset-otp'])) {
     $_SESSION['info'] = "";
     $otp_code = $_POST['otp'];
-    $check_code = "SELECT * FROM usertable WHERE code = :code";
+    $check_code = "SELECT * FROM users WHERE code = :code";
     $stmt = $db->prepare($check_code);
     $stmt->execute(['code' => $otp_code]);
 
@@ -198,7 +198,7 @@ if (isset($_POST['change-password'])) {
         $code = 0;
         $email = $_SESSION['email']; // Récupération de cet email via la session
         $encpass = password_hash($password, PASSWORD_BCRYPT);
-        $update_pass = "UPDATE usertable SET code = :code, password = :password WHERE email = :email";
+        $update_pass = "UPDATE users SET code = :code, password = :password WHERE email = :email";
         $stmt = $db->prepare($update_pass);
         $run_query = $stmt->execute(['code' => $code, 'password' => $encpass, 'email' => $email]);
         

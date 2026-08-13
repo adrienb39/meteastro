@@ -19,10 +19,10 @@ if ($isConnected && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confi
   if (!empty($newPass)) {
     $hashedPass = password_hash($newPass, PASSWORD_BCRYPT);
     // On protège les noms de colonnes avec ` `
-    $sql = "UPDATE `usertable` SET `name` = ?, `email` = ?, `password` = ? WHERE `id_users` = ?";
+    $sql = "UPDATE `users` SET `name` = ?, `email` = ?, `password` = ? WHERE `id_users` = ?";
     $obj->query2($sql, [$newName, $newEmail, $hashedPass, $userId]);
   } else {
-    $sql = "UPDATE `usertable` SET `name` = ?, `email` = ? WHERE `id_users` = ?";
+    $sql = "UPDATE `users` SET `name` = ?, `email` = ? WHERE `id_users` = ?";
     $obj->query2($sql, [$newName, $newEmail, $userId]);
   }
 

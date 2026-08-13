@@ -6,7 +6,7 @@ $db = createPdoConnection();
 function getMeteorologieContent($db)
 {
     $sql = "SELECT m.*, u.name FROM meteorologie m
-            INNER JOIN usertable u ON m.id_users = u.id_users 
+            INNER JOIN users u ON m.id_users = u.id_users 
             WHERE m.verified = 'y' ORDER BY m.date_meteorologie DESC";
     try {
         $stmt = $db->query($sql);

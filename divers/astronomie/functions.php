@@ -15,7 +15,7 @@ function getAllProducts()
 
 	function afficherContenu($db, $table)
 	{
-		$sql = "SELECT * FROM $table, usertable WHERE astronomie.id_users = usertable.id_users AND verified = 'y' ORDER BY astronomie.date_astronomie DESC;";
+		$sql = "SELECT * FROM $table, users WHERE astronomie.id_users = users.id_users AND verified = 'y' ORDER BY astronomie.date_astronomie DESC;";
 
 		try {
 			$stmt = $db->prepare($sql);

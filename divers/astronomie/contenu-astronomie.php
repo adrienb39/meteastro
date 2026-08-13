@@ -11,7 +11,7 @@ function getArticle($db, $id)
     // Sélection de toutes les colonnes de l'article (incluant gallery_images)
     $sql = 'SELECT a.*, u.name 
             FROM astronomie a 
-            JOIN usertable u ON a.id_users = u.id_users 
+            JOIN users u ON a.id_users = u.id_users 
             WHERE a.id = :id';
 
     try {

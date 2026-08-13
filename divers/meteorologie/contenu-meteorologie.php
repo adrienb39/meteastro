@@ -7,7 +7,7 @@ function getArticle($db, $id)
 {
     // Sélection incluant gallery_images pour la météo
     $sql = 'SELECT m.*, u.name FROM meteorologie m 
-            JOIN usertable u ON m.id_users = u.id_users 
+            JOIN users u ON m.id_users = u.id_users 
             WHERE m.id = :id';
 
     try {

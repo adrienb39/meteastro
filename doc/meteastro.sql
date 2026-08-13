@@ -338,10 +338,10 @@ INSERT INTO `users_software_license` (`id_users_software_license`, `user_id`, `s
 -- --------------------------------------------------------
 
 --
--- Structure de la table `usertable`
+-- Structure de la table `users`
 --
 
-CREATE TABLE `usertable` (
+CREATE TABLE `users` (
   `id_users` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -354,10 +354,10 @@ CREATE TABLE `usertable` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `usertable`
+-- Déchargement des données de la table `users`
 --
 
-INSERT INTO `usertable` (`id_users`, `name`, `email`, `password`, `code`, `status`, `avertissement`, `datetime`, `datetime_update`) VALUES
+INSERT INTO `users` (`id_users`, `name`, `email`, `password`, `code`, `status`, `avertissement`, `datetime`, `datetime_update`) VALUES
 (1, 'Adrien Bruyere', 'adrienb39@yahoo.com', '$2y$10$8mJPrEtswhenphVdInjlxe6IwSCj0Ohg8z/iZ1d3VDy3f6/Y7rEz2', 0, 'verified', NULL, '0000-00-00 00:00:00', '2026-05-03 10:58:23'),
 (5, 'gpezml', 'mfrz@dmz.com', '$2y$10$DbqncdXTOcxtdkMmKxSuC.NUUxUfy8kaql7nxVXVlUYDC/2FJtu.O', 0, 'verified', NULL, '0000-00-00 00:00:00', '2026-05-03 10:58:23');
 
@@ -370,7 +370,7 @@ INSERT INTO `usertable` (`id_users`, `name`, `email`, `password`, `code`, `statu
 --
 ALTER TABLE `astronomie`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_ASTRONOMIE_USERTABLE` (`id_users`);
+  ADD KEY `FK_ASTRONOMIE_users` (`id_users`);
 
 --
 -- Index pour la table `contact`
@@ -425,7 +425,7 @@ ALTER TABLE `menu_principal`
 --
 ALTER TABLE `meteorologie`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_METEOROLOGIE_USERTABLE` (`id_users`);
+  ADD KEY `FK_METEOROLOGIE_users` (`id_users`);
 
 --
 -- Index pour la table `users`
@@ -449,9 +449,9 @@ ALTER TABLE `users_software_license`
   ADD KEY `FK_USERS_SOFTWARE_LICENSE_LICENSE` (`license_id`);
 
 --
--- Index pour la table `usertable`
+-- Index pour la table `users`
 --
-ALTER TABLE `usertable`
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id_users`);
 
 --
@@ -537,9 +537,9 @@ ALTER TABLE `users_software_license`
   MODIFY `id_users_software_license` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT pour la table `usertable`
+-- AUTO_INCREMENT pour la table `users`
 --
-ALTER TABLE `usertable`
+ALTER TABLE `users`
   MODIFY `id_users` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
@@ -550,13 +550,13 @@ ALTER TABLE `usertable`
 -- Contraintes pour la table `astronomie`
 --
 ALTER TABLE `astronomie`
-  ADD CONSTRAINT `FK_ASTRONOMIE_USERTABLE` FOREIGN KEY (`id_users`) REFERENCES `usertable` (`id_users`);
+  ADD CONSTRAINT `FK_ASTRONOMIE_users` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`);
 
 --
 -- Contraintes pour la table `meteorologie`
 --
 ALTER TABLE `meteorologie`
-  ADD CONSTRAINT `FK_METEOROLOGIE_USERTABLE` FOREIGN KEY (`id_users`) REFERENCES `usertable` (`id_users`);
+  ADD CONSTRAINT `FK_METEOROLOGIE_users` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`);
 
 --
 -- Contraintes pour la table `users_software_license`

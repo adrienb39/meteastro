@@ -10,7 +10,7 @@ function getAstroContent($db)
 {
     $sql = "SELECT a.*, u.name 
             FROM astronomie a
-            JOIN usertable u ON a.id_users = u.id_users 
+            JOIN users u ON a.id_users = u.id_users 
             WHERE a.verified = 'y' 
             ORDER BY a.date_astronomie DESC";
     try {
