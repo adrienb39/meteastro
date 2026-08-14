@@ -755,15 +755,6 @@ function getLatestNews(PDO $db, string $table, int $limit = 5): array
         </div>
     </div>
 
-    <div class="pwa-dashboard-view">
-        <div class="pwa-card"
-            style="background-color: var(--pwa-bg-header); border-color: var(--pwa-text-active); max-width:400px; margin:20px auto;">
-            <h3 style="margin: 0 0 8px 0; color: var(--pwa-text-active);">Bienvenue dans votre Application</h3>
-            <p style="margin: 0; font-size: 14px;">L'interface s'est adaptée avec succès au mode autonome Material You.
-            </p>
-        </div>
-    </div>
-
     <?php include "cookie/cookie.php"; ?>
     <?php include "__partials/footer.php"; ?>
 

@@ -1285,6 +1285,51 @@ $jsonPlaylist = json_encode($userPlaylist);
             });
         });
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Gestion de la version de l'application
+      const appVersion = "<?= $appVersion ?>"; // Calqué sur le CACHE_NAME du SW
+      const versionField = document.getElementById('pwa-version');
+      if (versionField) {
+        versionField.textContent = `v${appVersion}`;
+      }
+
+      // 2. Détection de l'état du Service Worker de la PWA
+      const swField = document.getElementById('pwa-sw');
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then((registration) => {
+          if (swField) {
+            if (registration.active) {
+              swField.textContent = "Actif";
+              swField.style.color = "#198754"; // Vert de confirmation système Android
+            } else {
+              swField.textContent = "En attente";
+            }
+          }
+        }).catch(() => {
+          if (swField) swField.textContent = "Erreur SW";
+        });
+      } else {
+        if (swField) swField.textContent = "Indisponible";
+      }
+
+      // 3. Calcul de l'espace de stockage alloué au cache de l'application
+      const cacheField = document.getElementById('pwa-cache');
+      if ('storage' in navigator && 'estimate' in navigator.storage) {
+        navigator.storage.estimate().then((estimate) => {
+          if (cacheField) {
+            // Conversion précise en Mégaoctets (Mo)
+            const usedSize = (estimate.usage / (1024 * 1024)).toFixed(2);
+            cacheField.textContent = `${usedSize} Mo`;
+          }
+        }).catch(() => {
+          if (cacheField) cacheField.textContent = "Erreur";
+        });
+      } else {
+        if (cacheField) cacheField.textContent = "Non géré";
+      }
+    });
+  </script>
 </body>
 
 </html>
