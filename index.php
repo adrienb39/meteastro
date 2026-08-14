@@ -192,14 +192,19 @@ function getLatestNews(PDO $db, string $table, int $limit = 5): array
 
 <body>
 
-<div id="notification-onboarding" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 20px; border-radius: 12px; z-index: 999999; font-family: sans-serif;">
-  <h3 style="margin-top: 0; color: #333;">Activer les notifications ? 🚀</h3>
-  <p style="color: #666; font-size: 14px;">Restez informé en temps réel des nouveautés en astronomie et météorologie directement sur votre appareil.</p>
-  <div style="text-align: right; margin-top: 15px;">
-    <button id="btn-refuse-notif" style="background: none; border: none; color: #999; margin-right: 15px; cursor: pointer; font-weight: bold;">Plus tard</button>
-    <button id="btn-accept-notif" style="background: #007bff; border: none; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;">Autoriser</button>
-  </div>
-</div>
+    <div id="notification-onboarding"
+        style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 20px; border-radius: 12px; z-index: 999999; font-family: sans-serif;">
+        <h3 style="margin-top: 0; color: #333;">Activer les notifications ? 🚀</h3>
+        <p style="color: #666; font-size: 14px;">Restez informé en temps réel des nouveautés en astronomie et
+            météorologie directement sur votre appareil.</p>
+        <div style="text-align: right; margin-top: 15px;">
+            <button id="btn-refuse-notif"
+                style="background: none; border: none; color: #999; margin-right: 15px; cursor: pointer; font-weight: bold;">Plus
+                tard</button>
+            <button id="btn-accept-notif"
+                style="background: #007bff; border: none; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;">Autoriser</button>
+        </div>
+    </div>
 
     <div id="star-field"></div>
     <div class="sun"></div>
@@ -490,232 +495,232 @@ function getLatestNews(PDO $db, string $table, int $limit = 5): array
         </div>
 
         <div class="row justify-content-center mb-5">
-    <div class="col-md-10 col-xl-8">
-        <div class="glass-card shadow-lg">
-            <div class="card-body p-4 p-md-5">
+            <div class="col-md-10 col-xl-8">
+                <div class="glass-card shadow-lg">
+                    <div class="card-body p-4 p-md-5">
 
-                <h3 class="fw-bold mb-4 d-flex align-items-center">
-                    <span class="bg-primary rounded-pill me-3" style="width: 5px; height: 30px;"></span>
-                    Flux de données
-                </h3>
+                        <h3 class="fw-bold mb-4 d-flex align-items-center">
+                            <span class="bg-primary rounded-pill me-3" style="width: 5px; height: 30px;"></span>
+                            Flux de données
+                        </h3>
 
-                <ul class="nav nav-tabs mb-4" id="newsTabs" role="tablist">
-                    <li class="nav-item">
-                        <button class="nav-link active" id="astro-tab" data-bs-toggle="tab"
-                            data-bs-target="#astro-news" type="button" role="tab">Astronomie</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" id="meteo-tab" data-bs-toggle="tab"
-                            data-bs-target="#meteo-news" type="button" role="tab">Météorologie</button>
-                    </li>
-                </ul>
+                        <ul class="nav nav-tabs mb-4" id="newsTabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="astro-tab" data-bs-toggle="tab"
+                                    data-bs-target="#astro-news" type="button" role="tab">Astronomie</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="meteo-tab" data-bs-toggle="tab"
+                                    data-bs-target="#meteo-news" type="button" role="tab">Météorologie</button>
+                            </li>
+                        </ul>
 
-                <div class="tab-content" id="newsTabsContent">
+                        <div class="tab-content" id="newsTabsContent">
 
-                    <div class="tab-pane fade show active" id="astro-news" role="tabpanel">
-                        <?php
-                        $astro_data = getLatestNews($db, 'astronomie');
-                        $astro_list = (is_array($astro_data) && !isset($astro_data['title_contenu'])) ? $astro_data : ($astro_data ? [$astro_data] : []);
-                        ?>
+                            <div class="tab-pane fade show active" id="astro-news" role="tabpanel">
+                                <?php
+                                $astro_data = getLatestNews($db, 'astronomie');
+                                $astro_list = (is_array($astro_data) && !isset($astro_data['title_contenu'])) ? $astro_data : ($astro_data ? [$astro_data] : []);
+                                ?>
 
-                        <?php if (!empty($astro_list) && is_array($astro_list)): ?>
-                            <div id="carouselAstro" class="carousel slide" data-bs-ride="carousel">
-                                
-                                <?php if (count($astro_list) > 1): ?>
-                                    <div class="carousel-indicators" style="margin-bottom: -1.5rem;">
-                                        <?php $i = 0; ?>
-                                        <?php foreach ($astro_list as $astro): ?>
-                                            <?php if (is_array($astro)): ?>
-                                                <button type="button" 
-                                                        data-bs-target="#carouselAstro" 
-                                                        data-bs-slide-to="<?= $i ?>" 
-                                                        class="<?= $i === 0 ? 'active' : ''; ?>" 
-                                                        aria-current="<?= $i === 0 ? 'true' : 'false'; ?>" 
-                                                        aria-label="Slide <?= $i + 1 ?>"
-                                                        style="background-color: rgba(255, 255, 255, 0.3); border: none; height: 4px; transition: all 0.2s ease-in-out;"
-                                                        onmouseover="if(!this.classList.contains('active')) this.style.backgroundColor='rgba(255, 255, 255, 0.7)'"
-                                                        onmouseout="if(!this.classList.contains('active')) this.style.backgroundColor='rgba(255, 255, 255, 0.3)'">
-                                                </button>
-                                                <?php $i++; ?>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </div>
-                                <?php endif; ?>
+                                <?php if (!empty($astro_list) && is_array($astro_list)): ?>
+                                    <div id="carouselAstro" class="carousel slide" data-bs-ride="carousel">
 
-                                <div class="carousel-inner">
-                                    <?php $count = 0; ?>
-                                    <?php foreach ($astro_list as $astro): ?>
-                                        <?php if (is_array($astro)): ?>
-                                            <div class="carousel-item <?= $count === 0 ? 'active' : ''; ?>" data-bs-interval="5000">
-                                                <div class="row align-items-center px-5">
-                                                    <div class="col-md-8">
-                                                        <div class="d-flex align-items-center gap-2 mb-2">
-                                                            <?php if ($count === 0): ?>
-                                                                <span class="badge bg-success text-uppercase fw-bold px-2 py-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">Dernier signal</span>
+                                        <?php if (count($astro_list) > 1): ?>
+                                            <div class="carousel-indicators" style="margin-bottom: -1.5rem;">
+                                                <?php $i = 0; ?>
+                                                <?php foreach ($astro_list as $astro): ?>
+                                                    <?php if (is_array($astro)): ?>
+                                                        <button type="button" data-bs-target="#carouselAstro"
+                                                            data-bs-slide-to="<?= $i ?>" class="<?= $i === 0 ? 'active' : ''; ?>"
+                                                            aria-current="<?= $i === 0 ? 'true' : 'false'; ?>"
+                                                            aria-label="Slide <?= $i + 1 ?>"
+                                                            style="background-color: rgba(255, 255, 255, 0.3); border: none; height: 4px; transition: all 0.2s ease-in-out;"
+                                                            onmouseover="if(!this.classList.contains('active')) this.style.backgroundColor='rgba(255, 255, 255, 0.7)'"
+                                                            onmouseout="if(!this.classList.contains('active')) this.style.backgroundColor='rgba(255, 255, 255, 0.3)'">
+                                                        </button>
+                                                        <?php $i++; ?>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <div class="carousel-inner">
+                                            <?php $count = 0; ?>
+                                            <?php foreach ($astro_list as $astro): ?>
+                                                <?php if (is_array($astro)): ?>
+                                                    <div class="carousel-item <?= $count === 0 ? 'active' : ''; ?>"
+                                                        data-bs-interval="5000">
+                                                        <div class="row align-items-center px-5">
+                                                            <div class="col-md-8">
+                                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                                    <?php if ($count === 0): ?>
+                                                                        <span class="badge bg-success text-uppercase fw-bold px-2 py-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">Dernier signal</span>
+                                                                    <?php endif; ?>
+                                                                </div>
+
+                                                                <h4 class="h5 fw-bold text-white">
+                                                                    <?= htmlspecialchars($astro['title_contenu'] ?? 'Sans titre') ?>
+                                                                </h4>
+                                                                <p class="text-light">
+                                                                    <?= substr($astro['contenu'] ?? '', 0, 160) ?>...
+                                                                </p>
+                                                                <a href="/divers/astronomie/contenu-astronomie.php?id=<?= $astro['id'] ?>"
+                                                                    class="btn btn-link p-0 text-primary text-decoration-none fw-bold">
+                                                                    DÉCODER LA SUITE →
+                                                                </a>
+                                                            </div>
+                                                            <?php if (!empty($astro['filename'])): ?>
+                                                                <div class="col-md-4 mt-3 mt-md-0">
+                                                                    <img src="../../uploads/<?= htmlspecialchars($astro['filename']); ?>"
+                                                                        alt=""
+                                                                        style="width: 100%; height: auto; max-height: 150px; object-fit: cover; border-radius: 4px;">
+                                                                </div>
                                                             <?php endif; ?>
                                                         </div>
-                                                        
-                                                        <h4 class="h5 fw-bold text-white">
-                                                            <?= htmlspecialchars($astro['title_contenu'] ?? 'Sans titre') ?>
-                                                        </h4>
-                                                        <p class="text-light">
-                                                            <?= substr($astro['contenu'] ?? '', 0, 160) ?>...
-                                                        </p>
-                                                        <a href="/divers/astronomie/contenu-astronomie.php?id=<?= $astro['id'] ?>"
-                                                            class="btn btn-link p-0 text-primary text-decoration-none fw-bold">
-                                                            DÉCODER LA SUITE →
-                                                        </a>
                                                     </div>
-                                                    <?php if (!empty($astro['filename'])): ?>
-                                                        <div class="col-md-4 mt-3 mt-md-0">
-                                                            <img src="../../uploads/<?= htmlspecialchars($astro['filename']); ?>"
-                                                                alt=""
-                                                                style="width: 100%; height: auto; max-height: 150px; object-fit: cover; border-radius: 4px;">
-                                                        </div>
-                                                    <?php endif; ?>
-                                                </div>
-                                            </div>
-                                            <?php $count++; ?>
+                                                    <?php $count++; ?>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </div>
+
+                                        <?php if ($count > 1): ?>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAstro"
+                                                data-bs-slide="prev" style="width: 5%; min-width: 40px;">
+                                                <span class="d-flex align-items-center justify-content-center rounded-circle"
+                                                    style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
+                                                    onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
+                                                    onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"
+                                                        style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
+                                                </span>
+                                                <span class="visually-hidden">Précédent</span>
+                                            </button>
+
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselAstro"
+                                                data-bs-slide="next" style="width: 5%; min-width: 40px;">
+                                                <span class="d-flex align-items-center justify-content-center rounded-circle"
+                                                    style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
+                                                    onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
+                                                    onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"
+                                                        style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
+                                                </span>
+                                                <span class="visually-hidden">Suivant</span>
+                                            </button>
                                         <?php endif; ?>
-                                    <?php endforeach; ?>
-                                </div>
-
-                                <?php if ($count > 1): ?>
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselAstro"
-                                        data-bs-slide="prev" style="width: 5%; min-width: 40px;">
-                                        <span class="d-flex align-items-center justify-content-center rounded-circle"
-                                            style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
-                                            onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
-                                            onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"
-                                                style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
-                                        </span>
-                                        <span class="visually-hidden">Précédent</span>
-                                    </button>
-
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselAstro"
-                                        data-bs-slide="next" style="width: 5%; min-width: 40px;">
-                                        <span class="d-flex align-items-center justify-content-center rounded-circle"
-                                            style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
-                                            onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
-                                            onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"
-                                                style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
-                                        </span>
-                                        <span class="visually-hidden">Suivant</span>
-                                    </button>
+                                    </div>
+                                <?php else: ?>
+                                    <p class="text-muted fst-italic">Signal non détecté.</p>
                                 <?php endif; ?>
                             </div>
-                        <?php else: ?>
-                            <p class="text-muted fst-italic">Signal non détecté.</p>
-                        <?php endif; ?>
-                    </div>
 
 
-                    <div class="tab-pane fade" id="meteo-news" role="tabpanel">
-                        <?php
-                        $meteo_data = getLatestNews($db, 'meteorologie');
-                        $meteo_list = (is_array($meteo_data) && !isset($meteo_data['title_contenu'])) ? $meteo_data : ($meteo_data ? [$meteo_data] : []);
-                        ?>
+                            <div class="tab-pane fade" id="meteo-news" role="tabpanel">
+                                <?php
+                                $meteo_data = getLatestNews($db, 'meteorologie');
+                                $meteo_list = (is_array($meteo_data) && !isset($meteo_data['title_contenu'])) ? $meteo_data : ($meteo_data ? [$meteo_data] : []);
+                                ?>
 
-                        <?php if (!empty($meteo_list) && is_array($meteo_list)): ?>
-                            <div id="carouselMeteo" class="carousel slide" data-bs-ride="carousel">
-                                
-                                <?php if (count($meteo_list) > 1): ?>
-                                    <div class="carousel-indicators" style="margin-bottom: -1.5rem;">
-                                        <?php $i = 0; ?>
-                                        <?php foreach ($meteo_list as $meteo): ?>
-                                            <?php if (is_array($meteo)): ?>
-                                                <button type="button" 
-                                                        data-bs-target="#carouselMeteo" 
-                                                        data-bs-slide-to="<?= $i ?>" 
-                                                        class="<?= $i === 0 ? 'active' : ''; ?>" 
-                                                        aria-current="<?= $i === 0 ? 'true' : 'false'; ?>" 
-                                                        aria-label="Slide <?= $i + 1 ?>"
-                                                        style="background-color: rgba(255, 255, 255, 0.3); border: none; height: 4px; transition: all 0.2s ease-in-out;"
-                                                        onmouseover="if(!this.classList.contains('active')) this.style.backgroundColor='rgba(255, 255, 255, 0.7)'"
-                                                        onmouseout="if(!this.classList.contains('active')) this.style.backgroundColor='rgba(255, 255, 255, 0.3)'">
-                                                </button>
-                                                <?php $i++; ?>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </div>
-                                <?php endif; ?>
+                                <?php if (!empty($meteo_list) && is_array($meteo_list)): ?>
+                                    <div id="carouselMeteo" class="carousel slide" data-bs-ride="carousel">
 
-                                <div class="carousel-inner">
-                                    <?php $count = 0; ?>
-                                    <?php foreach ($meteo_list as $meteo): ?>
-                                        <?php if (is_array($meteo)): ?>
-                                            <div class="carousel-item <?= $count === 0 ? 'active' : ''; ?>" data-bs-interval="5000">
-                                                <div class="row align-items-center px-5">
-                                                    <div class="col-md-8">
-                                                        <div class="d-flex align-items-center gap-2 mb-2">
-                                                            <?php if ($count === 0): ?>
-                                                                <span class="badge bg-success text-uppercase fw-bold px-2 py-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">Dernier signal</span>
+                                        <?php if (count($meteo_list) > 1): ?>
+                                            <div class="carousel-indicators" style="margin-bottom: -1.5rem;">
+                                                <?php $i = 0; ?>
+                                                <?php foreach ($meteo_list as $meteo): ?>
+                                                    <?php if (is_array($meteo)): ?>
+                                                        <button type="button" data-bs-target="#carouselMeteo"
+                                                            data-bs-slide-to="<?= $i ?>" class="<?= $i === 0 ? 'active' : ''; ?>"
+                                                            aria-current="<?= $i === 0 ? 'true' : 'false'; ?>"
+                                                            aria-label="Slide <?= $i + 1 ?>"
+                                                            style="background-color: rgba(255, 255, 255, 0.3); border: none; height: 4px; transition: all 0.2s ease-in-out;"
+                                                            onmouseover="if(!this.classList.contains('active')) this.style.backgroundColor='rgba(255, 255, 255, 0.7)'"
+                                                            onmouseout="if(!this.classList.contains('active')) this.style.backgroundColor='rgba(255, 255, 255, 0.3)'">
+                                                        </button>
+                                                        <?php $i++; ?>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <div class="carousel-inner">
+                                            <?php $count = 0; ?>
+                                            <?php foreach ($meteo_list as $meteo): ?>
+                                                <?php if (is_array($meteo)): ?>
+                                                    <div class="carousel-item <?= $count === 0 ? 'active' : ''; ?>"
+                                                        data-bs-interval="5000">
+                                                        <div class="row align-items-center px-5">
+                                                            <div class="col-md-8">
+                                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                                    <?php if ($count === 0): ?>
+                                                                        <span class="badge bg-success text-uppercase fw-bold px-2 py-1"
+                                                                            style="font-size: 0.65rem; letter-spacing: 0.5px;">Dernier
+                                                                            signal</span>
+                                                                    <?php endif; ?>
+                                                                </div>
+
+                                                                <h4 class="h5 fw-bold text-white">
+                                                                    <?= htmlspecialchars($meteo['title_contenu'] ?? 'Sans titre') ?>
+                                                                </h4>
+                                                                <p class="text-light">
+                                                                    <?= substr($meteo['contenu'] ?? '', 0, 160) ?>...
+                                                                </p>
+                                                                <a href="/divers/meteorologie/contenu-meteorologie.php?id=<?= $meteo['id'] ?>"
+                                                                    class="btn btn-link p-0 text-primary text-decoration-none fw-bold">
+                                                                    DÉCODER LA SUITE →
+                                                                </a>
+                                                            </div>
+                                                            <?php if (!empty($meteo['filename'])): ?>
+                                                                <div class="col-md-4 mt-3 mt-md-0">
+                                                                    <img src="../../uploads/<?= htmlspecialchars($meteo['filename']); ?>"
+                                                                        alt=""
+                                                                        style="width: 100%; height: auto; max-height: 150px; object-fit: cover; border-radius: 4px;">
+                                                                </div>
                                                             <?php endif; ?>
                                                         </div>
-
-                                                        <h4 class="h5 fw-bold text-white">
-                                                            <?= htmlspecialchars($meteo['title_contenu'] ?? 'Sans titre') ?>
-                                                        </h4>
-                                                        <p class="text-light">
-                                                            <?= substr($meteo['contenu'] ?? '', 0, 160) ?>...
-                                                        </p>
-                                                        <a href="/divers/meteorologie/contenu-meteorologie.php?id=<?= $meteo['id'] ?>"
-                                                            class="btn btn-link p-0 text-primary text-decoration-none fw-bold">
-                                                            DÉCODER LA SUITE →
-                                                        </a>
                                                     </div>
-                                                    <?php if (!empty($meteo['filename'])): ?>
-                                                        <div class="col-md-4 mt-3 mt-md-0">
-                                                            <img src="../../uploads/<?= htmlspecialchars($meteo['filename']); ?>"
-                                                                alt=""
-                                                                style="width: 100%; height: auto; max-height: 150px; object-fit: cover; border-radius: 4px;">
-                                                        </div>
-                                                    <?php endif; ?>
-                                                </div>
-                                            </div>
-                                            <?php $count++; ?>
+                                                    <?php $count++; ?>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </div>
+
+                                        <?php if ($count > 1): ?>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselMeteo"
+                                                data-bs-slide="prev" style="width: 5%; min-width: 40px;">
+                                                <span class="d-flex align-items-center justify-content-center rounded-circle"
+                                                    style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
+                                                    onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
+                                                    onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"
+                                                        style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
+                                                </span>
+                                                <span class="visually-hidden">Précédent</span>
+                                            </button>
+
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselMeteo"
+                                                data-bs-slide="next" style="width: 5%; min-width: 40px;">
+                                                <span class="d-flex align-items-center justify-content-center rounded-circle"
+                                                    style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
+                                                    onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
+                                                    onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"
+                                                        style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
+                                                </span>
+                                                <span class="visually-hidden">Suivant</span>
+                                            </button>
                                         <?php endif; ?>
-                                    <?php endforeach; ?>
-                                </div>
-
-                                <?php if ($count > 1): ?>
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselMeteo"
-                                        data-bs-slide="prev" style="width: 5%; min-width: 40px;">
-                                        <span class="d-flex align-items-center justify-content-center rounded-circle"
-                                            style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
-                                            onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
-                                            onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"
-                                                style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
-                                        </span>
-                                        <span class="visually-hidden">Précédent</span>
-                                    </button>
-
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselMeteo"
-                                        data-bs-slide="next" style="width: 5%; min-width: 40px;">
-                                        <span class="d-flex align-items-center justify-content-center rounded-circle"
-                                            style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
-                                            onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
-                                            onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"
-                                                style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
-                                        </span>
-                                        <span class="visually-hidden">Suivant</span>
-                                    </button>
+                                    </div>
+                                <?php else: ?>
+                                    <p class="text-muted fst-italic">Signal non détecté.</p>
                                 <?php endif; ?>
                             </div>
-                        <?php else: ?>
-                            <p class="text-muted fst-italic">Signal non détecté.</p>
-                        <?php endif; ?>
-                    </div>
 
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
         <div class="row justify-content-center pt-5" id="contacts">
             <div class="col-md-10 col-xl-8">
@@ -750,292 +755,14 @@ function getLatestNews(PDO $db, string $table, int $limit = 5): array
         </div>
     </div>
 
-  <style>
-    /* ==========================================================================
-       1. VARIABLES DE THÈME (STYLE FLOTTANT ANDROID MATERIAL YOU)
-       ========================================================================== */
-    :root {
-      --pwa-bg-header: rgba(243, 243, 244, 0.90);
-      --pwa-bg-nav: rgba(243, 243, 244, 0.88);
-      --pwa-border-color: rgba(0, 0, 0, 0.06);
-      --pwa-text-main: #1f1f1f;
-      --pwa-text-inactive: #444746;
-      --pwa-text-active: #0b57d0;
-      --pwa-shadow-nav: 0 4px 12px rgba(0, 0, 0, 0.15);
-      --pwa-bg-body: #f8fafc;
-      --pwa-card-bg: #ffffff;
-      --pwa-overlay-bg: rgba(0, 0, 0, 0.5);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --pwa-bg-header: rgba(31, 31, 31, 0.90);
-        --pwa-bg-nav: rgba(31, 31, 31, 0.88);
-        --pwa-border-color: rgba(255, 255, 255, 0.07);
-        --pwa-text-main: #e3e3e3;
-        --pwa-text-inactive: #c4c7c5;
-        --pwa-text-active: #a8c7fa;
-        --pwa-shadow-nav: 0 4px 20px rgba(0, 0, 0, 0.5);
-        --pwa-bg-body: #121212;
-        --pwa-card-bg: #1e1e1e;
-        --pwa-overlay-bg: rgba(0, 0, 0, 0.7);
-      }
-    }
-
-    /* ==========================================================================
-       2. BOUTON FLOTTANT DISCRET ET ULTRA-MODERNE (FAB)
-       ========================================================================== */
-    .pwa-fab-trigger {
-        position: fixed;
-        top: 24px; 
-        right: 24px;
-        z-index: 9999999;
-        background-color: color-mix(in srgb, var(--pwa-card-bg) 60%, transparent);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        color: var(--pwa-text-active);
-        border: 1px solid var(--pwa-border-color);
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        box-shadow: var(--pwa-shadow-nav);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.2s, opacity 0.3s ease, background-color 0.25s, border-color 0.25s;
-    }
-
-    .pwa-fab-trigger:hover {
-        background-color: color-mix(in srgb, var(--pwa-card-bg) 75%, transparent);
-    }
-
-    .pwa-fab-trigger.pwa-discret {
-      opacity: 0.25;
-    }
-    
-    .pwa-fab-trigger.pwa-discret:hover {
-      opacity: 1;
-    }
-
-    .pwa-fab-trigger:active {
-      transform: scale(0.90);
-    }
-
-    .pwa-fab-trigger svg {
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
-    }
-
-    /* ==========================================================================
-       3. FENÊTRE MODALE & ÉLÉMENTS
-       ========================================================================== */
-    .pwa-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: var(--pwa-overlay-bg);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      padding: 16px;
-      box-sizing: border-box;
-    }
-
-    .pwa-modal-overlay.is-open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .pwa-modal-container {
-      width: 100%;
-      max-width: 400px;
-      transform: translateY(20px);
-      transition: transform 0.3s ease;
-    }
-
-    .pwa-modal-overlay.is-open .pwa-modal-container {
-      transform: translateY(0);
-    }
-
-    .pwa-card {
-      background: var(--pwa-card-bg);
-      border: 1px solid var(--pwa-border-color);
-      border-radius: 28px;
-      padding: 24px;
-      text-align: center;
-      box-shadow: var(--pwa-shadow-nav);
-      position: relative;
-    }
-
-    .pwa-btn-close {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: transparent;
-      border: none;
-      color: var(--pwa-text-inactive);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .pwa-logo {
-      width: 64px;
-      height: 64px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    
-    .pwa-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 16px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    /* TITRE SPECTRE COMPLET ANIMÉ (TOUTES LES COULEURS CONTINUES) */
-    .pwa-rainbow-title {
-      margin: 0 0 8px 0; 
-      font-size: 20px; 
-      font-weight: 700;
-      background: linear-gradient(to right, 
-        hsl(0, 100%, 50%), 
-        hsl(60, 100%, 50%), 
-        hsl(120, 100%, 50%), 
-        hsl(180, 100%, 50%), 
-        hsl(240, 100%, 50%), 
-        hsl(300, 100%, 50%), 
-        hsl(360, 100%, 50%)
-      ); 
-      background-size: 400% 100%; 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
-      animation: rainbow-fluid 30s linear infinite;
-    }
-
-    @keyframes rainbow-fluid {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 400% 50%; }
-    }
-
-    .pwa-badge-status {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--pwa-text-inactive);
-      background: var(--pwa-bg-header);
-      padding: 6px 12px;
-      border-radius: 8px;
-      display: inline-block;
-      margin-bottom: 16px;
-    }
-
-    .pwa-list-instructions {
-      text-align: left;
-      padding-left: 20px;
-      color: var(--pwa-text-main);
-      margin-bottom: 20px;
-    }
-
-    .pwa-list-instructions li {
-      margin-bottom: 12px;
-      line-height: 1.5;
-      font-size: 14px;
-    }
-
-    /* Bouton d'installation automatique */
-    .pwa-btn-install {
-      display: none; 
-      width: 100%;
-      padding: 14px;
-      font-size: 15px;
-      border-radius: 14px;
-      background-color: var(--pwa-text-active);
-      color: var(--pwa-card-bg);
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.25s, transform 0.1s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .pwa-btn-install:active {
-      transform: scale(0.98);
-    }
-
-    /* --- AFFICHAGE MODES APPLI INSTALLÉE --- */
-    .pwa-dashboard-view {
-        display: none !important;
-    }
-
-    @media (display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui) {
-        .pwa-dashboard-view {
-            display: block !important;
-        }
-        .pwa-browser-view, .pwa-fab-trigger {
-            display: none !important; 
-        }
-    }
-</style>
-
-<button class="pwa-fab-trigger pwa-browser-view" id="pwa-action-open" title="Installer l'application">
-  <svg viewBox="0 0 24 24">
-    <path d="M5 20h14v-2H5v2zm7-2l5-5h-4V4h-2v7H7l5 5z"/>
-  </svg>
-</button>
-
-<div class="pwa-modal-overlay pwa-browser-view" id="pwa-component-modal">
-  <main class="pwa-modal-container">
-    <div class="pwa-card">
-      <button class="pwa-btn-close" id="pwa-action-close">✕</button>
-      
-      <div class="pwa-logo"><img src="/ressources/logo.png" alt="Logo"></div>
-      
-      <h2 class="pwa-rainbow-title">Installer Meteastro</h2>
-
-      <p style="color: var(--pwa-text-inactive); margin: 0 0 16px 0; font-size: 14px;">
-        Ajoutez l'application à votre écran d'accueil pour profiter d'une expérience plein écran fluide.
-      </p>
-
-      <div class="pwa-badge-status" id="pwa-text-status">Analyse du système...</div>
-
-      <div id="pwa-guide-ios" style="display: none;">
-        <ol class="pwa-list-instructions">
-          <li>Ouvrez le menu de partage de Safari <span style="font-size: 16px;">⎋</span>.</li>
-          <li>Faites défiler et sélectionnez <strong>Sur l'écran d'accueil</strong>.</li>
-          <li>Validez en cliquant sur <strong>Ajouter</strong>.</li>
-        </ol>
-      </div>
-
-      <div id="pwa-guide-generic" style="display: none;">
-        <ol class="pwa-list-instructions" id="pwa-text-instructions">
-          <li>Ouvrez les options de votre navigateur <span style="font-weight: bold;">⋮</span>.</li>
-          <li>Choisissez l'option <strong>Installer l'application</strong> ou <i>Ajouter à l'écran d'accueil</i>.</li>
-        </ol>
-        
-        <button id="pwa-action-install" class="pwa-btn-install">Installer maintenant</button>
-      </div>
+    <div class="pwa-dashboard-view">
+        <div class="pwa-card"
+            style="background-color: var(--pwa-bg-header); border-color: var(--pwa-text-active); max-width:400px; margin:20px auto;">
+            <h3 style="margin: 0 0 8px 0; color: var(--pwa-text-active);">Bienvenue dans votre Application</h3>
+            <p style="margin: 0; font-size: 14px;">L'interface s'est adaptée avec succès au mode autonome Material You.
+            </p>
+        </div>
     </div>
-  </main>
-</div>
-
-<div class="pwa-dashboard-view">
-  <div class="pwa-card" style="background-color: var(--pwa-bg-header); border-color: var(--pwa-text-active); max-width:400px; margin:20px auto;">
-    <h3 style="margin: 0 0 8px 0; color: var(--pwa-text-active);">Bienvenue dans votre Application</h3>
-    <p style="margin: 0; font-size: 14px;">L'interface s'est adaptée avec succès au mode autonome Material You.</p>
-  </div>
-</div>
 
     <?php include "cookie/cookie.php"; ?>
     <?php include "__partials/footer.php"; ?>
@@ -1185,120 +912,120 @@ function getLatestNews(PDO $db, string $table, int $limit = 5): array
         document.addEventListener('DOMContentLoaded', initSpaceAmbience);
     </script>
     <script>
-(() => {
-  // 1. Configuration & Sélection des éléments du DOM
-  const DOM = {
-    modal: document.getElementById('pwa-component-modal'),
-    btnOpen: document.getElementById('pwa-action-open'),
-    btnClose: document.getElementById('pwa-action-close'),
-    btnInstall: document.getElementById('pwa-action-install'),
-    txtStatus: document.getElementById('pwa-text-status'),
-    guideIos: document.getElementById('pwa-guide-ios'),
-    guideGeneric: document.getElementById('pwa-guide-generic'),
-    txtInstructions: document.getElementById('pwa-text-instructions')
-  };
+        (() => {
+            // 1. Configuration & Sélection des éléments du DOM
+            const DOM = {
+                modal: document.getElementById('pwa-component-modal'),
+                btnOpen: document.getElementById('pwa-action-open'),
+                btnClose: document.getElementById('pwa-action-close'),
+                btnInstall: document.getElementById('pwa-action-install'),
+                txtStatus: document.getElementById('pwa-text-status'),
+                guideIos: document.getElementById('pwa-guide-ios'),
+                guideGeneric: document.getElementById('pwa-guide-generic'),
+                txtInstructions: document.getElementById('pwa-text-instructions')
+            };
 
-  let pwaDeferredPrompt = null;
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            let pwaDeferredPrompt = null;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-  // 2. Initialisation de l'affichage selon l'OS
-  const initPlatformUX = () => {
-    if (isIOS) {
-      DOM.txtStatus.textContent = "📱 Configuration : Apple iOS";
-      DOM.guideIos.style.display = "block";
-      DOM.guideGeneric.style.display = "none";
-    } else {
-      DOM.txtStatus.textContent = "🤖 Configuration : Android / Standard";
-      DOM.guideIos.style.display = "none";
-      DOM.guideGeneric.style.display = "block";
-      if (DOM.btnInstall) DOM.btnInstall.style.display = 'none';
-    }
-  };
+            // 2. Initialisation de l'affichage selon l'OS
+            const initPlatformUX = () => {
+                if (isIOS) {
+                    DOM.txtStatus.textContent = "📱 Configuration : Apple iOS";
+                    DOM.guideIos.style.display = "block";
+                    DOM.guideGeneric.style.display = "none";
+                } else {
+                    DOM.txtStatus.textContent = "🤖 Configuration : Android / Standard";
+                    DOM.guideIos.style.display = "none";
+                    DOM.guideGeneric.style.display = "block";
+                    if (DOM.btnInstall) DOM.btnInstall.style.display = 'none';
+                }
+            };
 
-  // 3. Gestionnaires d'événements pour la Modale
-  const toggleModal = (isOpen) => {
-    if (!DOM.modal) return;
-    DOM.modal.classList.toggle('is-open', isOpen);
-  };
+            // 3. Gestionnaires d'événements pour la Modale
+            const toggleModal = (isOpen) => {
+                if (!DOM.modal) return;
+                DOM.modal.classList.toggle('is-open', isOpen);
+            };
 
-  const initModalEvents = () => {
-    if (!DOM.btnOpen || !DOM.btnClose) return;
+            const initModalEvents = () => {
+                if (!DOM.btnOpen || !DOM.btnClose) return;
 
-    DOM.btnOpen.addEventListener('click', () => toggleModal(true));
-    DOM.btnClose.addEventListener('click', () => toggleModal(false));
-    DOM.modal.addEventListener('click', (e) => {
-      if (e.target === DOM.modal) toggleModal(false);
-    });
-  };
+                DOM.btnOpen.addEventListener('click', () => toggleModal(true));
+                DOM.btnClose.addEventListener('click', () => toggleModal(false));
+                DOM.modal.addEventListener('click', (e) => {
+                    if (e.target === DOM.modal) toggleModal(false);
+                });
+            };
 
-  // 4. Gestion intelligente du défilement (Bouton discret au scroll)
-  const initScrollBehavior = () => {
-    if (!DOM.btnOpen) return;
-    
-    let lastScrollTop = 0;
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-      // Si l'utilisateur descend de plus de 100px, le bouton s'estompe
-      if (scrollTop > lastScrollTop && scrollTop > 100) {
-        DOM.btnOpen.classList.add('pwa-discret');
-      } else {
-        DOM.btnOpen.classList.remove('pwa-discret');
-      }
-      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-    }, { passive: true });
-  };
+            // 4. Gestion intelligente du défilement (Bouton discret au scroll)
+            const initScrollBehavior = () => {
+                if (!DOM.btnOpen) return;
 
-  // 5. Logique PWA (Interception et Déclenchement de l'installation)
-  const initPwaEngine = () => {
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      pwaDeferredPrompt = e;
+                let lastScrollTop = 0;
+                window.addEventListener('scroll', () => {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-      // Si on n'est pas sur iOS, on propose le bouton natif à la place des étapes manuelles
-      if (!isIOS && DOM.btnInstall && DOM.txtInstructions) {
-        DOM.btnInstall.style.display = 'block';
-        DOM.txtInstructions.style.display = 'none';
-      }
-    });
+                    // Si l'utilisateur descend de plus de 100px, le bouton s'estompe
+                    if (scrollTop > lastScrollTop && scrollTop > 100) {
+                        DOM.btnOpen.classList.add('pwa-discret');
+                    } else {
+                        DOM.btnOpen.classList.remove('pwa-discret');
+                    }
+                    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+                }, { passive: true });
+            };
 
-    if (DOM.btnInstall) {
-      DOM.btnInstall.addEventListener('click', async () => {
-        if (!pwaDeferredPrompt) return;
+            // 5. Logique PWA (Interception et Déclenchement de l'installation)
+            const initPwaEngine = () => {
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    pwaDeferredPrompt = e;
 
-        await pwaDeferredPrompt.prompt();
-        const { outcome } = await pwaDeferredPrompt.userChoice;
+                    // Si on n'est pas sur iOS, on propose le bouton natif à la place des étapes manuelles
+                    if (!isIOS && DOM.btnInstall && DOM.txtInstructions) {
+                        DOM.btnInstall.style.display = 'block';
+                        DOM.txtInstructions.style.display = 'none';
+                    }
+                });
 
-        if (outcome === 'accepted') {
-          cleanUpPwaUX();
-        }
-        pwaDeferredPrompt = null;
-      });
-    }
+                if (DOM.btnInstall) {
+                    DOM.btnInstall.addEventListener('click', async () => {
+                        if (!pwaDeferredPrompt) return;
 
-    window.addEventListener('appinstalled', () => {
-      cleanUpPwaUX();
-    });
-  };
+                        await pwaDeferredPrompt.prompt();
+                        const { outcome } = await pwaDeferredPrompt.userChoice;
 
-  // Nettoyage de l'interface une fois installée
-  const cleanUpPwaUX = () => {
-    pwaDeferredPrompt = null;
-    toggleModal(false);
-    if (DOM.btnOpen) DOM.btnOpen.style.display = 'none';
-  };
+                        if (outcome === 'accepted') {
+                            cleanUpPwaUX();
+                        }
+                        pwaDeferredPrompt = null;
+                    });
+                }
 
-  // Lancement global du script
-  const init = () => {
-    initPlatformUX();
-    initModalEvents();
-    initScrollBehavior();
-    initPwaEngine();
-  };
+                window.addEventListener('appinstalled', () => {
+                    cleanUpPwaUX();
+                });
+            };
 
-  document.addEventListener('DOMContentLoaded', init);
-})();
-</script>
+            // Nettoyage de l'interface une fois installée
+            const cleanUpPwaUX = () => {
+                pwaDeferredPrompt = null;
+                toggleModal(false);
+                if (DOM.btnOpen) DOM.btnOpen.style.display = 'none';
+            };
+
+            // Lancement global du script
+            const init = () => {
+                initPlatformUX();
+                initModalEvents();
+                initScrollBehavior();
+                initPwaEngine();
+            };
+
+            document.addEventListener('DOMContentLoaded', init);
+        })();
+    </script>
     <script src="/js/main.js"></script>
 </body>
 

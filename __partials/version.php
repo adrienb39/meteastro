@@ -1,10 +1,10 @@
 <?php
 return [
-    'siteVersion' => '2.4.1',
+    'siteVersion' => '2.4.2',
     'appBuild'    => 0,
     'updated' => [
-        'day'   => 'Jeudi',
-        'num'   => 13,
+        'day'   => 'Vendredi',
+        'num'   => 14,
         'month' => 'Août',
         'year'  => 2026,
     ],
