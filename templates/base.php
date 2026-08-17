@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr-FR">
+<html lang="fr-FR" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -12,11 +12,14 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#007bff">
 
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <!-- <link rel="stylesheet" href="/assets/css/connexion.css"> -->
+    <link rel="stylesheet" href="/assets/css/cookie.css">
+    <link rel="stylesheet" href="/assets/css/divers.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -2950,7 +2953,7 @@
                         <div class="visitor-counter py-1 px-3 bg-primary bg-opacity-10 rounded-pill d-inline-block">
                             <span class="small fw-bold text-primary">
                                 <i class='bx bx-group me-1'></i>
-                                <?php include "counter.php"; ?> visiteurs
+                                <?= $nombreVisite ?> visiteurs
                             </span>
                         </div>
                     </div>
@@ -3148,10 +3151,19 @@
             </div>
         </div>
     </div>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/footer.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-        crossorigin="anonymous"></script>
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/astronomie.js"></script>
+    <script src="/assets/js/cookie.js"></script>
+    <script src="/assets/js/divers.js"></script>
+    <!-- <script src="/assets/js/login.js"></script> -->
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/menu.js"></script>
+    <script src="/assets/js/meteorologie.js"></script>
+    <script src="/assets/js/popup.js"></script>
+    <script src="/assets/js/updatemenu.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const music = document.getElementById('bgMusic');
@@ -3285,7 +3297,6 @@
             }
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.getElementById('contactForm').addEventListener('submit', async function (e) {
             e.preventDefault();
@@ -3542,7 +3553,6 @@
             document.addEventListener('DOMContentLoaded', init);
         })();
     </script>
-    <script src="/assets/js/main.js"></script>
 </body>
 
 </html>

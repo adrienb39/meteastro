@@ -28,8 +28,6 @@ class HomeController extends AbstractController
 
     public function index(): void
     {
-        $index = true;
-
         // --- Authentification ---
         $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']);
 
@@ -89,7 +87,6 @@ class HomeController extends AbstractController
 
         // Render
         $this->render('home/index', [
-            'index' => $index,
             'nombreVisite' => $nombreVisite,
             'isConnected' => $isConnected,
             'userName' => $userName,
