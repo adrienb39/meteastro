@@ -1,7 +1,7 @@
 <?php
 
 return [
-    // '/' => ['HomeController', 'index'],
+    '/' => ['HomeController', 'index'],
     // '/page/{page}' => ['PageController', 'page'],
     // '/page-a-propos/{id}' => ['PageController', 'pageAPropos'],
     // '/page-status/{id}' => ['PageController', 'pageStatus'],

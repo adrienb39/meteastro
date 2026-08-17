@@ -7,6 +7,11 @@ $isDevMode = true;
 
 $configuration = \Doctrine\ORM\ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
 
+// Lazy objects : natifs en PHP 8.4+, sinon fallback sur symfony/var-exporter
+if (PHP_VERSION_ID >= 80400) {
+    $configuration->enableNativeLazyObjects(true);
+}
+
 // Chargement des variables d'environnement
 $dotEnv = \Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
 $dotEnv->load(); // Charger les variables d'environnement de .env dans $_ENV

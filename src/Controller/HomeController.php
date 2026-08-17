@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\DecompteDepartSortie;
 use App\Entity\DefilementTexte;
+use App\Entity\MenuConnect;
+use App\Entity\MenuPrincipal;
 use App\Entity\MessageApresSortieHebdomadaire;
 use App\Entity\MessageSortieHebdomadaireADefinir;
 use App\Entity\Page;
@@ -27,78 +29,99 @@ class HomeController extends AbstractController
     public function index(): void
     {
         $index = true;
-        $fuseauHoraire = new \DateTimeZone('Europe/Paris');
-        $now = new \DateTime('now', $fuseauHoraire);
 
-        // 1. Statistiques et réglages
+        // --- Authentification ---
+        $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']);
+
+        // --- Logique de mise à jour du profil ---
+        if ($isConnected && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_update'])) {
+            $newName = $_POST['name'];
+            $newEmail = $_POST['email'];
+            $newPass = $_POST['password'];
+            $userId = $_SESSION['user_id'];
+
+            if (!empty($newPass)) {
+                $hashedPass = password_hash($newPass, PASSWORD_BCRYPT);
+                $sql = "UPDATE `users` SET `name` = ?, `email` = ?, `password` = ? WHERE `id_users` = ?";
+                $this->db->query2($sql, [$newName, $newEmail, $hashedPass, $userId]);
+            } else {
+                $sql = "UPDATE `users` SET `name` = ?, `email` = ? WHERE `id_users` = ?";
+                $this->db->query2($sql, [$newName, $newEmail, $userId]);
+            }
+
+            session_destroy();
+            header("Location: /connexion/login.php");
+            exit();
+        }
+
+        $userName = $isConnected ? $_SESSION['name'] : '';
+        $userEmail = $isConnected ? $_SESSION['email'] : '';
+
+        $entityClass = $isConnected ? MenuConnect::class : MenuPrincipal::class;
+        $menuItems = $this->entityManager
+            ->getRepository($entityClass)
+            ->findBy([], ['parent' => 'ASC', 'id' => 'ASC']);
+
+        // Génération du menu HTML
+        ob_start();
+        self::renderBootstrapMenu($menuItems);
+        $menuHtml = ob_get_clean();
+
+        // On récupère la chaîne des musiques de l'article (ex: "music1.mp3,music2.mp3")
+        $musicString = $article['music_file'] ?? '';
+        $userPlaylist = [];
+
+        if (!empty($musicString)) {
+            $files = explode(',', $musicString);
+            foreach ($files as $file) {
+                $file = trim($file);
+                if (!empty($file)) {
+                    $userPlaylist[] = "../../uploads/" . $file;
+                }
+            }
+        }
+        $jsonPlaylist = json_encode($userPlaylist);
+
+        // Statistiques et réglages
         $this->addUniqueIP();
         $nombreVisite = $this->getUniqueVisitor();
         $this->addUniqueIPMonthly();
 
-        $settings = $this->entityManager->getRepository(Reglage::class)->find(1);
-        $pages = $this->entityManager->getRepository(Page::class)->findBy([], ['ordrePageAccueil' => 'ASC']);
-        $pageAPropos = $this->entityManager->getRepository(PageAPropos::class)->findOneBy(['id' => 1]);
-        $pageStatus = $this->entityManager->getRepository(PageStatus::class)->findOneBy(['id' => 1]);
-        $pagePresentation = $this->entityManager->getRepository(PagePresentation::class)->findOneBy(['id' => 1]);
-
-        $defilementTexte = $this->entityManager->getRepository(DefilementTexte::class)->find(1);
-
-        // -----------------------------------------------------------
-        // 2. LOGIQUE MULTI-SORTIES (Prochaines ou Dernières)
-        // -----------------------------------------------------------
-
-        // On cherche d'abord s'il y a des sorties aujourd'hui ou dans le futur
-        $sortiesAffichees = $this->entityManager->getRepository(Sortie::class)->createQueryBuilder('s')
-            ->where('s.date >= :now')
-            ->setParameter('now', $now)
-            ->orderBy('s.date', 'ASC')
-            ->getQuery()
-            ->getResult();
-
-        // Si aucune sortie future, on récupère les dernières sorties passées (ex: les sorties d'hier)
-        if (empty($sortiesAffichees)) {
-            // On récupère la date de la toute dernière sortie enregistrée
-            $lastDateResult = $this->entityManager->getRepository(Sortie::class)->createQueryBuilder('s')
-                ->select('s.date')
-                ->where('s.date < :now')
-                ->setParameter('now', $now)
-                ->orderBy('s.date', 'DESC')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult();
-
-            if ($lastDateResult) {
-                $lastDate = $lastDateResult['date']->format('Y-m-d');
-                // On récupère toutes les sorties qui ont eu lieu ce jour-là
-                $sortiesAffichees = $this->entityManager->getRepository(Sortie::class)->createQueryBuilder('s')
-                    ->where('s.date LIKE :lastDate')
-                    ->setParameter('lastDate', $lastDate . '%')
-                    ->orderBy('s.date', 'ASC')
-                    ->getQuery()
-                    ->getResult();
-            }
-        }
-
-        $messageApresSortieHebdomadaire = $this->entityManager->getRepository(MessageApresSortieHebdomadaire::class)->find(1);
-        $messageSortieHebdomadaireADefinir = $this->entityManager->getRepository(MessageSortieHebdomadaireADefinir::class)->find(1);
-
-        $medias = $this->entityManager->getRepository(PhotoVideo::class)->findAll();
-
-        // 3. Render
+        // Render
         $this->render('home/index', [
             'index' => $index,
             'nombreVisite' => $nombreVisite,
-            'settings' => $settings,
-            'pages' => $pages,
-            'pageAPropos' => $pageAPropos,
-            'pageStatus' => $pageStatus,
-            'pagePresentation' => $pagePresentation,
-            'defilementTexte' => $defilementTexte,
-            'sorties' => $sortiesAffichees, // On passe la collection complète
-            'messageApresSortieHebdomadaire' => $messageApresSortieHebdomadaire,
-            'messageSortieHebdomadaireADefinir' => $messageSortieHebdomadaireADefinir,
-            'medias' => $medias
+            'isConnected' => $isConnected,
+            'userName' => $userName,
+            'userEmail' => $userEmail,
+            'menuHtml' => $menuHtml,
+            'jsonPlaylist' => $jsonPlaylist,
         ]);
+    }
+
+    public function renderBootstrapMenu(array $items, int $parentId = 0): void
+    {
+        foreach ($items as $item) {
+            if ($item->getParent() == $parentId) {
+                $hasChildren = false;
+                foreach ($items as $sub) {
+                    if ($sub->getParent() == $item->getId()) {
+                        $hasChildren = true;
+                        break;
+                    }
+                }
+                if ($hasChildren) {
+                    echo '<li class="nav-item dropdown">';
+                    echo '<a class="nav-link dropdown-toggle ' . ($item->getClass() ?? '') . '" href="' . $item->getUrl() . '" role="button" data-bs-toggle="dropdown" aria-expanded="false">' . ucfirst($item->getMenuName()) . '</a>';
+                    echo '<ul class="dropdown-menu shadow border-0 animate slideIn">';
+                    self::renderBootstrapMenu($items, $item->getId());
+                    echo '</ul></li>';
+                } else {
+                    $class = ($parentId == 0) ? 'nav-link' : 'dropdown-item';
+                    echo '<li><a class="' . $class . ' ' . ($item->getClass() ?? '') . '" href="' . $item->getUrl() . '">' . ucfirst($item->getMenuName()) . '</a></li>';
+                }
+            }
+        }
     }
 
     /**
