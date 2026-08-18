@@ -316,6 +316,37 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                             </div>
                         <?php endif; ?>
 
+                        <?php
+                    if (isset($_SESSION['info'])) {
+                        ?>
+                        <div class="success-alert" role="alert">
+    <i class="fa-solid fa-circle-check"></i>
+    <div>
+        <?php echo $_SESSION['info']; ?>
+    </div>
+</div>
+<style>
+    .success-alert {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: rgba(25, 135, 84, 0.15);
+  border: 1px solid rgba(25, 135, 84, 0.4);
+  color: #2ecc71;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.success-alert i {
+  font-size: 1.25rem;
+  color: #2ecc71;
+}
+</style>
+                        <?php
+                    }
+                    ?>
+
                         <div class="input-group">
                             <div class="input-field">
                                 <i class="fa-solid fa-envelope" aria-hidden="true"></i>

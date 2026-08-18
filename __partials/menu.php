@@ -4,39 +4,97 @@ require_once 'db.class.php';
 
 // Initialisation DB
 $obj = new Db();
-// Authentification simplifiée
-$isConnected = isset($_SESSION['email']) && isset($_SESSION['password']);
 
-// --- LOGIQUE DE MISE À JOUR ---
-if ($isConnected && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_update'])) {
-  $newName = $_POST['name'];
-  $newEmail = $_POST['email'];
-  $newPass = $_POST['password'];
-  $userId = $_SESSION['user_id']; // Assure-toi d'avoir l'ID en session
+// Vérification de la connexion
+$userId = $_SESSION['user_id'] ?? null;
+$isConnected = !empty($userId);
 
-  // Mise à jour simple (à adapter selon ta structure de table 'users')
-  // Remplace ton bloc de mise à jour par celui-ci :
-  if (!empty($newPass)) {
-    $hashedPass = password_hash($newPass, PASSWORD_BCRYPT);
-    // On protège les noms de colonnes avec ` `
-    $sql = "UPDATE `users` SET `name` = ?, `email` = ?, `password` = ? WHERE `id_users` = ?";
-    $obj->query2($sql, [$newName, $newEmail, $hashedPass, $userId]);
-  } else {
-    $sql = "UPDATE `users` SET `name` = ?, `email` = ? WHERE `id_users` = ?";
-    $obj->query2($sql, [$newName, $newEmail, $userId]);
-  }
-
-  // Déconnexion forcée après modification
-  session_destroy();
-  header("Location: connexion/login.php");
-  exit();
+// Redirection si l'utilisateur tente de soumettre sans être connecté
+if (!$isConnected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    header("Location: connexion/login.php");
+    exit();
 }
 
-$userName = $isConnected ? $_SESSION['name'] : '';
-$userEmail = $isConnected ? $_SESSION['email'] : '';
+// --- TRAITEMENT DES FORMULAIRES ---
+if ($isConnected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
 
+        // 1. MISE À JOUR DU PROFIL
+        if (isset($_POST['update_profile'])) {
+            $newName  = trim($_POST['name'] ?? '');
+            $newEmail = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
+            $newPass  = $_POST['password'] ?? '';
+
+            if (!empty($newName) && $newEmail) {
+                if (!empty($newPass)) {
+                    $hashedPass = password_hash($newPass, PASSWORD_DEFAULT);
+                    $sql = "UPDATE `users` SET `name` = ?, `email` = ?, `password` = ? WHERE `id_users` = ?";
+                    $obj->query2($sql, [$newName, $newEmail, $hashedPass, $userId]);
+                } else {
+                    $sql = "UPDATE `users` SET `name` = ?, `email` = ? WHERE `id_users` = ?";
+                    $obj->query2($sql, [$newName, $newEmail, $userId]);
+                }
+
+                $_SESSION = array();
+                if (ini_get("session.use_cookies")) {
+                    $params = session_get_cookie_params();
+                    setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+                }
+                session_destroy();
+
+                header("Location: connexion/login.php?updated=1");
+                exit();
+            }
+        }
+
+        // 2. MISE À JOUR DE LA NEWSLETTER
+        if (isset($_POST['update_newsletter'])) {
+            $newsletter = isset($_POST['newsletter']) ? 1 : 0;
+
+            $sql = "UPDATE `users` SET `newsletter` = ? WHERE `id_users` = ?";
+            $obj->query2($sql, [$newsletter, $userId]);
+
+            $_SESSION['newsletter'] = $newsletter;
+
+            header("Location: " . $_SERVER['PHP_SELF'] . "?saved=1");
+            exit();
+        }
+
+    } catch (Throwable $e) {
+        // En cas d'erreur, affiche le détail au lieu d'un écran noir
+        die("Erreur survenue lors du traitement : " . $e->getMessage());
+    }
+}
+
+// --- RÉCUPÉRATION DES DONNÉES EN BDD POUR AFFICHAGE ---
+if ($isConnected) {
+    $userData = $obj->query2("SELECT `name`, `email`, `newsletter` FROM `users` WHERE `id_users` = ?", [$userId]);
+    if (!empty($userData)) {
+        $userName       = $userData[0]['name'];
+        $userEmail      = $userData[0]['email'];
+        $userNewsletter = (int)$userData[0]['newsletter'];
+
+        // Synchronisation des variables de session
+        $_SESSION['name']       = $userName;
+        $_SESSION['email']      = $userEmail;
+        $_SESSION['newsletter'] = $userNewsletter;
+    }
+} else {
+    $userName       = '';
+    $userEmail      = '';
+    $userNewsletter = 0;
+}
+
+// Informations de version du site
+$version      = require __DIR__ . '/version.php';
+$siteVersion  = $version['siteVersion'];
+$appVersion   = $siteVersion . '.' . $version['appBuild'];
+$updated      = $version['updated'];
+$dateAffichee = "{$updated['day']} {$updated['num']} {$updated['month']} {$updated['year']}";
+
+// Menu dynamique
 $menuTable = $isConnected ? 'menu_connect' : 'menu_principal';
-$menuItems = $obj->query("SELECT * FROM $menuTable ORDER BY parent ASC, id ASC");
+$menuItems = $obj->query("SELECT * FROM `$menuTable` ORDER BY `parent` ASC, `id` ASC");
 
 /**
  * Fonction récursive pour générer le menu Bootstrap
@@ -214,6 +272,7 @@ function renderBootstrapMenu($items, $parentId = 0)
     img {
       user-select: none;
       -webkit-user-drag: none;
+    }
 
       /* Modal Custom */
       .modal-content {
@@ -227,62 +286,245 @@ function renderBootstrapMenu($items, $parentId = 0)
 <body>
   <?php if ($isConnected): ?>
     <div id="settings-overlay" class="edit-full-page">
-      <div class="container py-5">
-        <div class="d-flex justify-content-between align-items-center mb-5">
-          <a href="#" class="btn btn-outline-light rounded-pill px-4 shadow-sm">
-            <i class="fa-solid fa-arrow-left me-2"></i> Retour
-          </a>
-          <h2 class="text-white mb-0 fw-600">Paramètres du Compte</h2>
-        </div>
+  <div class="container py-5">
+    
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <a href="#" class="btn btn-outline-light rounded-pill px-4 shadow-sm">
+        <i class="fa-solid fa-arrow-left me-2"></i> Retour
+      </a>
+      <h2 class="text-white mb-0 fw-600">Paramètres du Compte</h2>
+    </div>
 
-        <div class="row justify-content-center">
-          <div class="col-lg-7">
-            <div class="glass-container text-start shadow-lg">
-              <form id="settingsForm" method="POST">
-                <div class="mb-4">
-                  <label class="text-white-50 small fw-bold">NOM D'UTILISATEUR</label>
-                  <input type="text" name="name" class="input-glass" value="<?= htmlspecialchars($userName) ?>" required>
-                </div>
-                <div class="mb-4">
-                  <label class="text-white-50 small fw-bold">ADRESSE EMAIL</label>
-                  <input type="email" name="email" class="input-glass" value="<?= htmlspecialchars($userEmail) ?>"
-                    required>
-                </div>
-                <div class="mb-4">
-                  <label class="text-white-50 small fw-bold">NOUVEAU MOT DE PASSE</label>
-                  <input type="password" name="password" class="input-glass" placeholder="••••••••">
-                  <small class="text-white-50">Laissez vide pour conserver l'actuel.</small>
-                </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="glass-container text-start shadow-lg p-4 p-md-5">
+          
+          <!-- FORMULAIRE 1 : INFORMATIONS DE COMPTE (AVEC DÉCONNEXION) -->
+          <form id="profileForm" action="" method="POST">
+            <h5 class="text-white mb-4"><i class="fa-solid fa-user-gear me-2 text-info"></i>Profil & Sécurité</h5>
 
-                <button type="button" class="btn-cosmic-glass" data-bs-toggle="modal" data-bs-target="#confirmModal">
-                  <i class="fa-solid fa-rotate me-2"></i> Synchroniser les données
-                </button>
+            <div class="mb-4">
+              <label for="userNameInput" class="text-white-50 small fw-bold mb-2">NOM D'UTILISATEUR</label>
+              <input type="text" id="userNameInput" name="name" class="input-glass form-control text-white" value="<?= htmlspecialchars($userName ?? '') ?>" required>
+            </div>
 
-                <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content shadow-lg">
-                      <div class="modal-body text-center p-5">
-                        <i class="fa-solid fa-triangle-exclamation text-warning mb-4" style="font-size: 3rem;"></i>
-                        <h4 class="text-white mb-3">Attention !</h4>
-                        <p class="text-white-50 mb-4">La modification de vos informations système entraînera une
-                          <b>déconnexion immédiate</b> pour synchroniser votre terminal.
-                        </p>
-                        <div class="d-grid gap-2">
-                          <button type="submit" name="confirm_update"
-                            class="btn btn-primary rounded-pill py-2 fw-bold">Confirmer et se déconnecter</button>
-                          <button type="button" class="btn btn-link text-white-50"
-                            data-bs-dismiss="modal">Annuler</button>
-                        </div>
-                      </div>
+            <div class="mb-4">
+              <label for="userEmailInput" class="text-white-50 small fw-bold mb-2">ADRESSE EMAIL</label>
+              <input type="email" id="userEmailInput" name="email" class="input-glass form-control text-white" value="<?= htmlspecialchars($userEmail ?? '') ?>" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="userPasswordInput" class="text-white-50 small fw-bold mb-2">NOUVEAU MOT DE PASSE</label>
+              <input type="password" id="userPasswordInput" name="password" class="input-glass form-control text-white" placeholder="••••••••" autocomplete="new-password">
+              <small class="text-white-50 mt-1 d-block">Laissez vide pour conserver le mot de passe actuel.</small>
+            </div>
+
+            <!-- Bouton déclenchant la modal de déconnexion -->
+            <button type="button" class="btn btn-cosmic-glass w-100 py-3 mb-4 fw-bold text-white" data-bs-toggle="modal" data-bs-target="#confirmModal">
+              <i class="fa-solid fa-rotate me-2"></i> Mettre à jour le profil
+            </button>
+
+            <!-- Modal de confirmation -->
+            <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content glass-container shadow-lg border-0">
+                  <div class="modal-body text-center p-4 p-md-5">
+                    <i class="fa-solid fa-triangle-exclamation text-warning mb-4" style="font-size: 3rem;"></i>
+                    <h4 class="text-white mb-3" id="confirmModalLabel">Attention !</h4>
+                    <p class="text-white-50 mb-4">
+                      La modification de vos identifiants entraînera une <b>déconnexion immédiate</b> pour des raisons de sécurité.
+                    </p>
+                    <div class="d-grid gap-2">
+                      <button type="submit" name="update_profile" class="btn btn-primary rounded-pill py-2 fw-bold">
+                        Confirmer et se déconnecter
+                      </button>
+                      <button type="button" class="btn btn-link text-white-50" data-bs-dismiss="modal">
+                        Annuler
+                      </button>
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
+            </div>
+          </form>
+
+          <?php if ($_SESSION['user_id'] == 1): ?>
+            <hr class="border-secondary my-5">
+
+          <?php
+session_start();
+
+// Génération d'un token dynamique unique s'il n'existe pas encore
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+$token = $_SESSION['csrf_token'];
+?>
+
+<a href="/api/scripts.php?token=<?php echo urlencode($token); ?>" class="btn-modern">
+  <span class="btn-content">
+    <i class="fa-solid fa-sliders"></i>
+    <span>Centre de contrôle</span>
+  </span>
+  <i class="fa-solid fa-arrow-right btn-arrow"></i>
+</a>
+<style>
+  /* ==========================================================================
+   Bouton Modern (Grand format + Alignement Flexbox parfait)
+   ========================================================================== */
+
+.btn-modern {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  
+  /* Dimensions agrandies */
+  padding: 1.1rem 2.2rem;
+  border-radius: 18px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+  
+  /* Apparence et couleurs */
+  color: #ffffff;
+  text-decoration: none;
+  background: linear-gradient(135deg, rgba(13, 202, 240, 0.15) 0%, rgba(13, 110, 253, 0.25) 100%);
+  border: 1px solid rgba(13, 202, 240, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(13, 202, 240, 0.15);
+  
+  /* Effet verre dépoli */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  /* Transitions et rendu */
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Effet de brillance au survol */
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+/* Alignement du conteneur texte + icône de gauche */
+.btn-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Correction spécifique des icônes FontAwesome (alignement vertical) */
+.btn-icon,
+.btn-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.btn-icon {
+  color: #0dcaf0;
+  font-size: 1.35rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-arrow {
+  font-size: 1.1rem;
+  opacity: 0.7;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* ==========================================================================
+   États d'interaction (Hover, Active, Focus)
+   ========================================================================== */
+
+.btn-modern:hover {
+  color: #ffffff;
+  border-color: rgba(13, 202, 240, 0.8);
+  background: linear-gradient(135deg, rgba(13, 202, 240, 0.3) 0%, rgba(13, 110, 253, 0.4) 100%);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(13, 202, 240, 0.4);
+}
+
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+.btn-modern:hover .btn-icon {
+  transform: scale(1.2) rotate(-10deg);
+}
+
+.btn-modern:hover .btn-arrow {
+  opacity: 1;
+  transform: translateX(6px);
+}
+
+.btn-modern:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(13, 202, 240, 0.25);
+}
+</style>
+<?php endif; ?>
+
+          <hr class="border-secondary my-5">
+
+          <!-- FORMULAIRE 2 : PREFERENCES NEWSLETTER (SANS DÉCONNEXION) -->
+          <form id="newsletterForm" action="" method="POST">
+            <h5 class="text-white mb-4"><i class="fa-solid fa-envelope-open-text me-2 text-info"></i>Abonnements</h5>
+
+            <div class="mb-4">
+              <div class="form-check form-switch mb-2" style="display: flex; justify-content: space-between; align-items: center;">
+                <input class="form-check-input" type="checkbox" role="switch" id="newsletterCheck" name="newsletter" value="1" <?= !empty($userNewsletter) ? 'checked' : '' ?>>
+                <label class="form-check-label text-white fw-bold" for="newsletterCheck">
+                  Newsletter & Mises à jour Meteastro
+                </label>
+              </div>
+              <small class="text-white-50 d-block ms-4">
+                Recevez les actualités astronomiques et les annonces de fonctionnalités (version 2.5.0+).
+              </small>
+            </div>
+
+            <button type="submit" name="update_newsletter" class="btn btn-outline-info w-100 py-2 fw-bold mb-4">
+              <i class="fa-solid fa-floppy-disk me-2"></i> Enregistrer les préférences
+            </button>
+          </form>
+
+          <hr class="border-secondary my-5">
+
+          <!-- WIDGET DE VERSION (INFORMATIF) -->
+          <div class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary d-flex justify-content-between align-items-center">
+            <div>
+              <span class="text-white-50 small d-block">VERSION INSTALLÉE</span>
+              <span id="currentVersionDisplay" class="text-white fw-bold">v<?= htmlspecialchars($siteVersion ?? '1.0.0') ?></span>
+            </div>
+            <div id="versionStatusBadge">
+              <span class="badge bg-secondary">Vérification en cours...</span>
             </div>
           </div>
+
+          <input type="hidden" id="clientVersionInput" value="<?= htmlspecialchars($siteVersion ?? '1.0.0') ?>">
+
         </div>
       </div>
     </div>
+  </div>
+</div>
   <?php endif; ?>
 
   <div class="info-bar text-center">
@@ -1801,6 +2043,57 @@ function renderBootstrapMenu($items, $parentId = 0)
 
     // Protection images
     document.addEventListener('contextmenu', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+  const currentVersionInput = document.getElementById('clientVersionInput');
+  const badgeContainer = document.getElementById('versionStatusBadge');
+
+  if (!badgeContainer) return;
+
+  const currentVersion = currentVersionInput?.value || '0.0.0';
+
+  try {
+    const response = await fetch('/api/get-latest-version.php');
+
+    if (!response.ok) {
+      throw new Error(`Erreur serveur HTTP : ${response.status}`);
+    }
+
+    const data = await response.json();
+    const { version: latestVersion = '1.0.0' } = data || {};
+
+    if (isVersionOutdated(currentVersion, latestVersion)) {
+      badgeContainer.innerHTML = `
+        <span class="badge bg-warning text-dark">
+          <i class="fa-solid fa-triangle-exclamation me-1"></i> Mise à jour v${latestVersion} disponible
+        </span>`;
+    } else {
+      badgeContainer.innerHTML = `
+        <span class="badge bg-success">
+          <i class="fa-solid fa-check me-1"></i> À jour
+        </span>`;
+    }
+  } catch (error) {
+    console.error('Erreur lors de la vérification de version :', error);
+    badgeContainer.innerHTML = `<span class="badge bg-secondary">Inconnu</span>`;
+  }
+});
+
+// Fonction utilitaire de comparaison de versions semver
+function isVersionOutdated(current, latest) {
+  const c = current.split('.').map(Number);
+  const l = latest.split('.').map(Number);
+
+  for (let i = 0; i < 3; i++) {
+    const currentNum = c[i] || 0;
+    const latestNum = l[i] || 0;
+
+    if (latestNum > currentNum) return true;
+    if (latestNum < currentNum) return false;
+  }
+  return false;
+}
   </script>
 </body>
 

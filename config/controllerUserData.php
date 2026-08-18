@@ -1,5 +1,7 @@
 <?php
 
+use function Safe\session_destroy;
+
 session_start();
 require "connexion_bdd.php"; // Assurez-vous que ce fichier contient la fonction createMysqliConnection()
 
@@ -103,7 +105,10 @@ if (isset($_POST['check'])) {
         if ($update_res) {
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
-            header('location: /index.php');
+            session_destroy();
+            session_start();
+            $_SESSION['info'] = "Vous pouvez maintenant vous connecter à votre compte.";
+            header('location: /connexion/login.php');
             exit();
         } else {
             $errors['otp-error'] = "Échec lors de la mise à jour du code !";
@@ -129,6 +134,7 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $fetch_pass)) {
             $_SESSION['email'] = $email;
             $_SESSION['name'] = $fetch['name'];
+            $_SESSION['newsletter'] = $fetch['newsletter'] ?? 0;
             $_SESSION['user_id'] = $fetch['id_users'];
             $status = $fetch['status'];
             if ($status == 'verified') {

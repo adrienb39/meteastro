@@ -225,7 +225,6 @@ $jsonPlaylist = json_encode($userPlaylist);
                 $appVersion  = $siteVersion . '.' . $version['appBuild'];
                 $updated = $version['updated'];
                 $dateAffichee = "{$updated['day']} {$updated['num']} {$updated['month']} {$updated['year']}";
-
                 ?>
                 <div class="col-md-4 text-center">
                     <div class="stats-card p-3 rounded-4">

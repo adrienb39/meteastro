@@ -1,4 +1,118 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once __DIR__ . '/__partials/db.class.php';
+
+$userId = $_SESSION['user_id'] ?? null;
+
+if ($userId) {
+    $obj = new Db();
+    $userData = $obj->query2("SELECT `newsletter` FROM `users` WHERE `id_users` = ?", [$userId]);
+
+    // Si l'utilisateur existe et que le champ 'newsletter' vaut stricte NULL
+    if (!empty($userData) && is_null($userData[0]['newsletter'])) {
+        header("Location: /connexion/welcome-newsletter.php");
+        exit(); // Bloque la suite de l'exécution d'index.php
+    }
+}
+?>
+<?php
+session_start();
+require_once __DIR__ . '/__partials/db.class.php';
+
+// Initialisation DB
+$obj = new Db();
+
+// Vérification de la connexion
+$userId = $_SESSION['user_id'] ?? null;
+$isConnected = !empty($userId);
+
+// Redirection si l'utilisateur tente de soumettre sans être connecté
+if (!$isConnected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    header("Location: connexion/login.php");
+    exit();
+}
+
+// --- TRAITEMENT DES FORMULAIRES ---
+if ($isConnected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+
+        // 1. MISE À JOUR DU PROFIL
+        if (isset($_POST['update_profile'])) {
+            $newName = trim($_POST['name'] ?? '');
+            $newEmail = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
+            $newPass = $_POST['password'] ?? '';
+
+            if (!empty($newName) && $newEmail) {
+                if (!empty($newPass)) {
+                    $hashedPass = password_hash($newPass, PASSWORD_DEFAULT);
+                    $sql = "UPDATE `users` SET `name` = ?, `email` = ?, `password` = ? WHERE `id_users` = ?";
+                    $obj->query2($sql, [$newName, $newEmail, $hashedPass, $userId]);
+                } else {
+                    $sql = "UPDATE `users` SET `name` = ?, `email` = ? WHERE `id_users` = ?";
+                    $obj->query2($sql, [$newName, $newEmail, $userId]);
+                }
+
+                $_SESSION = array();
+                if (ini_get("session.use_cookies")) {
+                    $params = session_get_cookie_params();
+                    setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+                }
+                session_destroy();
+
+                header("Location: connexion/login.php?updated=1");
+                exit();
+            }
+        }
+
+        // 2. MISE À JOUR DE LA NEWSLETTER
+        if (isset($_POST['update_newsletter'])) {
+            $newsletter = isset($_POST['newsletter']) ? 1 : 0;
+
+            $sql = "UPDATE `users` SET `newsletter` = ? WHERE `id_users` = ?";
+            $obj->query2($sql, [$newsletter, $userId]);
+
+            $_SESSION['newsletter'] = $newsletter;
+
+            header("Location: " . $_SERVER['PHP_SELF'] . "?saved=1");
+            exit();
+        }
+
+    } catch (Throwable $e) {
+        // En cas d'erreur, affiche le détail au lieu d'un écran noir
+        die("Erreur survenue lors du traitement : " . $e->getMessage());
+    }
+}
+
+// --- RÉCUPÉRATION DES DONNÉES EN BDD POUR AFFICHAGE ---
+if ($isConnected) {
+    $userData = $obj->query2("SELECT `name`, `email`, `newsletter` FROM `users` WHERE `id_users` = ?", [$userId]);
+    if (!empty($userData)) {
+        $userName = $userData[0]['name'];
+        $userEmail = $userData[0]['email'];
+        $userNewsletter = (int) $userData[0]['newsletter'];
+
+        // Synchronisation des variables de session
+        $_SESSION['name'] = $userName;
+        $_SESSION['email'] = $userEmail;
+        $_SESSION['newsletter'] = $userNewsletter;
+    }
+} else {
+    $userName = '';
+    $userEmail = '';
+    $userNewsletter = 0;
+}
+
+// Informations de version du site
+$version = require __DIR__ . '/__partials/version.php';
+$siteVersion = $version['siteVersion'];
+$appVersion = $siteVersion . '.' . $version['appBuild'];
+$updated = $version['updated'];
+$dateAffichee = "{$updated['day']} {$updated['num']} {$updated['month']} {$updated['year']}";
+?>
+<?php
 session_start();
 require_once "config/controllerUserData.php";
 $db = createPdoConnection();
@@ -555,7 +669,9 @@ function getLatestNews(PDO $db, string $table, int $limit = 5): array
                                                             <div class="col-md-8">
                                                                 <div class="d-flex align-items-center gap-2 mb-2">
                                                                     <?php if ($count === 0): ?>
-                                                                        <span class="badge bg-success text-uppercase fw-bold px-2 py-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">Dernier signal</span>
+                                                                        <span class="badge bg-success text-uppercase fw-bold px-2 py-1"
+                                                                            style="font-size: 0.65rem; letter-spacing: 0.5px;">Dernier
+                                                                            signal</span>
                                                                     <?php endif; ?>
                                                                 </div>
 
