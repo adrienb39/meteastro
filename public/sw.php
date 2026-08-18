@@ -2,7 +2,7 @@
 header('Content-Type: application/javascript');
  
 // Lecture de la version centralisée (siteVersion + appBuild)
-$version = require __DIR__ . '/__partials/version.php';
+$version = require __DIR__ . '/version.php';
 $cacheName = $version['siteVersion'] . '.' . $version['appBuild'];
 ?>
 const CACHE_NAME = '<?= $cacheName ?>';
@@ -84,8 +84,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: data.icon || '/ressources/logo.png',
-    badge: data.badge || '/ressources/logo.png',
+    icon: data.icon || '/assets/images/logo.png',
+    badge: data.badge || '/assets/images/logo.png',
     vibrate: [200, 100, 200],
     requireInteraction: false,
     data: {

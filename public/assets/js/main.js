@@ -3,8 +3,8 @@
    ========================================================================== */
 let deferredPrompt;
 const CONFIG = {
-  icon: '/ressources/logo.png',            // Icône principale (Pleine couleur)
-  badge: '/ressources/logo.png',           // Badge monochrome pour la barre d'état Android
+  icon: '/assets/images/logo.png',            // Icône principale (Pleine couleur)
+  badge: '/assets/images/logo.png',           // Badge monochrome pour la barre d'état Android
   storageKey: 'notif_onboarding_dismissed'
 };
 

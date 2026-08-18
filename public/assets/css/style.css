@@ -80,24 +80,28 @@ img { user-select: none; -webkit-user-drag: none; max-width: 100%; pointer-event
 
 /* --- 4. NAVIGATION --- */
 .navbar {
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(12px);
+      background: var(--glass-bg) !important;
+      backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
     position: sticky;
     top: 0;
     z-index: 1000;
-}
+    }
 
 .nav-link {
-    color: var(--text-main) !important;
-    font-weight: 600;
+      color: var(--text-main) !important;
+    font-weight: 600 !important;
     padding: 0.6rem 1.25rem !important;
     border-radius: 10px;
     transition: var(--transition);
-}
+      margin: 0 5px;
+    }
 
-.nav-link:hover { background: rgba(59, 130, 246, 0.1); color: var(--primary) !important; }
+.nav-link:hover {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--primary) !important;
+    }
 
 /* --- 5. FORMULAIRE DE CONTACT --- */
 .main { max-width: 900px; margin: 4rem auto; padding: 0 1.5rem; text-align: center; }
@@ -383,16 +387,4 @@ body.lightmode .lens-flare {
     20% { opacity: 0.5; }
     80% { opacity: 0.5; }
     100% { transform: translate(40px, -60px); opacity: 0; }
-}
-
-/* Conteneur pour s'assurer que rien ne dépasse */
-#star-field {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    overflow: hidden;
-    pointer-events: none;
 }
