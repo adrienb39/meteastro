@@ -35,10 +35,10 @@ class Meteorologie
     private ?string $musicFile;
 
     #[ORM\Column(name: 'show_images', type: "boolean")]
-    private bool $showImages = 1;
+    private bool $showImages = true;
 
     #[ORM\Column(name: 'enable_music', type: "boolean")]
-    private bool $enableMusic = 1;
+    private bool $enableMusic = true;
 
     #[ORM\Column(name: 'background_mode', type: "string", length: 20)]
     private string $backgroundMode = 'animated';
@@ -47,7 +47,7 @@ class Meteorologie
     private ?string $hudFeedId;
 
     #[ORM\Column(name: 'verified', type: "boolean")]
-    private bool $verified;
+    private bool $verified = false;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'id_users', referencedColumnName: 'id_users')]

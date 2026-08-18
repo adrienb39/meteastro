@@ -3168,78 +3168,82 @@
         </div>
     </div>
     <div class="cookie-wrapper">
-    
-    <aside id="cookie-banner" class="cookie-banner" role="status" aria-labelledby="banner-title" style="display: none;">
-        <div class="cookie-container">
-            <header>
-                <div class="cookie-icon" aria-hidden="true">🍪</div>
-                <h2 id="banner-title">Gestion des cookies</h2>
-            </header>
-            
-            <div class="cookie-content">
-                <p>
-                    Meteastro utilise des cookies pour optimiser votre navigation stellaire. 
-                    Certains sont nécessaires au fonctionnement du vaisseau, d'autres nous aident à cartographier votre expérience. 
-                    <a href="#" id="openTerms" class="cookie-link">Politique de confidentialité</a>.
-                </p>
-            </div>
-            
-            <div class="cookie-actions">
-                <button id="accept-all" class="cookie-btn btn-accept">Accepter tout</button>
-                <button id="reject-all" class="cookie-btn btn-reject">Refuser</button>
-                <button id="manage-btn" class="cookie-btn btn-manage">Paramétrer</button>
-            </div>
-        </div>
-    </aside>
 
-</div>
+        <aside id="cookie-banner" class="cookie-banner" role="status" aria-labelledby="banner-title"
+            style="display: none;">
+            <div class="cookie-container">
+                <header>
+                    <div class="cookie-icon" aria-hidden="true">🍪</div>
+                    <h2 id="banner-title">Gestion des cookies</h2>
+                </header>
 
-<div id="cookie-modal" class="cookie-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display: none;">
-    <div class="cookie-modal-content">
-        <button id="close-modal" class="btn-close-modal" aria-label="Fermer la fenêtre">&times;</button>
-        
-        <header class="modal-header">
-            <h3 id="modal-title">Préférences spatiales</h3>
-            <p class="modal-subtitle">Choisissez les données que vous souhaitez partager avec la station.</p>
-        </header>
-        
-        <div class="cookie-settings-list">
-            <div class="setting-item">
-                <div class="setting-info">
-                    <span class="setting-name">Cookies Techniques</span>
-                    <span class="setting-desc">Indispensables pour la connexion et la sécurité.</span>
+                <div class="cookie-content">
+                    <p>
+                        Meteastro utilise des cookies pour optimiser votre navigation stellaire.
+                        Certains sont nécessaires au fonctionnement du vaisseau, d'autres nous aident à cartographier
+                        votre expérience.
+                        <a href="#" id="openTerms" class="cookie-link">Politique de confidentialité</a>.
+                    </p>
                 </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="check-essential" checked disabled>
+
+                <div class="cookie-actions">
+                    <button id="accept-all" class="cookie-btn btn-accept">Accepter tout</button>
+                    <button id="reject-all" class="cookie-btn btn-reject">Refuser</button>
+                    <button id="manage-btn" class="cookie-btn btn-manage">Paramétrer</button>
                 </div>
             </div>
+        </aside>
 
-            <div class="setting-item">
-                <div class="setting-info">
-                    <span class="setting-name">Mesures d'Audience</span>
-                    <span class="setting-desc">Nous permettent d'améliorer les instruments de bord.</span>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="check-analytics">
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-info">
-                    <span class="setting-name">Personnalisation</span>
-                    <span class="setting-desc">Contenu adapté à vos précédentes explorations.</span>
-                </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="check-ads">
-                </div>
-            </div>
-        </div>
-
-        <footer class="modal-footer">
-            <button id="save-settings" class="cookie-btn btn-save">Enregistrer la configuration</button>
-        </footer>
     </div>
-</div>
+
+    <div id="cookie-modal" class="cookie-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title"
+        style="display: none;">
+        <div class="cookie-modal-content">
+            <button id="close-modal" class="btn-close-modal" aria-label="Fermer la fenêtre">&times;</button>
+
+            <header class="modal-header">
+                <h3 id="modal-title">Préférences spatiales</h3>
+                <p class="modal-subtitle">Choisissez les données que vous souhaitez partager avec la station.</p>
+            </header>
+
+            <div class="cookie-settings-list">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-name">Cookies Techniques</span>
+                        <span class="setting-desc">Indispensables pour la connexion et la sécurité.</span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="check-essential" checked
+                            disabled>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-name">Mesures d'Audience</span>
+                        <span class="setting-desc">Nous permettent d'améliorer les instruments de bord.</span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="check-analytics">
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-name">Personnalisation</span>
+                        <span class="setting-desc">Contenu adapté à vos précédentes explorations.</span>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="check-ads">
+                    </div>
+                </div>
+            </div>
+
+            <footer class="modal-footer">
+                <button id="save-settings" class="cookie-btn btn-save">Enregistrer la configuration</button>
+            </footer>
+        </div>
+    </div>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/footer.js"></script>
     <script src="/assets/js/app.js"></script>
@@ -3387,81 +3391,90 @@
         });
     </script>
     <script>
-        document.getElementById('contactForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        document.getElementById('contactForm')?.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-            const form = this;
-            const btn = document.getElementById('btnSubmit');
-            const originalText = btn.innerHTML; // Utilisation de innerHTML au cas où il y aurait des icônes
+    const form = e.currentTarget;
+    const btn = document.getElementById('btnSubmit');
+    const originalText = btn.innerHTML;
 
-            // 1. UI : Verrouillage du bouton (État "Propulsion")
-            btn.disabled = true;
-            btn.style.opacity = "0.7";
-            btn.innerHTML = `<span class="spinner"></span> TRANSMISSION EN COURS...`;
+    // Helper pour gérer l'état du bouton d'envoi
+    const setLoading = (isLoading) => {
+        btn.disabled = isLoading;
+        btn.style.opacity = isLoading ? '0.7' : '1';
+        btn.innerHTML = isLoading 
+            ? '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>TRANSMISSION EN COURS...' 
+            : originalText;
+    };
 
-            try {
-                const formData = new FormData(form);
+    setLoading(true);
 
-                const response = await fetch('contacts.php', {
-                    method: 'POST',
-                    body: formData,
-                    // Optionnel : ajouter un cache 'no-cache' pour éviter des soucis de navigateur
-                    cache: 'no-cache'
-                });
+    try {
+        const formData = new FormData(form);
+        formData.append('send_signal', '1');
 
-                // 2. Vérification de la réponse HTTP (404, 500, etc.)
-                if (!response.ok) {
-                    throw new Error(`Erreur serveur (${response.status})`);
-                }
-
-                // 3. Récupération sécurisée du texte pour diagnostiquer le JSON
-                const rawText = await response.text();
-                let res;
-
-                try {
-                    res = JSON.parse(rawText);
-                } catch (parseError) {
-                    console.error("Réponse brute du serveur :", rawText);
-                    throw new Error("La réponse du serveur est corrompue (Format JSON invalide).");
-                }
-
-                // 4. Traitement du résultat métier
-                if (res.status === 'success') {
-                    await Swal.fire({
-                        icon: 'success',
-                        title: 'Signal reçu !',
-                        text: res.message,
-                        background: '#0f172a', // Assorti au thème sombre/astro
-                        color: '#f1f5f9',
-                        confirmButtonColor: '#38bdf8',
-                        timer: 5000
-                    });
-                    form.reset();
-                } else {
-                    // Erreur envoyée volontairement par le PHP (ex: champs vides)
-                    throw new Error(res.message || 'Le centre de contrôle a rejeté le signal.');
-                }
-
-            } catch (err) {
-                // 5. Gestion des erreurs (Réseau, JSON corrompu ou erreur PHP)
-                console.error("Erreur de transmission :", err);
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Interférence détectée',
-                    text: err.message,
-                    background: '#0f172a',
-                    color: '#f1f5f9',
-                    confirmButtonColor: '#ef4444'
-                });
-
-            } finally {
-                // 6. Restauration du bouton
-                btn.disabled = false;
-                btn.style.opacity = "1";
-                btn.innerHTML = originalText;
+        // 1. Envoi de la requête au contrôleur
+        const response = await fetch('/', {
+            method: 'POST',
+            body: formData,
+            cache: 'no-cache',
+            headers: {
+                'Accept': 'application/json'
             }
         });
+
+        // 2. Contrôle du statut HTTP
+        if (!response.ok) {
+            throw new Error(`Erreur réseau HTTP (${response.status})`);
+        }
+
+        // 3. Extraction et validation du JSON
+        const rawText = await response.text();
+        let result;
+
+        try {
+            result = JSON.parse(rawText);
+        } catch (jsonError) {
+            console.error('Réponse brute non-JSON reçue du serveur :', rawText);
+            throw new Error('La réponse du serveur est corrompue (Format JSON invalide).');
+        }
+
+        // 4. Traitement du retour métier PHP
+        if (result.status === 'success') {
+            await Swal.fire({
+                icon: 'success',
+                title: 'Signal reçu !',
+                text: result.message || 'Transmission réussie.',
+                background: '#0f172a',
+                color: '#f1f5f9',
+                confirmButtonColor: '#38bdf8',
+                timer: 4000,
+                timerProgressBar: true
+            });
+
+            form.reset();
+        } else {
+            throw new Error(result.message || 'Le centre de contrôle a rejeté le signal.');
+        }
+
+    } catch (error) {
+        // 5. Capture et affichage des erreurs (Réseau, JSON ou PHP)
+        console.error('Échec de transmission :', error);
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Interférence détectée',
+            text: error.message,
+            background: '#0f172a',
+            color: '#f1f5f9',
+            confirmButtonColor: '#ef4444'
+        });
+
+    } finally {
+        // 6. Restauration systématique du bouton
+        setLoading(false);
+    }
+});
     </script>
 
     <script>
