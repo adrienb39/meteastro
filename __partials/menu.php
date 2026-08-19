@@ -349,7 +349,7 @@ function renderBootstrapMenu($items, $parentId = 0)
             </div>
           </form>
 
-          <?php if ($_SESSION['user_id'] == 1): ?>
+          <?php if ($_SESSION['email'] == 'adrienb39@yahoo.com'): ?>
             <hr class="border-secondary my-5">
 
           <?php
