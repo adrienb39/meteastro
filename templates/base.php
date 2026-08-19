@@ -3078,7 +3078,7 @@
                         <div class="pwa-card-icon"><i class="fa-solid fa-users"></i></div>
                         <div class="pwa-card-meta">
                             <span class="pwa-meta-label">Fréquentation</span>
-                            <span class="pwa-meta-value"><?php include "counter.php"; ?></span>
+                            <span class="pwa-meta-value"><?= $nombreVisite ?></span>
                         </div>
                     </div>
 
