@@ -1,5 +1,7 @@
 <?php
 
+use Doctrine\ORM\EntityManager;
+
 // Définir le chemin absolu vers le dossier 'ffct-challenge'
 define('ROOT_PATH', realpath(__DIR__ . '/..'));
 
@@ -51,6 +53,6 @@ foreach ($routes as $routePattern => $controllerAction) {
 
 // Si aucune route ne correspond, afficher une erreur 404
 if (!$routeFound) {
-    $errorController = new \App\Controller\ErrorController();
+    $errorController = new \App\Controller\ErrorController($entityManager);
     $errorController->error404();
 }

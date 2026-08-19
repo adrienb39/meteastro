@@ -82,8 +82,8 @@ class HomeController extends AbstractController
         $articlesMeteorologie = $this->entityManager->getRepository(Meteorologie::class)->findBy(['verified' => true]);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_signal'])) {
-        $this->contactProcess();
-    }
+            $this->contactProcess();
+        }
 
         // Render
         $this->render('home/index', [
@@ -124,64 +124,64 @@ class HomeController extends AbstractController
     }
 
     public function contactProcess(): void
-{
-    // Fixe l'en-tête de réponse en JSON
-    header('Content-Type: application/json; charset=utf-8');
+    {
+        // Fixe l'en-tête de réponse en JSON
+        header('Content-Type: application/json; charset=utf-8');
 
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        $this->sendJsonResponse('error', 'Méthode non autorisée.');
-    }
-
-    // 1. Récupération et Nettoyage des données
-    $pseudo = filter_input(INPUT_POST, 'pseudo', FILTER_SANITIZE_SPECIAL_CHARS);
-    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_SPECIAL_CHARS);
-
-    // 2. Validations
-    if (!$pseudo || !$email || !$message) {
-        $this->sendJsonResponse('error', 'Données invalides ou email mal formé.');
-    }
-
-    // Vérification DNS du domaine de l'email
-    $domain = substr(strrchr($email, "@"), 1);
-    if (!checkdnsrr($domain, "MX")) {
-        $this->sendJsonResponse('error', "La destination @{$domain} est introuvable dans la galaxie (Email inexistant).");
-    }
-
-    // 3. Envoi via PHPMailer
-    $mail = new PHPMailer(true);
-
-    try {
-        // Configuration Serveur SMTP
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'dvmta39@gmail.com';
-        $mail->Password   = 'pnnikshkztituxfj'; // Idéalement, à passer via $_ENV['SMTP_PASS']
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
-        $mail->CharSet    = 'UTF-8';
-        $mail->SMTPDebug  = 0;
-
-        // Destinataires
-        $mail->setFrom('dvmta39@gmail.com', 'Meteastro - Station de Contrôle');
-        $mail->addAddress('dvmta39@gmail.com');
-        $mail->addReplyTo($email, $pseudo);
-
-        // Intégration du Logo
-        $logoPath = __DIR__ . '/../../public/assets/images/logo.png'; // Ajuster le chemin selon votre structure
-        if (file_exists($logoPath)) {
-            $mail->addEmbeddedImage($logoPath, 'meteastro_logo');
-            $logoSrc = 'cid:meteastro_logo';
-        } else {
-            $logoSrc = 'https://meteastro/assets/images/logo.png';
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->sendJsonResponse('error', 'Méthode non autorisée.');
         }
 
-        // Contenu du mail
-        $mail->isHTML(true);
-        $mail->Subject = "🪐 [METEASTRO] Transmission de {$pseudo}";
+        // 1. Récupération et Nettoyage des données
+        $pseudo = filter_input(INPUT_POST, 'pseudo', FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $mail->Body = "
+        // 2. Validations
+        if (!$pseudo || !$email || !$message) {
+            $this->sendJsonResponse('error', 'Données invalides ou email mal formé.');
+        }
+
+        // Vérification DNS du domaine de l'email
+        $domain = substr(strrchr($email, "@"), 1);
+        if (!checkdnsrr($domain, "MX")) {
+            $this->sendJsonResponse('error', "La destination @{$domain} est introuvable dans la galaxie (Email inexistant).");
+        }
+
+        // 3. Envoi via PHPMailer
+        $mail = new PHPMailer(true);
+
+        try {
+            // Configuration Serveur SMTP
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'dvmta39@gmail.com';
+            $mail->Password = 'pnnikshkztituxfj'; // Idéalement, à passer via $_ENV['SMTP_PASS']
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+            $mail->CharSet = 'UTF-8';
+            $mail->SMTPDebug = 0;
+
+            // Destinataires
+            $mail->setFrom('dvmta39@gmail.com', 'Meteastro - Station de Contrôle');
+            $mail->addAddress('dvmta39@gmail.com');
+            $mail->addReplyTo($email, $pseudo);
+
+            // Intégration du Logo
+            $logoPath = __DIR__ . '/../../public/assets/images/logo.png'; // Ajuster le chemin selon votre structure
+            if (file_exists($logoPath)) {
+                $mail->addEmbeddedImage($logoPath, 'meteastro_logo');
+                $logoSrc = 'cid:meteastro_logo';
+            } else {
+                $logoSrc = 'https://meteastro/assets/images/logo.png';
+            }
+
+            // Contenu du mail
+            $mail->isHTML(true);
+            $mail->Subject = "🪐 [METEASTRO] Transmission de {$pseudo}";
+
+            $mail->Body = "
         <div style='background-color: #020617; padding: 40px 10px; font-family: Arial, sans-serif;'>
             <table align='center' border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px; background-color: #0f172a; border-radius: 12px; border: 1px solid #1e293b; color: #f1f5f9;'>
                 <tr>
@@ -209,41 +209,41 @@ class HomeController extends AbstractController
             </table>
         </div>";
 
-        $mail->AltBody = "Message de {$pseudo} ({$email}) : \n\n {$message}";
+            $mail->AltBody = "Message de {$pseudo} ({$email}) : \n\n {$message}";
 
-        $mail->send();
+            $mail->send();
 
-        $this->sendJsonResponse('success', 'Signal propulsé avec succès vers Meteastro !');
+            $this->sendJsonResponse('success', 'Signal propulsé avec succès vers Meteastro !');
 
-    } catch (Exception $e) {
-        error_log("PHPMailer Error: " . $mail->ErrorInfo);
-        $this->sendJsonResponse('error', 'Le signal a été dévié par une anomalie (Erreur d\'envoi).');
-    }
-}
-
-/**
- * Helper privé pour l'envoi de réponses JSON propres
- */
-private function sendJsonResponse(string $status, string $message): void
-{
-    // 1. Nettoie tout texte, espace ou HTML généré avant cette ligne
-    if (ob_get_length()) {
-        ob_clean();
+        } catch (Exception $e) {
+            error_log("PHPMailer Error: " . $mail->ErrorInfo);
+            $this->sendJsonResponse('error', 'Le signal a été dévié par une anomalie (Erreur d\'envoi).');
+        }
     }
 
-    // 2. Définit l'en-tête HTTP
-    header('Content-Type: application/json; charset=utf-8');
+    /**
+     * Helper privé pour l'envoi de réponses JSON propres
+     */
+    private function sendJsonResponse(string $status, string $message): void
+    {
+        // 1. Nettoie tout texte, espace ou HTML généré avant cette ligne
+        if (ob_get_length()) {
+            ob_clean();
+        }
 
-    // 3. Envoie le JSON
-    echo json_encode([
-        'status'    => $status,
-        'message'   => $message,
-        'timestamp' => time()
-    ], JSON_UNESCAPED_UNICODE);
+        // 2. Définit l'en-tête HTTP
+        header('Content-Type: application/json; charset=utf-8');
 
-    // 4. Bloque la suite de l'exécution (évite le rendu d'une vue HTML)
-    exit();
-}
+        // 3. Envoie le JSON
+        echo json_encode([
+            'status' => $status,
+            'message' => $message,
+            'timestamp' => time()
+        ], JSON_UNESCAPED_UNICODE);
+
+        // 4. Bloque la suite de l'exécution (évite le rendu d'une vue HTML)
+        exit();
+    }
 
     /**
      * Adds the unique IP to the iplist.txt file if it doesn't already exist.
