@@ -1834,7 +1834,7 @@ $astroEvents = json_decode($json, true);
                             </div>
 
                             <div class="card-content">
-                                <h2 class="post-title"><?= htmlspecialchars($post['title_contenu']) ?></h2>
+                                <h2 class="post-title"><?= $post['title_contenu'] ?></h2>
 
                                 <div class="post-excerpt">
                                     <?php

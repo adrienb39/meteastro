@@ -286,7 +286,7 @@ if (!empty($article['background_img'])) {
             </div>
 
             <header class="article-header">
-                <h1 class="article-title"><?= htmlspecialchars($article['title_contenu']) ?></h1>
+                <h1 class="article-title"><?= $article['title_contenu'] ?></h1>
 
                 <div class="article-meta">
                     <div class="meta-item">

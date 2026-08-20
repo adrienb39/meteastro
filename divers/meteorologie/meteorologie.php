@@ -316,7 +316,7 @@ $posts = getMeteorologieContent($db);
                 </h4>
                 <?php foreach ($posts as $post): ?>
                     <a class="report-item" href="contenu-meteorologie.php?id=<?= $post['id'] ?>"
-    data-title="<?= htmlspecialchars($post['title_contenu']) ?>"
+    data-title="<?= $post['title_contenu'] ?>"
     data-author="<?= htmlspecialchars($post['name']) ?>"
     data-date="<?= date("d M Y", strtotime($post['date_meteorologie'])) ?>"
     data-body="<?= nl2br(htmlspecialchars($post['contenu'])) ?>"
@@ -329,7 +329,7 @@ $posts = getMeteorologieContent($db);
 
     <div>
         <div style="font-weight: 600; font-size: 0.9rem; color: #c9d1d9;">
-            <?= htmlspecialchars($post['title_contenu']) ?>
+            <?= $post['title_contenu'] ?>
         </div>
         <div style="font-size: 0.75rem; color: #8b949e;">
             Par <?= htmlspecialchars($post['name']) ?>
