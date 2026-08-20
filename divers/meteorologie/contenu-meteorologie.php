@@ -339,6 +339,7 @@ if (!empty($article['background_img'])) {
 
     <script src="/js/meteorologie.js"></script>
     <script src="/js/divers.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
