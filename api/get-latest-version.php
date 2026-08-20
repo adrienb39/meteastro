@@ -84,12 +84,12 @@ try {
     require_once $newsletterScript;
 
     // --- 2. Configuration ---
-    $latestVersion = '2.5.0';
-    $releaseDate = '19/08/2026';
+    $latestVersion = '2.5.1';
+    $releaseDate = '20/08/2026';
     $minRequiredVersion = '1.0.0';
 
     $changelog = [
-        'Souscription aux actualités et alertes MeteAstro pour être tenu au courant des nouvelles versions',
+        'Correction de l\'envoie du code de vérification par mail',
     ];
 
     // --- 3. Connexion BDD ---
