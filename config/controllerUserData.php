@@ -174,7 +174,7 @@ if (isset($_POST['signup'])) {
         // Insérer les données dans la base
         $insert_data = "INSERT INTO users (name, email, password, code, status) VALUES (?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($insert_data);
-        $stmt->bind_param("sssssi", $name, $email, $encpass, $code, $status);
+        $stmt->bind_param("sssss", $name, $email, $encpass, $code, $status);
         $data_check = $stmt->execute();
 
         if ($data_check) {
