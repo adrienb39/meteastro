@@ -1,6 +1,6 @@
 <?php
 return [
-    'siteVersion' => '2.5.4',
+    'siteVersion' => '2.5.5',
     'appBuild'    => 0,
     'updated' => [
         'day'   => 'Jeudi',

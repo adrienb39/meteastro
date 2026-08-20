@@ -676,7 +676,7 @@ function getLatestNews(PDO $db, string $table, int $limit = 5): array
                                                                 </div>
 
                                                                 <h4 class="h5 fw-bold text-white">
-                                                                    <?= htmlspecialchars($astro['title_contenu'] ?? 'Sans titre') ?>
+                                                                    <?= $astro['title_contenu'] ?? 'Sans titre' ?>
                                                                 </h4>
                                                                 <p class="text-light">
                                                                     <?= substr($astro['contenu'] ?? '', 0, 160) ?>...
@@ -777,7 +777,7 @@ function getLatestNews(PDO $db, string $table, int $limit = 5): array
                                                                 </div>
 
                                                                 <h4 class="h5 fw-bold text-white">
-                                                                    <?= htmlspecialchars($meteo['title_contenu'] ?? 'Sans titre') ?>
+                                                                    <?= $meteo['title_contenu'] ?? 'Sans titre' ?>
                                                                 </h4>
                                                                 <p class="text-light">
                                                                     <?= substr($meteo['contenu'] ?? '', 0, 160) ?>...

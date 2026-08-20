@@ -691,7 +691,7 @@ $is_audio_preview_visible = ($is_music_checked && !empty($music_file_raw));
                                                 <i class="fa-solid <?= $item['icon'] ?> text-primary"></i>
                                             </div>
                                             <div>
-                                                <div class="fw-bold"><?= htmlspecialchars($item['title_contenu']) ?></div>
+                                                <div class="fw-bold"><?= $item['title_contenu'] ?></div>
                                                 <div class="d-flex align-items-center gap-2">
                                                     <small class="text-secondary small fw-normal text-uppercase"
                                                         style="letter-spacing: 1px; font-size: 0.7rem;">
@@ -721,7 +721,7 @@ $is_audio_preview_visible = ($is_music_checked && !empty($music_file_raw));
                                                         <button type="button" class="dropdown-item small btn-edit-trigger"
                                                             data-id="<?= $item['id'] ?>"
                                                             data-type="<?= strtolower($item['type']) ?>"
-                                                            data-title-c="<?= htmlspecialchars($item['title_contenu']) ?>"
+                                                            data-title-c="<?= $item['title_contenu'] ?>"
                                                             data-contenu="<?= htmlspecialchars($item['contenu'] ?? '') ?>"
                                                             data-filename="<?= htmlspecialchars($item['filename'] ?? '') ?>"
                                                             data-bg="<?= htmlspecialchars($item['background_img'] ?? '') ?>"
@@ -932,7 +932,7 @@ $is_audio_preview_visible = ($is_music_checked && !empty($music_file_raw));
                     <div class="data-card mission-briefing mb-3">
                         <span class="card-label">ÉLÉMENT SÉLECTIONNÉ</span>
                         <div class="card-value">
-                            <?= htmlspecialchars($current_item['title_contenu'] ?? 'Chargement...'); ?>
+                            <?= $current_item['title_contenu'] ?? 'Chargement...'; ?>
                         </div>
                     </div>
 

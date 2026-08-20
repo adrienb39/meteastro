@@ -84,12 +84,12 @@ try {
     require_once $newsletterScript;
 
     // --- 2. Configuration ---
-    $latestVersion = '2.5.4';
+    $latestVersion = '2.5.5';
     $releaseDate = '20/08/2026';
     $minRequiredVersion = '1.0.0';
 
     $changelog = [
-        'Correction du menu',
+        'Correction de l\'affichage du contenu',
     ];
 
     // --- 3. Connexion BDD ---
