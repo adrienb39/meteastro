@@ -4,6 +4,8 @@ return [
     '/' => ['HomeController', 'index'],
     '/astronomie' => ['AstronomieController', 'index'],
     '/astronomie/{id}' => ['AstronomieController', 'show'],
+    '/meteorologie' => ['MeteorologieController', 'index'],
+    '/meteorologie/{id}' => ['MeteorologieController', 'show'],
     // '/page/{page}' => ['PageController', 'page'],
     // '/page-a-propos/{id}' => ['PageController', 'pageAPropos'],
     // '/page-status/{id}' => ['PageController', 'pageStatus'],

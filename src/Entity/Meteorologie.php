@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -48,6 +49,9 @@ class Meteorologie
 
     #[ORM\Column(name: 'verified', type: "boolean")]
     private bool $verified = false;
+
+    #[ORM\Column(name: 'date_meteorologie', type: 'datetime')]
+    private DateTimeInterface $dateMeteorologie;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'id_users', referencedColumnName: 'id_users')]
@@ -128,7 +132,7 @@ class Meteorologie
         $this->musicFile = $musicFile;
     }
 
-     public function getShowImages(): bool
+    public function getShowImages(): bool
     {
         return $this->showImages;
     }
@@ -176,6 +180,16 @@ class Meteorologie
     public function setVerified(bool $verified): void
     {
         $this->verified = $verified;
+    }
+
+    public function getDateMeteorologie(): DateTimeInterface
+    {
+        return $this->dateMeteorologie;
+    }
+
+    public function setDateMeteorologie(DateTimeInterface $dateMeteorologie): void
+    {
+        $this->dateMeteorologie = $dateMeteorologie;
     }
 
     public function getUser(): User
