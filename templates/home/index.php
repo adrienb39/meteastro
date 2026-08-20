@@ -4,7 +4,7 @@
     /**
      * --- 1. CONFIGURATION ET LOGIQUE DE TRAITEMENT (PHP) ---
      */
-    $cacheFile = __DIR__ . '/prochains_lancements.json';
+    $cacheFile = __DIR__ . '/../../prochains_lancements.json';
     $cacheTime = 900; // 15 minutes
     $launches = [];
 

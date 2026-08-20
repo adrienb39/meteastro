@@ -19,6 +19,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono&display=swap"
         rel="stylesheet">
 
+        <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
     <style>
         :root {
             --glass: rgba(15, 23, 42, 0.7);
@@ -2578,7 +2585,7 @@
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
 </head>
 
-<body>
+<body class="astro-body <?= $isAurora ? 'aurora-theme' : ($isMatrixGrid ? 'matrix-theme' : ($isStarfield ? 'starfield-theme' : ($isDeepSpace ? 'deep-space-theme' : ($isSupernova ? 'supernova-theme' : ($isBlueprint ? 'blueprint-theme' : ''))))) ?>">
 
     <div id="notification-onboarding"
         style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 20px; border-radius: 12px; z-index: 999999; font-family: sans-serif;">

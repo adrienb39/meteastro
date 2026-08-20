@@ -1,28 +1,5 @@
-/* *, ::before, ::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    font-family: 'Courier New', Courier, monospace;
-}
-
-body {
-    background: white;
-    height: 100vh;
-} */
-
 .container {
     position: relative;
-    /* width: 1260px; */
-    /* height: 900px; */
-    /* bottom: 76px; */
-    /* border: 1px solid #333; */
-    margin-left: 140px;
-    /* background: white; */
-    /* border-radius: 2px; */
-    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
     display: block;
 }
 
@@ -43,10 +20,6 @@ ul.container-onglets {
     font-weight: 700;
     cursor: pointer;
 }
-
-/* .onglets:not(:nth-child(3)) {
-    border-right: 1px solid #333;
-} */
 
 .contenu {
     /* height: 70%; */

@@ -1,39 +1,6 @@
 <?php
-session_start();
-require_once '../../config/connexion_bdd.php';
-$db = createPdoConnection();
-
-/**
- * Récupère un article spécifique avec les informations de l'auteur et la galerie
- */
-function getArticle($db, $id)
-{
-    // Sélection de toutes les colonnes de l'article (incluant gallery_images)
-    $sql = 'SELECT a.*, u.name 
-            FROM astronomie a 
-            JOIN users u ON a.id_users = u.id_users 
-            WHERE a.id = :id';
-
-    try {
-        $stmt = $db->prepare($sql);
-        $stmt->execute([':id' => $id]);
-        $article = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$article) {
-            header('Location: index.php');
-            exit();
-        }
-        return $article;
-    } catch (PDOException $e) {
-        die("Erreur de connexion spatiale.");
-    }
-}
-
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $article = getArticle($db, (int) $_GET['id']);
-} else {
-    die('Erreur : Coordonnées de l\'article manquantes.');
-}
+$article = $article ?? [];
+$jsonPlaylist = $jsonPlaylist ?? '[]';
 
 $hudFeed = $article['hud_feed_id'] ?? '';
 $isAurora = ($hudFeed === 'astro_nebula_animated');
@@ -46,7 +13,7 @@ $isBlueprint = ($hudFeed === 'astro_blueprint_static');
 // Préparation du style CSS dynamique pour le background
 $bgDynamicStyle = "";
 if (!empty($article['background_img'])) {
-    $bgUrl = "../../uploads/" . htmlspecialchars($article['background_img']);
+    $bgUrl = "/uploads/" . htmlspecialchars($article['background_img']);
     $bgDynamicStyle = "
         body {
             background-image: url('$bgUrl') !important;
@@ -64,21 +31,13 @@ if (!empty($article['background_img'])) {
     ";
 }
 ?>
-<!DOCTYPE html>
-<html lang="fr-FR">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($article['title_contenu']) ?> | Meteastro</title>
-
+    <link rel="stylesheet" href="/assets/css/divers.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="/css/divers.css">
-    <link rel="stylesheet" href="/css/style.css">
     <style>
         :root {
             --space-dark: #05070a;
@@ -367,9 +326,6 @@ if (!empty($article['background_img'])) {
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 242, 255, 0.05);
         }
     </style>
-</head>
-
-<body class="<?= $isAurora ? 'aurora-theme' : ($isMatrixGrid ? 'matrix-theme' : ($isStarfield ? 'starfield-theme' : ($isDeepSpace ? 'deep-space-theme' : ($isSupernova ? 'supernova-theme' : ($isBlueprint ? 'blueprint-theme' : ''))))) ?>">
     <?php if ($isAurora): ?>
         <div class="feed-animated-simulation aurora"></div>
     <?php elseif ($isMatrixGrid): ?>
@@ -385,10 +341,8 @@ if (!empty($article['background_img'])) {
     <?php endif; ?>
     <div class="stars-bg"></div>
 
-    <?php include "../../__partials/menu.php"; ?>
-
     <main class="container-article">
-        <a href="astronomie.php" class="btn-back">
+        <a href="/astronomie" class="btn-back">
             <i class="fas fa-chevron-left"></i> RETOUR AU COSMOS
         </a>
 
@@ -396,7 +350,7 @@ if (!empty($article['background_img'])) {
             <div class="hero-banner">
                 <span class="category-badge"><?= htmlspecialchars($article['title']) ?></span>
                 <?php if ($article['show_images']): ?>
-                    <img class="hero-img" src="../../uploads/<?= htmlspecialchars($article['filename']); ?>"
+                    <img class="hero-img" src="/uploads/<?= htmlspecialchars($article['filename']); ?>"
                         alt="Image de l'article">
                 <?php endif; ?>
             </div>
@@ -407,7 +361,7 @@ if (!empty($article['background_img'])) {
                 <div class="article-meta">
                     <div class="meta-item">
                         <i class="fa-regular fa-calendar-check"></i>
-                        <?= date("d M Y", strtotime($article['date_astronomie'])) ?>
+                        <?= $article['date_astronomie']->format('d M Y') ?>
                     </div>
                     <div class="meta-item">
                         <i class="fa-solid fa-user-astronaut"></i>
@@ -432,8 +386,8 @@ if (!empty($article['background_img'])) {
                                 continue;
                             ?>
                             <div class="gallery-item">
-                                <a href="../../uploads/<?= htmlspecialchars($img) ?>" target="_blank">
-                                    <img src="../../uploads/<?= htmlspecialchars($img) ?>" alt="Vue de la galerie"
+                                <a href="/uploads/<?= htmlspecialchars($img) ?>" target="_blank">
+                                    <img src="/uploads/<?= htmlspecialchars($img) ?>" alt="Vue de la galerie"
                                         loading="lazy">
                                 </a>
                             </div>
@@ -444,12 +398,5 @@ if (!empty($article['background_img'])) {
         </article>
     </main>
 
-    <?php include "../../cookie/cookie.php"; ?>
-    <?php include "../../__partials/footer.php"; ?>
-
-    <script src="/js/astronomie.js"></script>
-    <script src="/js/divers.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    <script src="/assets/js/astronomie.js"></script>
+    <script src="/assets/js/divers.js"></script>

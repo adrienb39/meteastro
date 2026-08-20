@@ -49,6 +49,9 @@ class Astronomie
     #[ORM\Column(name: 'verified', type: "boolean")]
     private bool $verified = false;
 
+    #[ORM\Column(name: 'date_astronomie', type: 'datetime')]
+    private \DateTimeInterface $dateAstronomie;
+
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'id_users', referencedColumnName: 'id_users')]
     private User $user;
@@ -171,6 +174,11 @@ class Astronomie
     public function getVerified(): bool
     {
         return $this->verified;
+    }
+
+    public function getDateAstronomie(): \DateTimeInterface
+    {
+        return $this->dateAstronomie;
     }
 
     public function setVerified(bool $verified): void
