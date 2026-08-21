@@ -13,5 +13,9 @@ return [
     '/connexion/reset-code' => ['UserController', 'checkResetOtp'],
     '/connexion/new-password' => ['UserController', 'changePassword'],
     '/connexion/password-changed' => ['UserController', 'passwordChanged'],
+    '/connexion/logout' => ['UserController', 'logout'],
     '/newsletter/welcome-newsletter' => ['NewsletterController', 'welcome'],
+    '/user/update-profile' => ['UserController', 'updateProfile'],
+    '/user/update-newsletter' => ['UserController', 'updateNewsletter'],
+    '/cron/check-newsletter' => ['NewsletterCronController', 'checkNewsletter'],
 ];

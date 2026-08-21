@@ -36,7 +36,7 @@ class ErrorController extends AbstractController
             }
 
             session_destroy();
-            header("Location: /connexion/login.php");
+            header("Location: /connexion/login");
             exit();
         }
 

@@ -1,3 +1,19 @@
+<?php
+// Charge version.php depuis le répertoire racine du serveur web
+$version = require $_SERVER['DOCUMENT_ROOT'] . '/version.php';
+
+$siteVersion  = $version['siteVersion'] ?? '1.0.0';
+$appBuild     = $version['appBuild'] ?? '0';
+$appVersion   = $siteVersion . '.' . $appBuild;
+
+$updated      = $version['updated'] ?? [];
+$day          = $updated['day'] ?? '';
+$num          = $updated['num'] ?? '';
+$month        = $updated['month'] ?? '';
+$year         = $updated['year'] ?? '';
+
+$dateAffichee = trim("{$day} {$num} {$month} {$year}");
+?>
 <!DOCTYPE html>
 <?php if (empty($hideSiteHeader)): ?>
     <html lang="fr-FR" data-bs-theme="dark">
@@ -299,8 +315,8 @@
             }
 
             /* ==========================================================================
-       1. VARIABLES DE THÈME
-       ========================================================================== */
+           1. VARIABLES DE THÈME
+           ========================================================================== */
             :root {
                 --pwa-bg-header: rgba(243, 243, 244, 0.90);
                 --pwa-border-color: rgba(0, 0, 0, 0.07);
@@ -328,8 +344,8 @@
             }
 
             /* ==========================================================================
-       2. BOUTON FLOTTANT (FAB) — verre dépoli + halo pulsé
-       ========================================================================== */
+           2. BOUTON FLOTTANT (FAB) — verre dépoli + halo pulsé
+           ========================================================================== */
             .pwa-fab-trigger {
                 position: relative;
                 background: color-mix(in srgb, var(--pwa-card-bg) 65%, transparent);
@@ -395,8 +411,8 @@
             }
 
             /* ==========================================================================
-       3. OVERLAY & MODAL
-       ========================================================================== */
+           3. OVERLAY & MODAL
+           ========================================================================== */
             .pwa-modal-overlay {
                 position: fixed;
                 inset: 0;
@@ -487,8 +503,8 @@
             }
 
             /* ==========================================================================
-       4. LOGO
-       ========================================================================== */
+           4. LOGO
+           ========================================================================== */
             .pwa-logo-wrap {
                 position: relative;
                 width: 72px;
@@ -532,8 +548,8 @@
             }
 
             /* ==========================================================================
-       5. TEXTES
-       ========================================================================== */
+           5. TEXTES
+           ========================================================================== */
             .pwa-rainbow-title {
                 margin: 0 0 8px 0;
                 font-size: 21px;
@@ -603,8 +619,8 @@
             }
 
             /* ==========================================================================
-       6. INSTRUCTIONS
-       ========================================================================== */
+           6. INSTRUCTIONS
+           ========================================================================== */
             .pwa-list-instructions {
                 text-align: left;
                 list-style: none;
@@ -644,8 +660,8 @@
             }
 
             /* ==========================================================================
-       7. BOUTON D'INSTALLATION
-       ========================================================================== */
+           7. BOUTON D'INSTALLATION
+           ========================================================================== */
             .pwa-btn-install {
                 display: none;
                 width: 100%;
@@ -673,8 +689,8 @@
             }
 
             /* ==========================================================================
-       8. AFFICHAGE MODE APPLI INSTALLÉE
-       ========================================================================== */
+           8. AFFICHAGE MODE APPLI INSTALLÉE
+           ========================================================================== */
             .pwa-dashboard-view {
                 display: none !important;
             }
@@ -693,8 +709,8 @@
             }
 
             /* ==========================================================================
-       1. VARIABLES DE THÈME (STYLE FLOTTANT ANDROID MATERIAL YOU)
-       ========================================================================== */
+           1. VARIABLES DE THÈME (STYLE FLOTTANT ANDROID MATERIAL YOU)
+           ========================================================================== */
             :root {
                 /* --- Mode Clair (Couleurs de surface Android) --- */
                 --bg-header: rgba(243, 243, 244, 0.90);
@@ -728,8 +744,8 @@
             }
 
             /* ==========================================================================
-       2. EN-TÊTE DE L'APPLICATION
-       ========================================================================== */
+           2. EN-TÊTE DE L'APPLICATION
+           ========================================================================== */
             .app-header {
                 position: sticky;
                 top: 0;
@@ -777,8 +793,8 @@
             }
 
             /* ==========================================================================
-       3. GESTION PAR DÉFAUT (NAVIGATEURS WEB CLASSIQUES)
-       ========================================================================== */
+           3. GESTION PAR DÉFAUT (NAVIGATEURS WEB CLASSIQUES)
+           ========================================================================== */
             .bottom-nav {
                 display: none !important;
                 /* Masqué sur navigateur de bureau */
@@ -827,8 +843,8 @@
             }
 
             /* ==========================================================================
-       4. COMPORTEMENT EXCLUSIF : MODE APP INSTALLÉE (STANDALONE)
-       ========================================================================== */
+           4. COMPORTEMENT EXCLUSIF : MODE APP INSTALLÉE (STANDALONE)
+           ========================================================================== */
             @media (display-mode: standalone) {
 
                 .bottom-nav {
@@ -914,8 +930,8 @@
                 }
 
                 /* ==========================================================================
-       SOUS-MENU CONFIGURATION COMPTE (STYLE FLOTTANT ANDROID MATERIAL YOU)
-       ========================================================================== */
+           SOUS-MENU CONFIGURATION COMPTE (STYLE FLOTTANT ANDROID MATERIAL YOU)
+           ========================================================================== */
 
                 /* Positionnement du bouton parent */
                 .nav-item-has-submenu {
@@ -1074,8 +1090,8 @@
                 }
 
                 /* ==========================================================================
-       INTERFACES COMPOSANTS STANDALONE (MATERIAL YOU)
-       ========================================================================== */
+           INTERFACES COMPOSANTS STANDALONE (MATERIAL YOU)
+           ========================================================================== */
 
                 .pwa-app-dashboard {
                     width: 100%;
@@ -1730,8 +1746,8 @@
             }
 
             /* ==========================================================================
-       1. VARIABLES DE THÈME (STYLE FLOTTANT ANDROID MATERIAL YOU)
-       ========================================================================== */
+           1. VARIABLES DE THÈME (STYLE FLOTTANT ANDROID MATERIAL YOU)
+           ========================================================================== */
             :root {
                 /* --- Mode Clair (Couleurs de surface Android) --- */
                 --bg-header: rgba(243, 243, 244, 0.90);
@@ -1763,8 +1779,8 @@
             }
 
             /* ==========================================================================
-       2. EN-TÊTE DE L'APPLICATION
-       ========================================================================== */
+           2. EN-TÊTE DE L'APPLICATION
+           ========================================================================== */
             .app-header {
                 position: sticky;
                 top: 0;
@@ -1812,8 +1828,8 @@
             }
 
             /* ==========================================================================
-       3. GESTION PAR DÉFAUT (NAVIGATEURS WEB CLASSIQUES)
-       ========================================================================== */
+           3. GESTION PAR DÉFAUT (NAVIGATEURS WEB CLASSIQUES)
+           ========================================================================== */
             .bottom-nav {
                 display: none !important;
                 /* Masqué sur navigateur de bureau */
@@ -1858,8 +1874,8 @@
             }
 
             /* ==========================================================================
-       4. COMPORTEMENT EXCLUSIF : MODE APP INSTALLÉE (STANDALONE)
-       ========================================================================== */
+           4. COMPORTEMENT EXCLUSIF : MODE APP INSTALLÉE (STANDALONE)
+           ========================================================================== */
             @media (display-mode: standalone) {
 
                 .bottom-nav {
@@ -1945,8 +1961,8 @@
                 }
 
                 /* ==========================================================================
-       SOUS-MENU CONFIGURATION COMPTE (STYLE FLOTTANT ANDROID MATERIAL YOU)
-       ========================================================================== */
+           SOUS-MENU CONFIGURATION COMPTE (STYLE FLOTTANT ANDROID MATERIAL YOU)
+           ========================================================================== */
 
                 /* Positionnement du bouton parent */
                 .nav-item-has-submenu {
@@ -2105,8 +2121,8 @@
                 }
 
                 /* ==========================================================================
-       INTERFACES COMPOSANTS STANDALONE (MATERIAL YOU)
-       ========================================================================== */
+           INTERFACES COMPOSANTS STANDALONE (MATERIAL YOU)
+           ========================================================================== */
 
                 .pwa-app-dashboard {
                     width: 100%;
@@ -2631,8 +2647,161 @@
         <div class="sun"></div>
         <div class="lens-flare"></div>
         <?php if ($isConnected): ?>
+            <style>
+                /* CSS personnalisés pour le thème Glassmorphism / Cosmique */
+                .edit-full-page {
+                    min-height: 100vh;
+                    background: radial-gradient(circle at top right, #1a1c2e, #0f101d);
+                }
+
+                .glass-container {
+                    background: rgba(255, 255, 255, 0.05);
+                    backdrop-filter: blur(16px);
+                    -webkit-backdrop-filter: blur(16px);
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    border-radius: 24px;
+                }
+
+                .input-glass {
+                    background: rgba(255, 255, 255, 0.07) !important;
+                    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+                    border-radius: 12px !important;
+                    color: #ffffff !important;
+                    padding: 0.75rem 1rem;
+                    transition: all 0.3s ease;
+                }
+
+                .input-glass:focus {
+                    background: rgba(255, 255, 255, 0.12) !important;
+                    border-color: #0dcaf0 !important;
+                    box-shadow: 0 0 15px rgba(13, 202, 240, 0.25) !important;
+                    outline: none;
+                }
+
+                .btn-cosmic-glass {
+                    background: linear-gradient(135deg, rgba(13, 202, 240, 0.2) 0%, rgba(13, 110, 253, 0.3) 100%);
+                    border: 1px solid rgba(13, 202, 240, 0.4);
+                    border-radius: 14px;
+                    backdrop-filter: blur(8px);
+                    transition: all 0.3s ease;
+                }
+
+                .btn-cosmic-glass:hover {
+                    background: linear-gradient(135deg, rgba(13, 202, 240, 0.4) 0%, rgba(13, 110, 253, 0.5) 100%);
+                    border-color: rgba(13, 202, 240, 0.8);
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(13, 202, 240, 0.3);
+                }
+
+                .btn-modern {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 16px;
+                    width: 100%;
+                    padding: 1.1rem 2.2rem;
+                    border-radius: 18px;
+                    font-size: 1.15rem;
+                    font-weight: 700;
+                    line-height: 1.2;
+                    color: #ffffff;
+                    text-decoration: none;
+                    background: linear-gradient(135deg, rgba(13, 202, 240, 0.15) 0%, rgba(13, 110, 253, 0.25) 100%);
+                    border: 1px solid rgba(13, 202, 240, 0.4);
+                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), 0 0 15px rgba(13, 202, 240, 0.15);
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    overflow: hidden;
+                    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        background 0.3s ease,
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+                }
+
+                .btn-modern::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+                    transition: left 0.6s ease;
+                    pointer-events: none;
+                }
+
+                .btn-content {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+
+                .btn-icon,
+                .btn-arrow {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    line-height: 1;
+                }
+
+                .btn-icon {
+                    color: #0dcaf0;
+                    font-size: 1.35rem;
+                    transition: transform 0.3s ease;
+                }
+
+                .btn-arrow {
+                    font-size: 1.1rem;
+                    opacity: 0.7;
+                    transition: transform 0.3s ease, opacity 0.3s ease;
+                }
+
+                .btn-modern:hover {
+                    color: #ffffff;
+                    border-color: rgba(13, 202, 240, 0.8);
+                    background: linear-gradient(135deg, rgba(13, 202, 240, 0.3) 0%, rgba(13, 110, 253, 0.4) 100%);
+                    transform: translateY(-4px);
+                    box-shadow: 0 10px 30px rgba(13, 202, 240, 0.4);
+                }
+
+                .btn-modern:hover::before {
+                    left: 100%;
+                }
+
+                .btn-modern:hover .btn-icon {
+                    transform: scale(1.2) rotate(-10deg);
+                }
+
+                .btn-modern:hover .btn-arrow {
+                    opacity: 1;
+                    transform: translateX(6px);
+                }
+
+                .btn-modern:active {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 15px rgba(13, 202, 240, 0.25);
+                }
+
+                /* Personnalisation des switchs Bootstrap */
+                .form-switch .form-check-input {
+                    width: 3em;
+                    height: 1.5em;
+                    background-color: rgba(255, 255, 255, 0.2);
+                    border-color: rgba(255, 255, 255, 0.3);
+                    cursor: pointer;
+                }
+
+                .form-switch .form-check-input:checked {
+                    background-color: #0dcaf0;
+                    border-color: #0dcaf0;
+                }
+            </style>
+
             <div id="settings-overlay" class="edit-full-page">
                 <div class="container py-5">
+
+                    <!-- En-tête -->
                     <div class="d-flex justify-content-between align-items-center mb-5">
                         <a href="#" class="btn btn-outline-light rounded-pill px-4 shadow-sm">
                             <i class="fa-solid fa-arrow-left me-2"></i> Retour
@@ -2642,52 +2811,118 @@
 
                     <div class="row justify-content-center">
                         <div class="col-lg-7">
-                            <div class="glass-container text-start shadow-lg">
-                                <form id="settingsForm" method="POST">
+                            <div class="glass-container text-start shadow-lg p-4 p-md-5">
+
+                                <!-- FORMULAIRE 1 : INFORMATIONS DE COMPTE (AVEC DÉCONNEXION) -->
+                                <form id="profileForm" action="/user/update-profile" method="POST">
+                                    <h5 class="text-white mb-4">
+                                        <i class="fa-solid fa-user-gear me-2 text-info"></i>Profil & Sécurité
+                                    </h5>
+
                                     <div class="mb-4">
-                                        <label class="text-white-50 small fw-bold">NOM D'UTILISATEUR</label>
-                                        <input type="text" name="name" class="input-glass"
-                                            value="<?= htmlspecialchars($userName) ?>" required>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label class="text-white-50 small fw-bold">ADRESSE EMAIL</label>
-                                        <input type="email" name="email" class="input-glass"
-                                            value="<?= htmlspecialchars($userEmail) ?>" required>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label class="text-white-50 small fw-bold">NOUVEAU MOT DE PASSE</label>
-                                        <input type="password" name="password" class="input-glass" placeholder="••••••••">
-                                        <small class="text-white-50">Laissez vide pour conserver l'actuel.</small>
+                                        <label for="userNameInput" class="text-white-50 small fw-bold mb-2">NOM
+                                            D'UTILISATEUR</label>
+                                        <input type="text" id="userNameInput" name="name" class="input-glass form-control"
+                                            value="<?= htmlspecialchars($userName ?? '') ?>" required>
                                     </div>
 
-                                    <button type="button" class="btn-cosmic-glass" data-bs-toggle="modal"
-                                        data-bs-target="#confirmModal">
-                                        <i class="fa-solid fa-rotate me-2"></i> Synchroniser les données
+                                    <div class="mb-4">
+                                        <label for="userEmailInput" class="text-white-50 small fw-bold mb-2">ADRESSE
+                                            EMAIL</label>
+                                        <input type="email" id="userEmailInput" name="email" class="input-glass form-control"
+                                            value="<?= htmlspecialchars($userEmail ?? '') ?>" required>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="userPasswordInput" class="text-white-50 small fw-bold mb-2">NOUVEAU MOT DE
+                                            PASSE</label>
+                                        <input type="password" id="userPasswordInput" name="password"
+                                            class="input-glass form-control" placeholder="••••••••" autocomplete="new-password">
+                                        <small class="text-white-50 mt-1 d-block">Laissez vide pour conserver le mot de passe
+                                            actuel.</small>
+                                    </div>
+
+                                    <!-- Bouton déclenchant la modal de déconnexion -->
+                                    <button type="button" class="btn btn-cosmic-glass w-100 py-3 mb-4 fw-bold text-white"
+                                        data-bs-toggle="modal" data-bs-target="#confirmModal">
+                                        <i class="fa-solid fa-rotate me-2"></i> Mettre à jour le profil
                                     </button>
 
-                                    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+                                    <!-- Modal de confirmation -->
+                                    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel"
+                                        aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content shadow-lg">
-                                                <div class="modal-body text-center p-5">
+                                            <div class="modal-content glass-container shadow-lg border-0">
+                                                <div class="modal-body text-center p-4 p-md-5">
                                                     <i class="fa-solid fa-triangle-exclamation text-warning mb-4"
                                                         style="font-size: 3rem;"></i>
-                                                    <h4 class="text-white mb-3">Attention !</h4>
-                                                    <p class="text-white-50 mb-4">La modification de vos informations système
-                                                        entraînera une
-                                                        <b>déconnexion immédiate</b> pour synchroniser votre terminal.
+                                                    <h4 class="text-white mb-3" id="confirmModalLabel">Attention !</h4>
+                                                    <p class="text-white-50 mb-4">
+                                                        La modification de vos identifiants entraînera une <b>déconnexion
+                                                            immédiate</b> pour des raisons de sécurité.
                                                     </p>
                                                     <div class="d-grid gap-2">
                                                         <button type="submit" name="confirm_update"
-                                                            class="btn btn-primary rounded-pill py-2 fw-bold">Confirmer et se
-                                                            déconnecter</button>
+                                                            class="btn btn-primary rounded-pill py-2 fw-bold">
+                                                            Confirmer et se déconnecter
+                                                        </button>
                                                         <button type="button" class="btn btn-link text-white-50"
-                                                            data-bs-dismiss="modal">Annuler</button>
+                                                            data-bs-dismiss="modal">
+                                                            Annuler
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
+
+                                <hr class="border-secondary my-5">
+
+                                <!-- FORMULAIRE 2 : PREFERENCES NEWSLETTER -->
+                                <form id="newsletterForm" action="/user/update-newsletter" method="POST">
+                                    <h5 class="text-white mb-4">
+                                        <i class="fa-solid fa-envelope-open-text me-2 text-info"></i>Abonnements
+                                    </h5>
+
+                                    <div class="mb-4">
+                                        <div
+                                            class="form-check form-switch d-flex justify-content-between align-items-center ps-0 mb-2">
+                                            <label class="form-check-label text-white fw-bold me-3" for="newsletterCheck">
+                                                Newsletter & Mises à jour Meteastro
+                                            </label>
+                                            <input class="form-check-input ms-auto" type="checkbox" role="switch"
+                                                id="newsletterCheck" name="newsletter" value="1" <?= !empty($userNewsletter) ? 'checked' : '' ?>>
+                                        </div>
+                                        <small class="text-white-50 d-block">
+                                            Recevez les actualités astronomiques et les annonces de fonctionnalités.
+                                        </small>
+                                    </div>
+
+                                    <button type="submit" name="update_newsletter"
+                                        class="btn btn-outline-info w-100 py-2 fw-bold mb-4">
+                                        <i class="fa-solid fa-floppy-disk me-2"></i> Enregistrer les préférences
+                                    </button>
+                                </form>
+
+                                <hr class="border-secondary my-5">
+
+                                <!-- WIDGET DE VERSION -->
+                                <div
+                                    class="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="text-white-50 small d-block">VERSION INSTALLÉE</span>
+                                        <span id="currentVersionDisplay"
+                                            class="text-white fw-bold">v<?= htmlspecialchars($siteVersion ?? '1.0.0') ?></span>
+                                    </div>
+                                    <div id="versionStatusBadge">
+                                        <span class="badge bg-secondary">Vérification en cours...</span>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" id="clientVersionInput"
+                                    value="<?= htmlspecialchars($siteVersion ?? '1.0.0') ?>">
+
                             </div>
                         </div>
                     </div>
@@ -3702,6 +3937,86 @@
                 document.addEventListener('DOMContentLoaded', init);
             })();
         </script>
+        <script>
+document.addEventListener('DOMContentLoaded', () => {
+  checkAppVersion();
+});
+
+async function checkAppVersion() {
+  const badgeContainer = document.getElementById('versionStatusBadge');
+  const versionDisplay = document.getElementById('currentVersionDisplay');
+  if (!badgeContainer) return;
+
+  // Version locale issue de version.php
+  const latestVersionInput = document.getElementById('clientVersionInput');
+  const latestVersion = latestVersionInput?.value?.trim() || '1.0.0';
+
+  try {
+    const response = await fetch('/cron/check-newsletter', {
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Récupération de la version renvoyée par le contrôleur
+    const currentVersion = data?.version?.trim() || latestVersion;
+
+    // --- Affichage de currentVersion dans le HTML ---
+    if (versionDisplay) {
+      versionDisplay.textContent = `v${currentVersion}`;
+    }
+
+    // Comparaison et affichage du badge
+    if (isVersionOutdated(currentVersion, latestVersion)) {
+      renderBadge(
+        badgeContainer, 
+        'bg-warning text-dark', 
+        'fa-triangle-exclamation', 
+        `Mise à jour v${latestVersion} disponible`
+      );
+    } else {
+      renderBadge(
+        badgeContainer, 
+        'bg-success', 
+        'fa-check', 
+        'À jour'
+      );
+    }
+  } catch (error) {
+    console.error('Erreur lors de la vérification de version :', error);
+    renderBadge(badgeContainer, 'bg-secondary', 'fa-circle-question', 'Inconnu');
+  }
+}
+
+function renderBadge(container, bgClass, iconClass, text) {
+  container.innerHTML = `
+    <span class="badge ${bgClass}">
+      <i class="fa-solid ${iconClass} me-1"></i> ${text}
+    </span>`;
+}
+
+function isVersionOutdated(current, latest) {
+  const parseVersion = (v) => v.toString().replace(/^v/, '').split('.').map(num => parseInt(num, 10) || 0);
+  
+  const currentParts = parseVersion(current);
+  const latestParts = parseVersion(latest);
+  const maxLength = Math.max(currentParts.length, latestParts.length);
+
+  for (let i = 0; i < maxLength; i++) {
+    const c = currentParts[i] || 0;
+    const l = latestParts[i] || 0;
+
+    if (l > c) return true;
+    if (l < c) return false;
+  }
+
+  return false;
+}
+</script>
     <?php endif; ?>
 </body>
 

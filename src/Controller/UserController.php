@@ -334,4 +334,124 @@ class UserController extends AbstractController
             'hideSiteHeader' => true,
         ]);
     }
+
+    public function logout(): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        // Destruction complète de la session
+        $_SESSION = [];
+
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params["path"],
+                $params["domain"],
+                $params["secure"],
+                $params["httponly"]
+            );
+        }
+
+        session_destroy();
+
+        // Redirection directe vers la page de connexion
+        $this->redirect('/connexion/login');
+        exit();
+    }
+
+    public function updateProfile(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']);
+
+        if (!$isConnected) {
+            $this->redirect('/connexion/login');
+            exit();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_update'])) {
+            $userId = $_SESSION['user_id'] ?? null;
+
+            if ($userId) {
+                /** @var User|null $userToUpdate */
+                $userToUpdate = $this->entityManager->getRepository(User::class)->find($userId);
+
+                if ($userToUpdate) {
+                    $newName = trim($_POST['name'] ?? '');
+                    $newEmail = trim($_POST['email'] ?? '');
+                    $newPass = $_POST['password'] ?? '';
+
+                    if (!empty($newName)) {
+                        $userToUpdate->setName($newName);
+                    }
+                    if (!empty($newEmail)) {
+                        $userToUpdate->setEmail($newEmail);
+                    }
+                    if (!empty($newPass)) {
+                        $hashedPass = password_hash($newPass, PASSWORD_BCRYPT);
+                        $userToUpdate->setPassword($hashedPass);
+                    }
+
+                    $this->entityManager->flush();
+                }
+            }
+
+            // Déconnexion de sécurité après modification des identifiants
+            session_destroy();
+            $this->redirect('/connexion/login');
+            exit();
+        }
+
+        $this->redirect('/');
+    }
+
+    /**
+     * Traite la mise à jour des abonnements (Newsletter)
+     * Ne déconnecte pas l'utilisateur.
+     */
+    public function updateNewsletter(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']);
+
+        if (!$isConnected) {
+            $this->redirect('/connexion/login');
+            exit();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_newsletter'])) {
+            $userId = $_SESSION['user_id'] ?? null;
+
+            if ($userId) {
+                /** @var User|null $userToUpdate */
+                $userToUpdate = $this->entityManager->getRepository(User::class)->find($userId);
+
+                if ($userToUpdate) {
+                    $isNewsletter = isset($_POST['newsletter']) ? 1 : 0;
+                    $userToUpdate->setNewsletter($isNewsletter);
+                    
+                    $this->entityManager->flush();
+                    
+                    // Mise à jour de la session
+                    $_SESSION['newsletter'] = $isNewsletter;
+                }
+            }
+        }
+
+        // Redirection vers la page précédente ou l'accueil
+        $referer = $_SERVER['HTTP_REFERER'] ?? '/';
+        $this->redirect($referer);
+        exit();
+    }
 }

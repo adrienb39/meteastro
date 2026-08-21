@@ -22,7 +22,10 @@ class HomeController extends AbstractController
 
     public function index(): void
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         // --- Authentification ---
         $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']);
 
@@ -34,47 +37,15 @@ class HomeController extends AbstractController
             $user = $userId ? $this->entityManager->getRepository(User::class)->find($userId) : null;
             $newsletterStatus = $user ? $user->getNewsletter() : null;
 
-            // Si la valeur est strictement différente de 0 et de 1 (ex: null), on redirige
             if ($newsletterStatus !== 0 && $newsletterStatus !== 1) {
-                $this->redirect('/newsletter/welcome');
+                $this->redirect('/newsletter/welcome-newsletter');
                 exit();
             }
 
             $_SESSION['newsletter'] = $newsletterStatus;
         }
 
-        // --- Logique de mise à jour du profil ---
-        if ($isConnected && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_update'])) {
-            $newName = $_POST['name'] ?? '';
-            $newEmail = $_POST['email'] ?? '';
-            $newPass = $_POST['password'] ?? '';
-            $isNewsletter = isset($_POST['newsletter']) ? (int) $_POST['newsletter'] : null;
-            $userId = $_SESSION['user_id'] ?? null;
-
-            if ($userId) {
-                /** @var User|null $userToUpdate */
-                $userToUpdate = $this->entityManager->getRepository(User::class)->find($userId);
-
-                if ($userToUpdate) {
-                    $userToUpdate->setName($newName);
-                    $userToUpdate->setEmail($newEmail);
-                    $userToUpdate->setNewsletter($isNewsletter);
-
-                    if (!empty($newPass)) {
-                        $hashedPass = password_hash($newPass, PASSWORD_BCRYPT);
-                        $userToUpdate->setPassword($hashedPass);
-                    }
-
-                    $this->entityManager->flush();
-                }
-            }
-
-            session_destroy();
-            $this->redirect('/connexion/login.php');
-            exit();
-        }
-
-        // Données utilisateur
+        // Données utilisateur pour l'affichage
         $userName = $isConnected ? ($_SESSION['name'] ?? '') : '';
         $userEmail = $isConnected ? ($_SESSION['email'] ?? '') : '';
         $userNewsletter = $isConnected ? ($_SESSION['newsletter'] ?? null) : null;
@@ -82,7 +53,7 @@ class HomeController extends AbstractController
         // --- Génération du menu ---
         $entityClass = $isConnected ? MenuConnect::class : MenuPrincipal::class;
         $menuItems = $this->entityManager
-            ->getRepository($entityClass)
+            ->getRepository(MenuConnect::class)
             ->findBy([], ['parent' => 'ASC', 'id' => 'ASC']);
 
         ob_start();

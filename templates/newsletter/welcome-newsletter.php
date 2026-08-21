@@ -182,7 +182,7 @@
         <!-- Contenu texte -->
         <span
             class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 rounded-pill px-3 py-2 mb-3 extra-small text-uppercase tracking-wider">
-            <i class="fa-solid fa-sparkles me-1"></i> Communauté MétéAstro
+            <i class="fa-solid fa-sparkles me-1"></i> Communauté MeteAstro
         </span>
 
         <h2 class="text-gradient fw-bold mb-3">Restez la tête dans les étoiles !</h2>

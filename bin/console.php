@@ -1,14 +1,31 @@
 <?php
+
+use App\Command\SendNewsletterCommand;
+use App\Service\NewsletterMailerService;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 
-// Ce fichier permet de configurer la console afin de la lier à l'entityManager
-// Ainsi, toutes les commandes pourront "communiquer avec la base de données" via l'entityManager
+require_once __DIR__ . '/../vendor/autoload.php';
 
-// Récupérer l'EntityManager
 /**
- * @var Doctrine\ORM\EntityManager $entityManager
+ * @var EntityManager $entityManager
  */
-$entityManager = require_once __DIR__.'/../config/bootstrap.php';
+$entityManager = require_once __DIR__ . '/../config/bootstrap.php';
 
-ConsoleRunner::run(new SingleManagerProvider($entityManager));
+// 1. Initialisation des services nécessaires
+$projectDir = dirname(__DIR__);
+$newsletterService = new NewsletterMailerService($entityManager, $projectDir);
+
+// 2. Création de l'application Console avec le provider Doctrine
+$commands = [
+    new SendNewsletterCommand($newsletterService),
+];
+
+$cli = ConsoleRunner::createApplication(
+    new SingleManagerProvider($entityManager),
+    $commands
+);
+
+// 3. Exécution de la console
+$cli->run();
