@@ -140,7 +140,7 @@ class UserController extends AbstractController
                     ? "Un code de vérification vous a été envoyé par e-mail."
                     : "Votre compte a été créé, mais l'e-mail de vérification n'a pas pu être envoyé. Contactez le support si le problème persiste.";
                 $_SESSION['email'] = $user->getEmail();
-                header('Location: user-otp.php');
+                $this->redirect('/connexion/user-otp');
                 exit();
             }
         }
@@ -184,12 +184,13 @@ class UserController extends AbstractController
                 session_destroy();
                 session_start();
                 $_SESSION['info'] = "Vous pouvez maintenant vous connecter à votre compte.";
-                header('Location: /connexion/login.php');
+                $this->redirect('/connexion/login');
                 exit();
             }
         }
 
         $this->render('connexion/user-otp', [
+            'hideSiteHeader' => true,
             'errors' => $errors,
         ]);
     }

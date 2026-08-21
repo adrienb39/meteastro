@@ -8,6 +8,7 @@ return [
     '/meteorologie/{id}' => ['MeteorologieController', 'show'],
     '/connexion/login' => ['UserController', 'login'],
     '/connexion/signup' => ['UserController', 'signup'],
+    '/connexion/user-otp' => ['UserController', 'checkOtp'],
     // '/page/{page}' => ['PageController', 'page'],
     // '/page-a-propos/{id}' => ['PageController', 'pageAPropos'],
     // '/page-status/{id}' => ['PageController', 'pageStatus'],
