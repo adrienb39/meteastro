@@ -53,7 +53,8 @@ class UserController extends AbstractController
                 $_SESSION['password'] = $user->getPassword();
 
                 if ($user->getStatus() === 'verified') {
-                    header('Location: /index.php');
+                    $this->redirect('/');
+
                     exit();
                 }
 
@@ -67,7 +68,7 @@ class UserController extends AbstractController
                 $_SESSION['info'] = $mailSent
                     ? "Il semble que vous n'ayez pas encore vérifié votre adresse e-mail. Un nouveau code vient de vous être envoyé - {$email}"
                     : "Il semble que vous n'ayez pas encore vérifié votre adresse e-mail, et l'envoi du code a échoué. Réessayez plus tard.";
-                header('Location: user-otp.php');
+                $this->redirect('/connexion/user-otp');
                 exit();
             }
         }

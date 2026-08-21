@@ -6,6 +6,7 @@ use App\Entity\Astronomie;
 use App\Entity\MenuConnect;
 use App\Entity\MenuPrincipal;
 use App\Entity\Meteorologie;
+use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -21,44 +22,74 @@ class HomeController extends AbstractController
 
     public function index(): void
     {
+        session_start();
         // --- Authentification ---
         $isConnected = isset($_SESSION['email']) && isset($_SESSION['password']);
 
+        // --- Redirection Newsletter ---
+        if ($isConnected) {
+            $userId = $_SESSION['user_id'] ?? null;
+
+            /** @var User|null $user */
+            $user = $userId ? $this->entityManager->getRepository(User::class)->find($userId) : null;
+            $newsletterStatus = $user ? $user->getNewsletter() : null;
+
+            // Si la valeur est strictement différente de 0 et de 1 (ex: null), on redirige
+            if ($newsletterStatus !== 0 && $newsletterStatus !== 1) {
+                $this->redirect('/newsletter/welcome');
+                exit();
+            }
+
+            $_SESSION['newsletter'] = $newsletterStatus;
+        }
+
         // --- Logique de mise à jour du profil ---
         if ($isConnected && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_update'])) {
-            $newName = $_POST['name'];
-            $newEmail = $_POST['email'];
-            $newPass = $_POST['password'];
-            $userId = $_SESSION['user_id'];
+            $newName = $_POST['name'] ?? '';
+            $newEmail = $_POST['email'] ?? '';
+            $newPass = $_POST['password'] ?? '';
+            $isNewsletter = isset($_POST['newsletter']) ? (int) $_POST['newsletter'] : null;
+            $userId = $_SESSION['user_id'] ?? null;
 
-            if (!empty($newPass)) {
-                $hashedPass = password_hash($newPass, PASSWORD_BCRYPT);
-                $sql = "UPDATE `users` SET `name` = ?, `email` = ?, `password` = ? WHERE `id_users` = ?";
-                $this->db->query2($sql, [$newName, $newEmail, $hashedPass, $userId]);
-            } else {
-                $sql = "UPDATE `users` SET `name` = ?, `email` = ? WHERE `id_users` = ?";
-                $this->db->query2($sql, [$newName, $newEmail, $userId]);
+            if ($userId) {
+                /** @var User|null $userToUpdate */
+                $userToUpdate = $this->entityManager->getRepository(User::class)->find($userId);
+
+                if ($userToUpdate) {
+                    $userToUpdate->setName($newName);
+                    $userToUpdate->setEmail($newEmail);
+                    $userToUpdate->setNewsletter($isNewsletter);
+
+                    if (!empty($newPass)) {
+                        $hashedPass = password_hash($newPass, PASSWORD_BCRYPT);
+                        $userToUpdate->setPassword($hashedPass);
+                    }
+
+                    $this->entityManager->flush();
+                }
             }
 
             session_destroy();
-            header("Location: /connexion/login.php");
+            $this->redirect('/connexion/login.php');
             exit();
         }
 
-        $userName = $isConnected ? $_SESSION['name'] : '';
-        $userEmail = $isConnected ? $_SESSION['email'] : '';
+        // Données utilisateur
+        $userName = $isConnected ? ($_SESSION['name'] ?? '') : '';
+        $userEmail = $isConnected ? ($_SESSION['email'] ?? '') : '';
+        $userNewsletter = $isConnected ? ($_SESSION['newsletter'] ?? null) : null;
 
+        // --- Génération du menu ---
         $entityClass = $isConnected ? MenuConnect::class : MenuPrincipal::class;
         $menuItems = $this->entityManager
             ->getRepository($entityClass)
             ->findBy([], ['parent' => 'ASC', 'id' => 'ASC']);
 
-        // Génération du menu HTML
         ob_start();
         self::renderBootstrapMenu($menuItems);
         $menuHtml = ob_get_clean();
 
-        // On récupère la chaîne des musiques de l'article (ex: "music1.mp3,music2.mp3")
+        // --- Playlist ---
         $musicString = $article['music_file'] ?? '';
         $userPlaylist = [];
 
@@ -73,11 +104,12 @@ class HomeController extends AbstractController
         }
         $jsonPlaylist = json_encode($userPlaylist);
 
-        // Statistiques et réglages
+        // --- Statistiques ---
         $this->addUniqueIP();
         $nombreVisite = $this->getUniqueVisitor();
         $this->addUniqueIPMonthly();
 
+        // --- Articles & Contact ---
         $articlesAstronomie = $this->entityManager->getRepository(Astronomie::class)->findBy(['verified' => true]);
         $articlesMeteorologie = $this->entityManager->getRepository(Meteorologie::class)->findBy(['verified' => true]);
 
@@ -85,16 +117,17 @@ class HomeController extends AbstractController
             $this->contactProcess();
         }
 
-        // Render
+        // --- Rendu final ---
         $this->render('home/index', [
             'nombreVisite' => $nombreVisite,
             'isConnected' => $isConnected,
             'userName' => $userName,
             'userEmail' => $userEmail,
+            'userNewsletter' => $userNewsletter,
             'menuHtml' => $menuHtml,
             'jsonPlaylist' => $jsonPlaylist,
             'articlesAstronomie' => $articlesAstronomie,
-            'articlesMeteorologie' => $articlesMeteorologie
+            'articlesMeteorologie' => $articlesMeteorologie,
         ]);
     }
 

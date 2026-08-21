@@ -28,6 +28,12 @@ class User
     #[ORM\Column(name: 'status', type: "string")]
     private string $status;
 
+    #[ORM\Column(name: 'newsletter', type: "integer", nullable: true)]
+    private ?int $newsletter = null;
+
+    #[ORM\Column(name: 'last_version', type: "string", length: 10, nullable: true)]
+    private ?string $lastVersion = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -81,5 +87,25 @@ class User
     public function setStatus(string $status): void
     {
         $this->status = $status;
+    }
+
+    public function getNewsletter(): ?int
+    {
+        return $this->newsletter;
+    }
+
+    public function setNewsletter(?int $newsletter): void
+    {
+        $this->newsletter = $newsletter;
+    }
+
+    public function getLastVersion(): ?string
+    {
+        return $this->lastVersion;
+    }
+
+    public function setLastVersion(?string $lastVersion): void
+    {
+        $this->lastVersion = $lastVersion;
     }
 }
