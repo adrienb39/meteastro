@@ -260,6 +260,115 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
             }
         }
     }
+
+    /* Container de la case à cocher */
+    .consent-checkbox {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 0.9rem;
+        border-radius: 12px;
+        cursor: pointer;
+        user-select: none;
+        transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .consent-checkbox:active {
+        transform: scale(0.98);
+    }
+
+    /* Masquer l'input natif tout en le gardant accessible */
+    .consent-checkbox input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+    }
+
+    /* Boîte personnalisée */
+    .checkbox-box {
+        width: 1.35rem;
+        height: 1.35rem;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Icone SVG (La coche) */
+    .check-icon {
+        width: 0.9rem;
+        height: 0.9rem;
+        color: #ffffff;
+        stroke-dasharray: 24;
+        stroke-dashoffset: 24;
+        transition: stroke-dashoffset 0.3s ease 0.05s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform: scale(0.5) rotate(-10deg);
+    }
+
+    /* Hover sur la case */
+    .consent-checkbox:hover .checkbox-box {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+
+    /* État COCHÉ (Animations clés) */
+    .consent-checkbox input[type="checkbox"]:checked+.checkbox-box {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        animation: checkbox-bounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .consent-checkbox input[type="checkbox"]:checked+.checkbox-box .check-icon {
+        stroke-dashoffset: 0;
+        transform: scale(1) rotate(0deg);
+    }
+
+    /* Navigation Clavier (Focus accessible) */
+    .consent-checkbox input[type="checkbox"]:focus-visible+.checkbox-box {
+        box-shadow: 0 0 0 4px var(--primary-glow);
+        border-color: var(--primary);
+    }
+
+    /* Texte & Lien */
+    .label-text {
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    .terms-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        position: relative;
+        transition: color 0.2s ease;
+    }
+
+    /* Animation d'effet de rebond (Spring) */
+    @keyframes checkbox-bounce {
+        0% {
+            transform: scale(1);
+        }
+
+        40% {
+            transform: scale(0.85);
+        }
+
+        70% {
+            transform: scale(1.15);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
 </style>
 <div class="star-field" aria-hidden="true"></div>
 <div class="glowing-stars" aria-hidden="true"></div>
@@ -327,11 +436,18 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                 </div>
 
                 <div class="consent-container">
-                    <label class="checkbox-wrapper">
+                    <label class="consent-checkbox">
                         <input type="checkbox" name="consent" id="consent" required>
-                        <span class="checkmark"></span>
+
+                        <span class="checkbox-box" aria-hidden="true">
+                            <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+
                         <span class="label-text">
-                            J'accepte les <a href="#" id="openTerms">Termes et Conditions</a>
+                            J'accepte les <a href="#" id="openTerms" class="terms-link">Termes et Conditions</a>
                         </span>
                     </label>
                 </div>
