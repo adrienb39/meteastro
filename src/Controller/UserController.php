@@ -301,7 +301,7 @@ class UserController extends AbstractController
                     $this->entityManager->flush();
 
                     $_SESSION['info'] = "Votre mot de passe a changé. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.";
-                    header('Location: password-changed.php');
+                    $this->redirect('/connexion/password-changed');
                     exit();
                 }
 
@@ -310,6 +310,7 @@ class UserController extends AbstractController
         }
 
         $this->render('connexion/new-password', [
+            'hideSiteHeader' => true,
             'errors' => $errors,
         ]);
     }
