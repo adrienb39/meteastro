@@ -12,6 +12,7 @@ return [
     '/connexion/forgot-password' => ['UserController', 'forgotPassword'],
     '/connexion/reset-code' => ['UserController', 'checkResetOtp'],
     '/connexion/new-password' => ['UserController', 'changePassword'],
+    '/connexion/password-changed' => ['UserController', 'passwordChanged'],
     // '/page/{page}' => ['PageController', 'page'],
     // '/page-a-propos/{id}' => ['PageController', 'pageAPropos'],
     // '/page-status/{id}' => ['PageController', 'pageStatus'],

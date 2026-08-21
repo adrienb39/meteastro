@@ -314,4 +314,23 @@ class UserController extends AbstractController
             'errors' => $errors,
         ]);
     }
+
+    // -----------------------------------------------------------------
+    // Mot de passe oublié - étape 4 : confirmation
+    // -----------------------------------------------------------------
+    public function passwordChanged(): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!empty($_SESSION['info'])) {
+            $this->redirect('/connexion/login');
+            exit();
+        }
+
+        $this->render('connexion/password-changed', [
+            'hideSiteHeader' => true,
+        ]);
+    }
 }
