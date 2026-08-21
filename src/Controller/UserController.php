@@ -261,12 +261,13 @@ class UserController extends AbstractController
             } else {
                 $_SESSION['email'] = $user->getEmail();
                 $_SESSION['info'] = "Veuillez créer un nouveau mot de passe que vous n'utilisez sur aucun autre site.";
-                header('Location: new-password.php');
+                $this->redirect('/connexion/new-password');
                 exit();
             }
         }
 
         $this->render('connexion/reset-code', [
+            'hideSiteHeader' => true,
             'errors' => $errors,
         ]);
     }
