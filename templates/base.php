@@ -1,5 +1,10 @@
 <!DOCTYPE html>
+<?php if (empty($hideSiteHeader)): ?>
 <html lang="fr-FR" data-bs-theme="dark">
+    <?php endif; ?>
+<?php if (!empty($hideSiteHeader)): ?>
+<html lang="fr-FR" data-bs-theme="<?php echo ($themeChoice === 'light') ? 'light' : 'dark'; ?>">
+    <?php endif; ?>
 
 <head>
     <meta charset="UTF-8">
@@ -12,10 +17,15 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#007bff">
 
-    <!-- <link rel="stylesheet" href="/assets/css/connexion.css"> -->
     <!-- <link rel="stylesheet" href="/assets/css/divers.css"> -->
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <?php if (!empty($hideSiteHeader)): ?>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/assets/css/connexion.css" />
+    <?php endif; ?>
+
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono&display=swap"
         rel="stylesheet">
 
@@ -23,10 +33,19 @@
         href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
     <style>
+        <?php if (!empty($hideSiteHeader)): ?>
+        .login-page .info-bar,
+        .login-page .header-top,
+        .login-page .pwa-app,
+        .login-page .navbar,
+        .login-page .footer-glass {
+            display: none !important;
+        }
+        <?php endif; ?>
+        <?php if (empty($hideSiteHeader)): ?>
         :root {
             --glass: rgba(15, 23, 42, 0.7);
             --border: rgba(255, 255, 255, 0.1);
@@ -2574,7 +2593,9 @@
                 }
             }
         }
+        <?php endif; ?>
     </style>
+    <?php if (empty($hideSiteHeader)): ?>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/cookie.css">
@@ -2583,10 +2604,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js">
     </script>
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+    <?php endif; ?>
 </head>
 
-<body class="astro-body <?= $isAurora ? 'aurora-theme' : ($isMatrixGrid ? 'matrix-theme' : ($isStarfield ? 'starfield-theme' : ($isDeepSpace ? 'deep-space-theme' : ($isSupernova ? 'supernova-theme' : ($isBlueprint ? 'blueprint-theme' : ''))))) ?>">
+<body class="astro-body <?= !empty($hideSiteHeader) ? 'login-page  ' : '' ?> <?php echo $bodyClass; ?> <?= $isAurora ? 'aurora-theme' : ($isMatrixGrid ? 'matrix-theme' : ($isStarfield ? 'starfield-theme' : ($isDeepSpace ? 'deep-space-theme' : ($isSupernova ? 'supernova-theme' : ($isBlueprint ? 'blueprint-theme' : ''))))) ?>">
 
+<?php if (empty($hideSiteHeader)): ?>
     <div id="notification-onboarding"
         style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 20px; border-radius: 12px; z-index: 999999; font-family: sans-serif;">
         <h3 style="margin-top: 0; color: #333;">Activer les notifications ? 🚀</h3>
@@ -2853,10 +2876,20 @@
             </a>
         <?php endif; ?>
     </nav>
+    <?php endif; ?>
+    <?php if (empty($hideSiteHeader)): ?>
     <main class="container-fluid">
         <?= $content ?>
     </main>
+    <?php endif; ?>
 
+    <?php if (!empty($hideSiteHeader)): ?>
+    <main class="container container-mobile">
+        <?= $content ?>
+    </main>
+    <?php endif; ?>
+
+    <?php if (empty($hideSiteHeader)): ?>
     <script>
         // Protection globale des images
         document.addEventListener('contextmenu', e => {
@@ -3251,13 +3284,17 @@
             </footer>
         </div>
     </div>
+    <?php if (empty($hideSiteHeader)): ?>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <?php endif; ?>
     <script src="/assets/js/footer.js"></script>
     <script src="/assets/js/app.js"></script>
     <script src="/assets/js/astronomie.js"></script>
     <script src="/assets/js/cookie.js"></script>
     <script src="/assets/js/divers.js"></script>
-    <!-- <script src="/assets/js/login.js"></script> -->
+    <?php if (!empty($hideSiteHeader)): ?>
+    <script src="/assets/js/login.js"></script>
+    <?php endif; ?>
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/menu.js"></script>
     <script src="/assets/js/meteorologie.js"></script>
@@ -3662,6 +3699,7 @@
             document.addEventListener('DOMContentLoaded', init);
         })();
     </script>
+    <?php endif; ?>
 </body>
 
 </html>

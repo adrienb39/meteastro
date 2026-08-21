@@ -254,253 +254,273 @@
     <?php endif; ?>
 
     <div class="row g-4 mb-5">
-            <div class="col-lg-6">
-                <a href="/astronomie" class="category-box glass-card shadow">
-                    <img src="/assets/images/astronomie.jpg" alt="Astronomie">
-                    <div class="position-absolute bottom-0 start-0 p-4 w-100 bg-gradient">
-                        <h2 class="h1 fw-bold text-white mb-1">Astronomie</h2>
-                        <p class="text-light-50 mb-0 opacity-75">Explorez les étoiles et le cosmos.</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-6">
-                <a href="/meteorologie" class="category-box glass-card shadow">
-                    <img src="/assets/images/meteorologie.jpg" alt="Météorologie">
-                    <div class="position-absolute bottom-0 start-0 p-4 w-100 bg-gradient">
-                        <h2 class="h1 fw-bold text-white mb-1">Météorologie</h2>
-                        <p class="text-light-50 mb-0 opacity-75">Données climatiques en temps réel.</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <div class="row justify-content-center mb-5">
-            <div class="col-md-10 col-xl-8">
-                <div class="glass-card shadow-lg">
-                    <div class="card-body p-4 p-md-5">
-
-                        <h3 class="fw-bold mb-4 d-flex align-items-center">
-                            <span class="bg-primary rounded-pill me-3" style="width: 5px; height: 30px;"></span>
-                            Flux de données
-                        </h3>
-
-                        <ul class="nav nav-tabs mb-4" id="newsTabs" role="tablist">
-                            <li class="nav-item">
-                                <button class="nav-link active" id="astro-tab" data-bs-toggle="tab"
-                                    data-bs-target="#astro-news" type="button" role="tab">Astronomie</button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" id="meteo-tab" data-bs-toggle="tab"
-                                    data-bs-target="#meteo-news" type="button" role="tab">Météorologie</button>
-                            </li>
-                        </ul>
-
-                        <div class="tab-content" id="newsTabsContent">
-
-                            <div class="tab-pane fade show active" id="astro-news" role="tabpanel">
-    <?php 
-    // Validation des données issues de Doctrine / $articlesAstronomie
-    $articles = array_filter($articlesAstronomie); 
-    $totalArticles = count($articles);
-    ?>
-
-    <?php if ($totalArticles > 0): ?>
-        <div id="carouselAstro" class="carousel slide" data-bs-ride="carousel">
-
-            <?php if ($totalArticles > 1): ?>
-                <div class="carousel-indicators mb-n3">
-                    <?php foreach (array_keys($articles) as $index): ?>
-                        <button type="button" 
-                                data-bs-target="#carouselAstro" 
-                                data-bs-slide-to="<?= $index ?>" 
-                                class="<?= $index === 0 ? 'active' : '' ?>" 
-                                aria-current="<?= $index === 0 ? 'true' : 'false' ?>" 
-                                aria-label="Slide <?= $index + 1 ?>">
-                        </button>
-                    <?php endforeach; ?>
+        <div class="col-lg-6">
+            <a href="/astronomie" class="category-box glass-card shadow">
+                <img src="/assets/images/astronomie.jpg" alt="Astronomie">
+                <div class="position-absolute bottom-0 start-0 p-4 w-100 bg-gradient">
+                    <h2 class="h1 fw-bold text-white mb-1">Astronomie</h2>
+                    <p class="text-light-50 mb-0 opacity-75">Explorez les étoiles et le cosmos.</p>
                 </div>
-            <?php endif; ?>
+            </a>
+        </div>
+        <div class="col-lg-6">
+            <a href="/meteorologie" class="category-box glass-card shadow">
+                <img src="/assets/images/meteorologie.jpg" alt="Météorologie">
+                <div class="position-absolute bottom-0 start-0 p-4 w-100 bg-gradient">
+                    <h2 class="h1 fw-bold text-white mb-1">Météorologie</h2>
+                    <p class="text-light-50 mb-0 opacity-75">Données climatiques en temps réel.</p>
+                </div>
+            </a>
+        </div>
+    </div>
 
-            <div class="carousel-inner">
-                <?php foreach ($articles as $index => $astro): 
-                    // Supporte à la fois les entités Doctrine ($astro->get...) et les tableaux associatifs
-                    $isEntity = is_object($astro);
-                    $id = $isEntity ? $astro->getId() : ($astro['id'] ?? null);
-                    $title = $isEntity ? $astro->getTitleContenu() : ($astro['title_contenu'] ?? 'Sans titre');
-                    $content = $isEntity ? $astro->getContenu() : ($astro['contenu'] ?? '');
-                    $filename = $isEntity ? $astro->getFilename() : ($astro['filename'] ?? null);
-                    
-                    // Tronquage propre du texte
-                    $excerpt = mb_strimwidth(strip_tags($content), 0, 160, '...');
-                ?>
-                    <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>" data-bs-interval="5000">
-                        <div class="row align-items-center px-4 px-md-5">
-                            <div class="col-md-8">
-                                <?php if ($index === 0): ?>
-                                    <div class="d-flex align-items-center gap-2 mb-2">
-                                        <span class="badge bg-success text-uppercase fw-bold px-2 py-1 fs-7">
-                                            Dernier signal
-                                        </span>
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-10 col-xl-8">
+            <div class="glass-card shadow-lg">
+                <div class="card-body p-4 p-md-5">
+
+                    <h3 class="fw-bold mb-4 d-flex align-items-center">
+                        <span class="bg-primary rounded-pill me-3" style="width: 5px; height: 30px;"></span>
+                        Flux de données
+                    </h3>
+
+                    <ul class="nav nav-tabs mb-4" id="newsTabs" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" id="astro-tab" data-bs-toggle="tab"
+                                data-bs-target="#astro-news" type="button" role="tab">Astronomie</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" id="meteo-tab" data-bs-toggle="tab" data-bs-target="#meteo-news"
+                                type="button" role="tab">Météorologie</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="newsTabsContent">
+
+                        <div class="tab-pane fade show active" id="astro-news" role="tabpanel">
+                            <?php
+                            // Validation des données issues de Doctrine / $articlesAstronomie
+                            $articles = array_filter($articlesAstronomie);
+                            $totalArticles = count($articles);
+                            ?>
+
+                            <?php if ($totalArticles > 0): ?>
+                                <div id="carouselAstro" class="carousel slide" data-bs-ride="carousel">
+
+                                    <?php if ($totalArticles > 1): ?>
+                                        <div class="carousel-indicators mb-n3">
+                                            <?php foreach (array_keys($articles) as $index): ?>
+                                                <button type="button" data-bs-target="#carouselAstro"
+                                                    data-bs-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>"
+                                                    aria-current="<?= $index === 0 ? 'true' : 'false' ?>"
+                                                    aria-label="Slide <?= $index + 1 ?>">
+                                                </button>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <div class="carousel-inner">
+                                        <?php foreach ($articles as $index => $astro):
+                                            // Supporte à la fois les entités Doctrine ($astro->get...) et les tableaux associatifs
+                                            $isEntity = is_object($astro);
+                                            $id = $isEntity ? $astro->getId() : ($astro['id'] ?? null);
+                                            $title = $isEntity ? $astro->getTitleContenu() : ($astro['title_contenu'] ?? 'Sans titre');
+                                            $content = $isEntity ? $astro->getContenu() : ($astro['contenu'] ?? '');
+                                            $filename = $isEntity ? $astro->getFilename() : ($astro['filename'] ?? null);
+
+                                            // Tronquage propre du texte
+                                            $excerpt = mb_strimwidth(strip_tags($content), 0, 160, '...');
+                                            ?>
+                                            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>"
+                                                data-bs-interval="5000">
+                                                <div class="row align-items-center px-4 px-md-5">
+                                                    <div class="col-md-8">
+                                                        <?php if ($index === 0): ?>
+                                                            <div class="d-flex align-items-center gap-2 mb-2">
+                                                                <span
+                                                                    class="badge bg-success text-uppercase fw-bold px-2 py-1 fs-7">
+                                                                    Dernier signal
+                                                                </span>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <h4 class="h5 fw-bold text-white mb-2">
+                                                            <?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>
+                                                        </h4>
+
+                                                        <p class="text-light opacity-75 mb-3">
+                                                            <?= htmlspecialchars($excerpt, ENT_QUOTES, 'UTF-8') ?>
+                                                        </p>
+
+                                                        <a href="/divers/astronomie/contenu-astronomie.php?id=<?= urlencode($id) ?>"
+                                                            class="btn btn-link p-0 text-primary text-decoration-none fw-bold">
+                                                            DÉCODER LA SUITE &rarr;
+                                                        </a>
+                                                    </div>
+
+                                                    <?php if (!empty($filename)): ?>
+                                                        <div class="col-md-4 mt-3 mt-md-0 text-center">
+                                                            <img src="../../uploads/<?= htmlspecialchars($filename, ENT_QUOTES, 'UTF-8') ?>"
+                                                                alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>"
+                                                                class="img-fluid rounded object-fit-cover shadow-sm astro-carousel-img">
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
-                                <?php endif; ?>
 
-                                <h4 class="h5 fw-bold text-white mb-2">
-                                    <?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>
-                                </h4>
-                                
-                                <p class="text-light opacity-75 mb-3">
-                                    <?= htmlspecialchars($excerpt, ENT_QUOTES, 'UTF-8') ?>
-                                </p>
+                                    <?php if ($totalArticles > 1): ?>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselAstro"
+                                            data-bs-slide="prev" style="width: 5%; min-width: 40px;">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle"
+                                                style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: 0.2s ease-in-out; transform: scale(1);"
+                                                onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
+                                                onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"
+                                                    style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
+                                            </span>
+                                            <span class="visually-hidden">Précédent</span>
+                                        </button>
 
-                                <a href="/divers/astronomie/contenu-astronomie.php?id=<?= urlencode($id) ?>" 
-                                   class="btn btn-link p-0 text-primary text-decoration-none fw-bold">
-                                    DÉCODER LA SUITE &rarr;
-                                </a>
-                            </div>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselAstro"
+                                            data-bs-slide="next" style="width: 5%; min-width: 40px;">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle"
+                                                style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
+                                                onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
+                                                onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"
+                                                    style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
+                                            </span>
+                                            <span class="visually-hidden">Suivant</span>
+                                        </button>
+                                    <?php endif; ?>
 
-                            <?php if (!empty($filename)): ?>
-                                <div class="col-md-4 mt-3 mt-md-0 text-center">
-                                    <img src="../../uploads/<?= htmlspecialchars($filename, ENT_QUOTES, 'UTF-8') ?>" 
-                                         alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" 
-                                         class="img-fluid rounded object-fit-cover shadow-sm astro-carousel-img">
                                 </div>
+                            <?php else: ?>
+                                <p class="text-muted fst-italic p-3">Signal non détecté.</p>
                             <?php endif; ?>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-
-            <?php if ($totalArticles > 1): ?>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselAstro" data-bs-slide="prev" style="width: 5%; min-width: 40px;">
-                                                <span class="d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: 0.2s ease-in-out; transform: scale(1);" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
-                                                    <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
-                                                </span>
-                                                <span class="visually-hidden">Précédent</span>
-                                            </button>
-
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselAstro" data-bs-slide="next" style="width: 5%; min-width: 40px;">
-                                                <span class="d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
-                                                    <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
-                                                </span>
-                                                <span class="visually-hidden">Suivant</span>
-                                            </button>
-            <?php endif; ?>
-
-        </div>
-    <?php else: ?>
-        <p class="text-muted fst-italic p-3">Signal non détecté.</p>
-    <?php endif; ?>
-</div>
 
 
-                            <div class="tab-pane fade" id="meteo-news" role="tabpanel">
-    <?php 
-    // Normalisation de la récupération des données
-    $meteo_raw = $articlesMeteorologie;
-    
-    // Normalisation sous forme de tableau d'éléments
-    if (is_array($meteo_raw) && isset($meteo_raw['title_contenu'])) {
-        $articles = [$meteo_raw];
-    } else {
-        $articles = array_filter(is_array($meteo_raw) ? $meteo_raw : []);
-    }
-    
-    $totalArticles = count($articles);
-    ?>
+                        <div class="tab-pane fade" id="meteo-news" role="tabpanel">
+                            <?php
+                            // Normalisation de la récupération des données
+                            $meteo_raw = $articlesMeteorologie;
 
-    <?php if ($totalArticles > 0): ?>
-        <div id="carouselMeteo" class="carousel slide" data-bs-ride="carousel">
+                            // Normalisation sous forme de tableau d'éléments
+                            if (is_array($meteo_raw) && isset($meteo_raw['title_contenu'])) {
+                                $articles = [$meteo_raw];
+                            } else {
+                                $articles = array_filter(is_array($meteo_raw) ? $meteo_raw : []);
+                            }
 
-            <?php if ($totalArticles > 1): ?>
-                <div class="carousel-indicators mb-n3">
-                    <?php foreach (array_keys($articles) as $index): ?>
-                        <button type="button" 
-                                data-bs-target="#carouselMeteo" 
-                                data-bs-slide-to="<?= $index ?>" 
-                                class="<?= $index === 0 ? 'active' : '' ?>" 
-                                aria-current="<?= $index === 0 ? 'true' : 'false' ?>" 
-                                aria-label="Slide <?= $index + 1 ?>">
-                        </button>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+                            $totalArticles = count($articles);
+                            ?>
 
-            <div class="carousel-inner">
-                <?php foreach ($articles as $index => $meteo): 
-                    // Supporte entité Doctrine ou tableau associatif
-                    $isEntity = is_object($meteo);
-                    $id = $isEntity ? $meteo->getId() : ($meteo['id'] ?? null);
-                    $title = $isEntity ? $meteo->getTitleContenu() : ($meteo['title_contenu'] ?? 'Sans titre');
-                    $content = $isEntity ? $meteo->getContenu() : ($meteo['contenu'] ?? '');
-                    $filename = $isEntity ? $meteo->getFilename() : ($meteo['filename'] ?? null);
-                    
-                    // Tronquage propre UTF-8 sans couper de balises HTML
-                    $excerpt = mb_strimwidth(strip_tags($content), 0, 160, '...');
-                ?>
-                    <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>" data-bs-interval="5000">
-                        <div class="row align-items-center px-4 px-md-5">
-                            <div class="col-md-8">
-                                <?php if ($index === 0): ?>
-                                    <div class="d-flex align-items-center gap-2 mb-2">
-                                        <span class="badge bg-success text-uppercase fw-bold px-2 py-1 fs-7">
-                                            Dernier signal
-                                        </span>
+                            <?php if ($totalArticles > 0): ?>
+                                <div id="carouselMeteo" class="carousel slide" data-bs-ride="carousel">
+
+                                    <?php if ($totalArticles > 1): ?>
+                                        <div class="carousel-indicators mb-n3">
+                                            <?php foreach (array_keys($articles) as $index): ?>
+                                                <button type="button" data-bs-target="#carouselMeteo"
+                                                    data-bs-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>"
+                                                    aria-current="<?= $index === 0 ? 'true' : 'false' ?>"
+                                                    aria-label="Slide <?= $index + 1 ?>">
+                                                </button>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <div class="carousel-inner">
+                                        <?php foreach ($articles as $index => $meteo):
+                                            // Supporte entité Doctrine ou tableau associatif
+                                            $isEntity = is_object($meteo);
+                                            $id = $isEntity ? $meteo->getId() : ($meteo['id'] ?? null);
+                                            $title = $isEntity ? $meteo->getTitleContenu() : ($meteo['title_contenu'] ?? 'Sans titre');
+                                            $content = $isEntity ? $meteo->getContenu() : ($meteo['contenu'] ?? '');
+                                            $filename = $isEntity ? $meteo->getFilename() : ($meteo['filename'] ?? null);
+
+                                            // Tronquage propre UTF-8 sans couper de balises HTML
+                                            $excerpt = mb_strimwidth(strip_tags($content), 0, 160, '...');
+                                            ?>
+                                            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>"
+                                                data-bs-interval="5000">
+                                                <div class="row align-items-center px-4 px-md-5">
+                                                    <div class="col-md-8">
+                                                        <?php if ($index === 0): ?>
+                                                            <div class="d-flex align-items-center gap-2 mb-2">
+                                                                <span
+                                                                    class="badge bg-success text-uppercase fw-bold px-2 py-1 fs-7">
+                                                                    Dernier signal
+                                                                </span>
+                                                            </div>
+                                                        <?php endif; ?>
+
+                                                        <h4 class="h5 fw-bold text-white mb-2">
+                                                            <?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>
+                                                        </h4>
+
+                                                        <p class="text-light opacity-75 mb-3">
+                                                            <?= htmlspecialchars($excerpt, ENT_QUOTES, 'UTF-8') ?>
+                                                        </p>
+
+                                                        <a href="/divers/meteorologie/contenu-meteorologie.php?id=<?= urlencode($id) ?>"
+                                                            class="btn btn-link p-0 text-primary text-decoration-none fw-bold">
+                                                            DÉCODER LA SUITE &rarr;
+                                                        </a>
+                                                    </div>
+
+                                                    <?php if (!empty($filename)): ?>
+                                                        <div class="col-md-4 mt-3 mt-md-0 text-center">
+                                                            <img src="../../uploads/<?= htmlspecialchars($filename, ENT_QUOTES, 'UTF-8') ?>"
+                                                                alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>"
+                                                                class="img-fluid rounded object-fit-cover shadow-sm astro-carousel-img">
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
-                                <?php endif; ?>
 
-                                <h4 class="h5 fw-bold text-white mb-2">
-                                    <?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>
-                                </h4>
-                                
-                                <p class="text-light opacity-75 mb-3">
-                                    <?= htmlspecialchars($excerpt, ENT_QUOTES, 'UTF-8') ?>
-                                </p>
+                                    <?php if ($totalArticles > 1): ?>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselMeteo"
+                                            data-bs-slide="prev" style="width: 5%; min-width: 40px;">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle"
+                                                style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: 0.2s ease-in-out; transform: scale(1);"
+                                                onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
+                                                onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"
+                                                    style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
+                                            </span>
+                                            <span class="visually-hidden">Précédent</span>
+                                        </button>
 
-                                <a href="/divers/meteorologie/contenu-meteorologie.php?id=<?= urlencode($id) ?>" 
-                                   class="btn btn-link p-0 text-primary text-decoration-none fw-bold">
-                                    DÉCODER LA SUITE &rarr;
-                                </a>
-                            </div>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselMeteo"
+                                            data-bs-slide="next" style="width: 5%; min-width: 40px;">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle"
+                                                style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;"
+                                                onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
+                                                onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"
+                                                    style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
+                                            </span>
+                                            <span class="visually-hidden">Suivant</span>
+                                        </button>
+                                    <?php endif; ?>
 
-                            <?php if (!empty($filename)): ?>
-                                <div class="col-md-4 mt-3 mt-md-0 text-center">
-                                    <img src="../../uploads/<?= htmlspecialchars($filename, ENT_QUOTES, 'UTF-8') ?>" 
-                                         alt="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" 
-                                         class="img-fluid rounded object-fit-cover shadow-sm astro-carousel-img">
                                 </div>
+                            <?php else: ?>
+                                <p class="text-muted fst-italic p-3">Signal non détecté.</p>
                             <?php endif; ?>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
 
-            <?php if ($totalArticles > 1): ?>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselMeteo" data-bs-slide="prev" style="width: 5%; min-width: 40px;">
-                                                <span class="d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: 0.2s ease-in-out; transform: scale(1);" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
-                                                    <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
-                                                </span>
-                                                <span class="visually-hidden">Précédent</span>
-                                            </button>
-
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselMeteo" data-bs-slide="next" style="width: 5%; min-width: 40px;">
-                                                <span class="d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.15); transition: all 0.2s ease-in-out;" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'; this.style.transform='scale(1)';">
-                                                    <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(0); width: 1.25rem; height: 1.25rem;"></span>
-                                                </span>
-                                                <span class="visually-hidden">Suivant</span>
-                                            </button>
-            <?php endif; ?>
-
-        </div>
-    <?php else: ?>
-        <p class="text-muted fst-italic p-3">Signal non détecté.</p>
-    <?php endif; ?>
-</div>
-
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
     <div class="row justify-content-center pt-5" id="contacts">
         <div class="col-md-10 col-xl-8">

@@ -6,6 +6,7 @@ return [
     '/astronomie/{id}' => ['AstronomieController', 'show'],
     '/meteorologie' => ['MeteorologieController', 'index'],
     '/meteorologie/{id}' => ['MeteorologieController', 'show'],
+    '/connexion/login' => ['UserController', 'login'],
     // '/page/{page}' => ['PageController', 'page'],
     // '/page-a-propos/{id}' => ['PageController', 'pageAPropos'],
     // '/page-status/{id}' => ['PageController', 'pageStatus'],
