@@ -9,6 +9,7 @@ return [
     '/connexion/login' => ['UserController', 'login'],
     '/connexion/signup' => ['UserController', 'signup'],
     '/connexion/user-otp' => ['UserController', 'checkOtp'],
+    '/connexion/forgot-password' => ['UserController', 'forgotPassword'],
     // '/page/{page}' => ['PageController', 'page'],
     // '/page-a-propos/{id}' => ['PageController', 'pageAPropos'],
     // '/page-status/{id}' => ['PageController', 'pageStatus'],

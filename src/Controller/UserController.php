@@ -226,12 +226,13 @@ class UserController extends AbstractController
                     ? "Un code de réinitialisation vous a été envoyé par e-mail."
                     : "Le code a été généré, mais l'e-mail n'a pas pu être envoyé. Contactez le support si le problème persiste.";
                 $_SESSION['email'] = $email;
-                header('Location: reset-code.php');
+                $this->redirect('/connexion/reset-code');
                 exit();
             }
         }
 
         $this->render('connexion/forgot-password', [
+            'hideSiteHeader' => true,
             'errors' => $errors,
             'email' => $email,
         ]);
