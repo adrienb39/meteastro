@@ -104,7 +104,7 @@ function sendNewsletterRelease($obj, $latestVersion, $logoPath)
                                     ⚡ Changements apportés dans cette version :
                                 </h3>
                                 <ul style='margin: 0; padding-left: 20px; color: #cbd5e1; font-size: 13px; line-height: 1.8;'>
-                                    <li><strong style='color: #f1f5f9;'>Correction :</strong> Affichage du contenu</li>
+                                    <li><strong style='color: #f1f5f9;'>Amélioration :</strong> Termes et conditions à coché</li>
                                 </ul>
                             </div>
 

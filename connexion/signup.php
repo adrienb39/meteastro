@@ -21,15 +21,16 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inscription | Meteastro Expedition</title>
-    
-    <meta name="description" content="Rejoignez la station Meteastro. Créez votre compte pour accéder aux données astronomiques et météorologiques.">
+
+    <meta name="description"
+        content="Rejoignez la station Meteastro. Créez votre compte pour accéder aux données astronomiques et météorologiques.">
     <link rel="icon" type="image/png" href="/ressources/logo.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="/css/connexion.css" />
-    
+
     <style>
         /* ==========================================================================
            1. VARIABLES DE THÈME (STYLE FLOTTANT ANDROID MATERIAL YOU)
@@ -44,6 +45,13 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
             --shadow-header: 0 1px 2px rgba(0, 0, 0, 0.05);
             --shadow-nav: 0 2px 6px rgba(0, 0, 0, 0.08);
             --logout-color: #dc3545;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --primary-glow: rgba(59, 130, 246, 0.25);
+            --text-main-consent: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --bg-hover: #f8fafc;
         }
 
         .lightmode {
@@ -98,15 +106,15 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
            3. COMPORTEMENT EXCLUSIF : MODE APP INSTALLÉE (STANDALONE)
            ========================================================================== */
         @media (display-mode: standalone) {
-            
+
             .bottom-nav {
                 display: flex !important;
                 justify-content: space-around;
                 position: fixed;
-                bottom: 16px; 
-                left: 12px;   
+                bottom: 16px;
+                left: 12px;
                 right: 12px;
-                height: 60px; 
+                height: 60px;
                 background: var(--bg-nav);
                 border: 1px solid var(--border-color);
                 box-shadow: var(--shadow-nav);
@@ -127,7 +135,7 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                 text-decoration: none;
                 color: var(--text-inactive);
                 font-family: 'Outfit', sans-serif;
-                font-size: 10px; 
+                font-size: 10px;
                 font-weight: 500;
                 height: 100%;
                 flex: 1;
@@ -140,7 +148,7 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
             }
 
             .nav-icon {
-                font-size: 20px; 
+                font-size: 20px;
                 margin-bottom: 3px;
                 line-height: 1;
                 transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
@@ -149,7 +157,7 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
             .nav-label {
                 display: block;
                 font-size: 10px;
-                letter-spacing: 0.1px; 
+                letter-spacing: 0.1px;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -169,8 +177,9 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                 transform: scale(0.9);
             }
 
-            .nav-item.active, .nav-item:hover {
-                color: var(--text-active); 
+            .nav-item.active,
+            .nav-item:hover {
+                color: var(--text-active);
                 font-weight: 700;
             }
 
@@ -181,17 +190,17 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
 
             .nav-submenu {
                 position: absolute;
-                bottom: 72px; 
+                bottom: 72px;
                 right: 50%;
                 width: 180px;
                 background: var(--bg-nav);
                 border: 1px solid var(--border-color);
                 box-shadow: var(--shadow-nav);
-                border-radius: 20px; 
+                border-radius: 20px;
                 padding: 6px;
                 z-index: 1001;
                 box-sizing: border-box;
-                
+
                 visibility: hidden;
                 opacity: 0;
                 transform: translateX(50%) translateY(12px) scale(0.96);
@@ -216,7 +225,8 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                 transition: background 0.15s ease, color 0.15s ease;
             }
 
-            .submenu-item:hover, .submenu-item.active {
+            .submenu-item:hover,
+            .submenu-item.active {
                 background: rgba(11, 87, 208, 0.08);
                 color: var(--text-active);
             }
@@ -235,6 +245,7 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
             .logout-item {
                 color: var(--logout-color);
             }
+
             .logout-item:hover {
                 background: rgba(220, 53, 69, 0.08);
                 color: var(--logout-color);
@@ -254,17 +265,132 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
 
             /* --- ADAPTATION STRUCTURELLE DE L'APPLICATION --- */
             .container-mobile {
-                padding-bottom: 100px !important; 
+                padding-bottom: 100px !important;
                 box-sizing: border-box;
             }
 
-            .navbar, #playerContainer {
+            .navbar,
+            #playerContainer {
                 display: none !important;
             }
 
             @media (max-width: 350px) {
-                .nav-label { font-size: 9px; }
-                .nav-icon { font-size: 18px; }
+                .nav-label {
+                    font-size: 9px;
+                }
+
+                .nav-icon {
+                    font-size: 18px;
+                }
+            }
+        }
+
+        /* Container de la case à cocher */
+        .consent-checkbox {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 12px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s ease, transform 0.15s ease;
+        }
+
+        .consent-checkbox:active {
+            transform: scale(0.98);
+        }
+
+        /* Masquer l'input natif tout en le gardant accessible */
+        .consent-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        /* Boîte personnalisée */
+        .checkbox-box {
+            width: 1.35rem;
+            height: 1.35rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Icone SVG (La coche) */
+        .check-icon {
+            width: 0.9rem;
+            height: 0.9rem;
+            color: #ffffff;
+            stroke-dasharray: 24;
+            stroke-dashoffset: 24;
+            transition: stroke-dashoffset 0.3s ease 0.05s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(0.5) rotate(-10deg);
+        }
+
+        /* Hover sur la case */
+        .consent-checkbox:hover .checkbox-box {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        /* État COCHÉ (Animations clés) */
+        .consent-checkbox input[type="checkbox"]:checked+.checkbox-box {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            animation: checkbox-bounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .consent-checkbox input[type="checkbox"]:checked+.checkbox-box .check-icon {
+            stroke-dashoffset: 0;
+            transform: scale(1) rotate(0deg);
+        }
+
+        /* Navigation Clavier (Focus accessible) */
+        .consent-checkbox input[type="checkbox"]:focus-visible+.checkbox-box {
+            box-shadow: 0 0 0 4px var(--primary-glow);
+            border-color: var(--primary);
+        }
+
+        /* Texte & Lien */
+        .label-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .terms-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.2s ease;
+        }
+
+        /* Animation d'effet de rebond (Spring) */
+        @keyframes checkbox-bounce {
+            0% {
+                transform: scale(1);
+            }
+
+            40% {
+                transform: scale(0.85);
+            }
+
+            70% {
+                transform: scale(1.15);
+            }
+
+            100% {
+                transform: scale(1);
             }
         }
     </style>
@@ -316,14 +442,14 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                         <div class="input-group">
                             <div class="input-field">
                                 <i class="fa-solid fa-user" aria-hidden="true"></i>
-                                <input type="text" name="name" placeholder="Nom complet" 
-                                       value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
+                                <input type="text" name="name" placeholder="Nom complet"
+                                    value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
                             </div>
 
                             <div class="input-field">
                                 <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                                <input type="email" name="email" placeholder="Email" 
-                                       value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
+                                <input type="email" name="email" placeholder="Email"
+                                    value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
                             </div>
 
                             <div class="input-field">
@@ -338,11 +464,18 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                         </div>
 
                         <div class="consent-container">
-                            <label class="checkbox-wrapper">
+                            <label class="consent-checkbox">
                                 <input type="checkbox" name="consent" id="consent" required>
-                                <span class="checkmark"></span>
+
+                                <span class="checkbox-box" aria-hidden="true">
+                                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+
                                 <span class="label-text">
-                                    J'accepte les <a href="#" id="openTerms">Termes et Conditions</a>
+                                    J'accepte les <a href="#" id="openTerms" class="terms-link">Termes et Conditions</a>
                                 </span>
                             </label>
                         </div>
@@ -376,17 +509,20 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
             </div>
             <div class="modal-body">
                 <h3>1. Acceptation des termes</h3>
-                <p>En accédant à ce site, vous acceptez d'être lié par ces termes et conditions et toutes les lois et réglementations applicables.</p>
-                
+                <p>En accédant à ce site, vous acceptez d'être lié par ces termes et conditions et toutes les lois et
+                    réglementations applicables.</p>
+
                 <h3>2. Utilisation du site</h3>
-                <p>Vous pouvez utiliser notre site uniquement à des fins légales et d'une manière qui ne porte pas atteinte aux droits des autres utilisateurs.</p>
-                
+                <p>Vous pouvez utiliser notre site uniquement à des fins légales et d'une manière qui ne porte pas
+                    atteinte aux droits des autres utilisateurs.</p>
+
                 <h3>3. Propriété intellectuelle</h3>
-                <p>Tous les contenus présents sur ce site (textes, graphiques, logos) sont la propriété de Meteastro.</p>
-                
+                <p>Tous les contenus présents sur ce site (textes, graphiques, logos) sont la propriété de Meteastro.
+                </p>
+
                 <h3>4. Limitation de responsabilité</h3>
                 <p>Meteastro ne peut être tenu responsable des dommages résultant de l'utilisation de ce site.</p>
-                
+
                 <h3>5. Modifications</h3>
                 <p>Meteastro se réserve le droit de modifier ces termes à tout moment.</p>
             </div>
@@ -397,18 +533,21 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
     </div>
 
     <nav class="bottom-nav">
-        <a href="/divers/astronomie/astronomie.php" class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'astronomie.php') ? 'active' : ''; ?>">
+        <a href="/divers/astronomie/astronomie.php"
+            class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'astronomie.php') ? 'active' : ''; ?>">
             <span class="nav-icon">🪐</span>
             <span class="nav-label">Astro</span>
         </a>
-        
-        <a href="/divers/meteorologie/meteorologie.php" class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'meteorologie.php') ? 'active' : ''; ?>">
+
+        <a href="/divers/meteorologie/meteorologie.php"
+            class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'meteorologie.php') ? 'active' : ''; ?>">
             <span class="nav-icon">⛈️</span>
             <span class="nav-label">Météo</span>
         </a>
 
         <?php if ($isConnected): ?>
-            <a href="/connexion/contenu.php" class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'contenu.php') ? 'active' : ''; ?>">
+            <a href="/connexion/contenu.php"
+                class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'contenu.php') ? 'active' : ''; ?>">
                 <span class="nav-icon">📝</span>
                 <span class="nav-label">Contenus</span>
             </a>
@@ -421,7 +560,8 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                 </div>
 
                 <div class="nav-submenu" id="account-submenu">
-                    <a href="/connexion/profile.php" class="submenu-item <?php echo (basename($_SERVER['PHP_SELF']) == 'profile.php') ? 'active' : ''; ?>">
+                    <a href="/connexion/profile.php"
+                        class="submenu-item <?php echo (basename($_SERVER['PHP_SELF']) == 'profile.php') ? 'active' : ''; ?>">
                         <span class="submenu-icon">👤</span> Profil
                     </a>
                     <a href="#parametres/" class="submenu-item">
@@ -439,12 +579,14 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                 <span class="nav-label">Contact</span>
             </a>
 
-            <a href="/connexion/login.php" class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'login.php') ? 'active' : ''; ?>">
+            <a href="/connexion/login.php"
+                class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'login.php') ? 'active' : ''; ?>">
                 <span class="nav-icon">👤</span>
                 <span class="nav-label">Connexion</span>
             </a>
 
-            <a href="/connexion/signup.php" class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'signup.php') ? 'active' : ''; ?>">
+            <a href="/connexion/signup.php"
+                class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'signup.php') ? 'active' : ''; ?>">
                 <span class="nav-icon">👤➕</span>
                 <span class="nav-label">S'inscrire</span>
             </a>
@@ -452,7 +594,7 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
     </nav>
 
     <script src="/js/login.js"></script>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuTrigger = document.getElementById('account-menu-trigger');
@@ -463,7 +605,7 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
                 menuTrigger.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const isOpen = submenu.classList.toggle('open');
-                    
+
                     if (isOpen) {
                         menuTrigger.classList.add('open');
                     } else {
@@ -482,4 +624,5 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
         });
     </script>
 </body>
+
 </html>
