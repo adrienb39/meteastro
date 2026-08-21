@@ -20,21 +20,21 @@ $bodyClass = ($themeChoice === 'light') ? 'lightmode' : '';
            ========================================================================== */
     :root {
         /* --- Mode Clair (Couleurs de surface Android) --- */
-            --bg-header: rgba(243, 243, 244, 0.90);
-            --bg-nav: rgba(243, 243, 244, 0.88);
-            --border-color: rgba(0, 0, 0, 0.06);
-            --text-inactive: #444746;
-            --text-active: #0b57d0;
-            --shadow-header: 0 1px 2px rgba(0, 0, 0, 0.05);
-            --shadow-nav: 0 2px 6px rgba(0, 0, 0, 0.08);
-            --logout-color: #dc3545;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --primary-glow: rgba(59, 130, 246, 0.25);
-            --text-main-consent: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #cbd5e1;
-            --bg-hover: #f8fafc;
+        --bg-header: rgba(243, 243, 244, 0.90);
+        --bg-nav: rgba(243, 243, 244, 0.88);
+        --border-color: rgba(0, 0, 0, 0.06);
+        --text-inactive: #444746;
+        --text-active: #0b57d0;
+        --shadow-header: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-nav: 0 2px 6px rgba(0, 0, 0, 0.08);
+        --logout-color: #dc3545;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --primary-glow: rgba(59, 130, 246, 0.25);
+        --text-main-consent: #1e293b;
+        --text-muted: #64748b;
+        --border-color: #cbd5e1;
+        --bg-hover: #f8fafc;
     }
 
     .lightmode {
